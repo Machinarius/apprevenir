@@ -90,7 +90,8 @@
 						</mat-radio-group>
 						<mat-error 
 							class="mat-error" 
-							*ngIf="personalInfoFormGroup.get('gender').hasError('required')"
+							style="font-size: 75%;"
+							*ngIf="genderSelectionIsInvalid"
 						>
 							Por favor elige tu género
 						</mat-error>
@@ -98,29 +99,34 @@
 						<div>
 							<mat-form-field class="width-100">
 								<mat-label>Estado Civil</mat-label>
-								<mat-select>
-									<mat-option>
-										asdasdas
+								<mat-select formControlName="maritalStatus">
+									<mat-option *ngFor="let status of maritalStatusValues" [value]="status.key">
+										{{status.label}}
 									</mat-option>
 								</mat-select>
+								<mat-error>
+									Por favor elige tu estado civil
+								</mat-error>
 							</mat-form-field>
 						</div>
 						
-
 						<div>
 							<mat-form-field class="width-100">
 								<mat-label>Nivel de Estudios</mat-label>
-								<mat-select>
-									<mat-option>
-										asdasdas
+								<mat-select formControlName="educationLevel">
+									<mat-option *ngFor="let level of educationLevels" [value]="level.key">
+										{{level.label}}
 									</mat-option>
 								</mat-select>
+								<mat-error>
+									Por favor elige tu nivel de estudios
+								</mat-error>
 							</mat-form-field>
 						</div>
 
 						<div class="app-flex">
-							<button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
-							<button class="btn btn-primary" matStepperNext>Siguiente</button>
+							<button class="btn btn-secondary app-m-right">Cancelar</button>
+							<button class="btn btn-primary" matStepperNext (click)="onProfileNextClicked()">Siguiente</button>
 						</div>
 					</form>
 

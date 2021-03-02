@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, AbstractControl, ValidatorFn } from '@angular/forms';
 import loadFakeUniversities from './constants/fakeUniversities';
 import { OnboardingSources, OnboardingSourcesKeys } from "./constants/onboardingSources";
+import { MaritalStatusValues } from "./constants/maritalStatusValues";
+import { EducationLevels } from './constants/educationLevels';
 
 @Component({
   selector: 'app-registration',
@@ -19,6 +21,8 @@ export class RegistrationComponent implements OnInit {
 
   loadingData = true;
   onboardingSources = OnboardingSources;
+  maritalStatusValues = MaritalStatusValues;
+  educationLevels = EducationLevels;
   universities: { id: number, label: string }[] = [];
 
   constructor(private _formBuilder: FormBuilder) {
@@ -34,6 +38,19 @@ export class RegistrationComponent implements OnInit {
     return this.personalInfoFormGroup.get('onboardingSource').value === OnboardingSourcesKeys.UNIVERSITY;
   }
 
+  get genderSelectionIsInvalid() {
+    if (!this.personalInfoFormGroup) {
+      return false;
+    }
+
+    const control = this.personalInfoFormGroup.get('gender');
+    return control.dirty && control.hasError('required');
+  }
+
+  onProfileNextClicked() {
+    this.personalInfoFormGroup.get('gender').markAsDirty();
+  }
+
   async ngOnInit(): Promise<void> {
     this.personalInfoFormGroup = this._formBuilder.group({
       onboardingSource: ['', Validators.required],
@@ -42,8 +59,11 @@ export class RegistrationComponent implements OnInit {
       maidenName: ['', Validators.required],
       lastName: ['', Validators.required],
       birthDate: ['', Validators.compose([Validators.required, this.dateValidator])],
-      gender: ['', Validators.required]
+      gender: ['', Validators.required],
+      maritalStatus: ['', Validators.required],
+      educationLevel: ['', Validators.required]
     });
+
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
