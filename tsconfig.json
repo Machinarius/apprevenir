@@ -17,7 +17,8 @@
       "dom"
     ],
     "paths": {
-      "@typedefs/*": ["src/typedefs/*"]
+      "@typedefs/*": ["src/typedefs/*"],
+      "@environments/*": ["src/environments/*"]
     }
   }
 }
