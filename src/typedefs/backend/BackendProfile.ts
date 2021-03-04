@@ -1,3 +1,5 @@
+import { BackendClientConfig } from "./BackendClientConfig";
+
 export interface BackendProfile {
   id: number,
   user_id: number,
@@ -12,7 +14,7 @@ export interface BackendProfile {
   country_id: number | null,
   state_id: number | null,
   city_id: number | null,
-  client_config: unknown | null,
+  client_config: BackendClientConfig | null,
   created_at: string,
   updated_at: string,
   deleted_at: string | null
