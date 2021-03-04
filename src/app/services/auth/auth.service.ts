@@ -29,7 +29,9 @@ export class AuthService {
       res => {
         const accessToken = res["data"].access_token;
         const profileObject = res["data"].profile;
+        const userRole = res["data"].role;
         profileObject.email = credentials["email"]; // Bruh...
+        profileObject.role = userRole;
 
         storeAuhToken(accessToken);
         storeProfileInfo(profileObject);

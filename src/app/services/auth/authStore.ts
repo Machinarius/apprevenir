@@ -1,3 +1,9 @@
+enum Roles {
+  Root = "root",
+  Admin = "admin",
+  Client = "client"
+}
+
 export interface IProfileInfo {
   id: number,
   userId: number,
@@ -14,6 +20,7 @@ export interface IProfileInfo {
   stateId: number,
   cityId: number,
   clientConfig: any | null,
+  role: Roles,
   createdAt: Date,
   updatedAt: Date | null
 }
@@ -75,11 +82,17 @@ export function storeProfileInfo(profileInfo: any) {
     stateId: profileInfo.state_id,
     cityId: profileInfo.city_id,
     clientConfig: profileInfo.client_config,
+    role: profileInfo.role as Roles,
     createdAt: new Date(profileInfo.created_at),
     updatedAt: profileInfo.updated_at == null ? null : new Date(profileInfo.updated_at)
   };
 
   localStorage.setItem('profile', JSON.stringify(normalizedProfile));
+}
+
+export function isUserAdmin() {
+  const profile = getStoredProfileInfo();
+  return profile.role == Roles.Admin || profile.role == Roles.Root;
 }
 
 export function getStoredProfileInfo(): IProfileInfo {
