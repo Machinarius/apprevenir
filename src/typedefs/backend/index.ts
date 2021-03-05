@@ -11,3 +11,4 @@ export { BackendCompanyUser } from "./BackendCompanyUser";
 export { BackendCountry } from "./BackendCountry";
 export { BackendState } from "./BackendState";
 export { BackendCity } from "./BackendCity";
+export { BackendRegistrationRequest } from "./BackendRegistrationRequest";

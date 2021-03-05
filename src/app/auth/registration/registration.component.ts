@@ -3,10 +3,14 @@ import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl }
 import { ReferralSources } from "./constants/referralSources";
 import { MaritalStatusValues } from "./constants/maritalStatusValues";
 import { EducationLevels } from './constants/educationLevels';
-import { BackendCity, BackendClientTypes, BackendCountry, BackendState } from '@typedefs/backend';
+import { BackendCity, BackendClientTypes, BackendCountry, BackendRegistrationRequest, BackendState } from '@typedefs/backend';
 import { HierarchyNode } from './referralHierarchy/HierarchyNode';
 import { buildRootHierarchy } from "./referralHierarchy/builders/hierarchyBuilder";
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
+import { LocationFormGroup, LoginFormGroup, PersonalInfoFormGroup } from './forms/FormKeys';
+import { RegistrationResult, submitRegistrationForms } from './forms/registrationSubmitHandler';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -30,7 +34,7 @@ export class RegistrationComponent implements OnInit {
   states: BackendState[] | null = null;
   cities: BackendCity[] | null = null;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private router: Router) {
     this.referralHierarchyRequiredValidator = this.referralHierarchyRequiredValidator.bind(this);
     this.dateValidator = this.dateValidator.bind(this);
     this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
@@ -38,6 +42,7 @@ export class RegistrationComponent implements OnInit {
     this.onStateChanged = this.onStateChanged.bind(this);
     this.passwordConfirmationValidator = this.passwordConfirmationValidator.bind(this);
     this.onSubmitClicked = this.onSubmitClicked.bind(this);
+    this.handleRegistrationResult = this.handleRegistrationResult.bind(this);
   }
 
   get selectedReferralSource() {
@@ -80,20 +85,20 @@ export class RegistrationComponent implements OnInit {
       gender: ['', Validators.required],
       maritalStatus: ['', Validators.required],
       educationLevel: ['', Validators.required]
-    });
+    } as PersonalInfoFormGroup);
 
     this.locationFormGroup = this._formBuilder.group({
       country: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required]
-    });
+    } as LocationFormGroup);
 
     this.loginFormGroup = this._formBuilder.group({
       phoneNumber: ['', Validators.required],
       emailAddress: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16)])],
       passwordConfirmation: ['', Validators.compose([Validators.required, this.passwordConfirmationValidator])]
-    });
+    } as LoginFormGroup);
 
     this.loadingData = true;
     this.countries = await getCountries();
@@ -181,12 +186,14 @@ export class RegistrationComponent implements OnInit {
     this.loadingData = false;
   }
 
-  public onSubmitClicked() {
-    const formsAreValid = [
+  public async onSubmitClicked() {
+    const allForms = [
       this.personalInfoFormGroup, 
       this.locationFormGroup, 
       this.loginFormGroup
-    ].reduce(
+    ];
+
+    const formsAreValid = allForms.reduce(
       (formsValid, form) => {
         form.markAllAsTouched();
         form.markAsDirty();
@@ -197,7 +204,32 @@ export class RegistrationComponent implements OnInit {
     if (!formsAreValid) {
       return;
     }
+    
+    this.loadingData = true;
+    try {
+      const result = await submitRegistrationForms(...allForms);
+      this.handleRegistrationResult(result);
+    } catch (error) {
+      console.error("Error while trying to submit the registration data", error);
+      this.handleRegistrationResult({ wasSuccessful: false, errorMessages: [] });
+    } finally {
+      this.loadingData = false;
+    }
+  }
 
-    throw new Error("Not implemented");
+  async handleRegistrationResult(result: RegistrationResult) {
+    if (result.wasSuccessful) {
+      await Swal.fire("Bienvenido", "Has sido registrado exitósamente. Utiliza tu correo y contraseña para ingresar.", "success");
+
+      this.router.navigate(['']); 
+      return;
+    }
+
+    let errorMessage = "No fue posible contactar el servidor. Por favor revisa tu conexión a internet e inténtalo de nuevo";
+    if (result.errorMessages.length) {
+      errorMessage = "Por favor revisa los datos ingresados e inténtalo de nuevo: " + result.errorMessages.join(", ");
+    }
+
+    Swal.fire("Error", errorMessage, "error");
   }
 }

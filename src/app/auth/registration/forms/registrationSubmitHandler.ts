@@ -1,0 +1,73 @@
+import { FormGroup } from "@angular/forms";
+import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from "@typedefs/backend";
+import { RawFormData } from "./FormKeys";
+import { environment } from "@environments/environment";
+
+function formatDateComponent(dateComponent: number) {
+  return dateComponent.toString().padStart(2, "0");
+}
+
+export interface RegistrationResult {
+  wasSuccessful: boolean,
+  errorMessages: string[]
+}
+
+export async function submitRegistrationForms(
+  ...forms: FormGroup[]
+): Promise<RegistrationResult> {
+  const rawFormData: RawFormData = forms.reduce((data, form) => Object.assign(data, form.value), {});
+  const birthday = new Date(rawFormData.birthDate);
+  const birthdayValue = 
+  `${birthday.getFullYear()}-${formatDateComponent(birthday.getMonth() + 1)}-${formatDateComponent(birthday.getDate())}`;
+
+  const registrationPayload: BackendRegistrationRequest = {
+    birthday: birthdayValue,
+    country_id: rawFormData.country,
+    state_id: rawFormData.state,
+    city_id: rawFormData.city,
+    civil_status_id: rawFormData.maritalStatus,
+    client: "persona natual",
+    client_type: rawFormData.referralSource as BackendClientTypes,
+    education_level_id: rawFormData.educationLevel,
+    email: rawFormData.emailAddress,
+    first_name_two: rawFormData.lastName,
+    first_names: rawFormData.name,
+    gender_id: parseInt(rawFormData.gender),
+    last_name_one: rawFormData.maidenName,
+    last_names: rawFormData.maidenName + " " + rawFormData.lastName,
+    password: rawFormData.password,
+    password_confirmation: rawFormData.passwordConfirmation,
+    phone: rawFormData.phoneNumber,
+    reference: rawFormData.referralHierarchy1,
+    selectA: rawFormData.referralHierarchy2,
+    selectB: rawFormData.referralHierarchy3,
+    selectC: rawFormData.referralHierarchy4,
+    client_config: {
+      client: BackendClientTypes.NaturalPerson,
+      client_type: rawFormData.referralSource as BackendClientTypes,
+      selectA: rawFormData.referralHierarchy2,
+      selectB: rawFormData.referralHierarchy3,
+      selectC: rawFormData.referralHierarchy4
+    }
+  };
+
+  const response = await fetch(`${environment.url}/api/v1/register`, {
+    body: JSON.stringify(registrationPayload),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+
+  const resultObject: RegistrationResult = { wasSuccessful: true, errorMessages: [] };
+  const responsePayload = await response.json() as BackendResponse<{}>;
+  if (!responsePayload.success) {
+    resultObject.wasSuccessful = false;
+    if (responsePayload.errors) {
+      const errors = responsePayload.errors;
+      resultObject.errorMessages = Object.keys(errors).reduce((messages, key) => [...messages, ...errors[key]], []);
+    }
+  }
+
+  return resultObject;
+}
