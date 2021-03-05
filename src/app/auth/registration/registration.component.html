@@ -7,12 +7,12 @@
 	</div>
 
 	<div class="login__section-two">
-		<div class="loader" *ngIf="loadingData">
+		<div class="loader" [hidden]="!loadingData">
 			<mat-spinner></mat-spinner>
 			<span style="font-family: 'KanitMedium';">Cargando Datos...</span>
 		</div>
 
-		<div class="section-two" *ngIf="!loadingData">
+		<div class="section-two" [hidden]="loadingData">
 			<div class="section-two__title">Crear una cuenta</div>
 			<mat-horizontal-stepper #stepper linear="true">
 				<mat-step [stepControl]="personalInfoFormGroup">
@@ -121,42 +121,51 @@
 					</form>
 
 				</mat-step>
-				<mat-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
-					<form [formGroup]="secondFormGroup">
+				<mat-step [stepControl]="locationFormGroup">
+					<form [formGroup]="locationFormGroup">
 						<ng-template matStepLabel>Ubicación</ng-template>
 						<div>
 							<mat-form-field class="width-100">
 								<mat-label>País</mat-label>
-								<mat-select>
-									<mat-option>
-										asdasdas
+								<mat-select formControlName="country" (selectionChange)="onCountryChanged()">
+									<mat-option *ngFor="let country of countries" [value]="country.id">
+										{{country.name}}
 									</mat-option>
 								</mat-select>
+								<mat-error>
+									Por favor elige tu País
+								</mat-error>
 							</mat-form-field>
 						</div>
 						
-
-						<div>
+						<div *ngIf="states">
 							<mat-form-field class="width-100">
 								<mat-label>Departamento</mat-label>
-								<mat-select>
-									<mat-option>
-										asdasdas
+								<mat-select formControlName="state" (selectionChange)="onStateChanged()">
+									<mat-option *ngFor="let state of states" [value]="state.id">
+										{{state.name}}
 									</mat-option>
 								</mat-select>
+								<mat-error>
+									Por favor elige tu Departamento
+								</mat-error>
 							</mat-form-field>
 						</div>
 
-						<div>
+						<div *ngIf="cities">
 							<mat-form-field class="width-100">
 								<mat-label>Ciudad</mat-label>
-								<mat-select>
-									<mat-option>
-										asdasdas
+								<mat-select formControlName="city">
+									<mat-option *ngFor="let city of cities" [value]="city.id">
+										{{city.name}}
 									</mat-option>
 								</mat-select>
+								<mat-error>
+									Por favor elige tu Ciudad
+								</mat-error>
 							</mat-form-field>
 						</div>
+
 						<div class="app-flex">
 							<button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
 							<button class="btn btn-primary" matStepperNext>Siguiente</button>

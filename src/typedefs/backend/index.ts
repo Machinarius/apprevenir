@@ -8,3 +8,6 @@ export { BackendUniversityUser } from "./BackendUniversityUser";
 export { BackendEducationBureauUser } from "./BackendEducationBureauUser";
 export { BackendEducationalInstitutionUser } from "./BackendEducationalInstitutionUser";
 export { BackendCompanyUser } from "./BackendCompanyUser";
+export { BackendCountry } from "./BackendCountry";
+export { BackendState } from "./BackendState";
+export { BackendCity } from "./BackendCity";
