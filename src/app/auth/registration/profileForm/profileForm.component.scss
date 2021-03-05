@@ -1,0 +1,141 @@
+.login {
+    display: flex;
+    &__section-one {
+        background-color: var(--color-primary);
+        width: 609px;
+        height: 100vh;
+        position: relative;
+        z-index: 1;
+    }
+    &__section-two {
+        background-color: var(--color-white);
+        border-radius: 20px 0px 0px 20px;
+        width: 100%;
+        margin-left: -25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        z-index: 2;
+        overflow-y: scroll;
+    }
+}
+
+.section-one {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 609px;
+}
+
+.section-two {
+    width: 550px;
+    height: 700px;
+    &__title {
+        color: var(--color-normal-grey);
+        font-size: 32px;
+        font-family: 'KanitMedium';
+    }
+    &__text {
+        width: 276px;
+        height: 47px;
+        color: var(--color-normal-grey);
+        font-size: 16px;
+        margin: 1rem 0;
+        font-family: "FiratRegular";
+        line-height: 22px;
+        margin-bottom: 3rem;
+    }
+    &__forgot-box {
+        text-align: right;
+        margin: 10px 0;
+    }
+    &__forgot {
+        text-align: right;
+        color: var(--color-primary);
+        font-size: 14px;
+        margin: 5px 0;
+        font-family: "FiratRegular";
+    }
+    &__divider {
+        margin: 2rem 0;
+        position: relative;
+    }
+    &__empty {
+        height: 1px;
+        background: var(--color-grey-dark-1);
+    }
+    &__label {
+        color: var(--color-normal-grey);
+        position: absolute;
+        top: -10px;
+        background: var(--color-white);
+        width: 162px;
+        left: 23%;
+        right: 0;
+        text-align: center;
+        font-size: 14px;
+        font-family: "FiratRegular";
+    }
+    &__termns {
+        font-size: 14px;
+        color: var(--color-normal-grey);
+        margin: 2rem 0;
+        font-family: "FiratRegular";
+
+        a {
+            color: var(--color-primary);
+        }
+    }
+}
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+.example-full-width {
+width: 100%;
+}
+
+.logo-login {
+    width: 282px;
+    height: 60px;
+    position: absolute;
+    top: 3rem;
+}
+
+.logo-bg {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 35rem;
+}
+
+.registration {
+    &__title {
+        font-size: 24px;
+        color: var(--color-normal-grey);
+        font-family: 'KanitMedium';
+    }
+
+    &__box {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__gender {
+        font-size: 16px;
+        color: var(--color-normal-grey);
+        font-family: 'FiratRegular';
+        margin-bottom: 1rem;
+    }
+    &__university {
+        font-size: 16px;
+        color: var(--color-normal-grey);
+        font-family: 'FiratRegular';
+    }
+    
+}

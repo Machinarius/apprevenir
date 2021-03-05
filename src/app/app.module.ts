@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { LoginComponent } from './auth/login/login.component';
-import { RegistrationComponent } from './auth/registration/registration.component';
+import { ProfileFormComponent } from './auth/registration/profileForm/profileForm.component';
 import { ReferralHierarchyComponent } from "./auth/registration/referralHierarchy/renderer/referralHierarchy.component";
 import { HomeComponent } from './home/home.component';
 import { ModalComponent } from './auth/modal/modal.component';
@@ -34,10 +34,13 @@ import { ProfileModalComponent } from './profile/profile-modal/profile-modal.com
 import { HomeModalComponent } from './home/home-modal/home-modal.component';
 import { ConfidentialModalComponent } from './test/confidential-modal/confidential-modal.component';
 import { LeveModalComponent } from './test/leve-modal/leve-modal.component';
+import { RegistrationComponent } from './auth/registration/registration.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    ProfileFormComponent,
     RegistrationComponent,
     ReferralHierarchyComponent,
     HomeComponent,

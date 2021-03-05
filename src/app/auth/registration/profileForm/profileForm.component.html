@@ -1,0 +1,216 @@
+<div class="loader" [hidden]="!loadingData">
+  <mat-spinner></mat-spinner>
+  <div class="spinner-span">Cargando Datos...</div>
+</div>
+
+<div class="section-two" [hidden]="loadingData">
+  <mat-horizontal-stepper #stepper>
+    <div class="section-two__title">Crear una cuenta</div>
+    <mat-step [stepControl]="personalInfoFormGroup">
+      <ng-template matStepLabel>Información Personal</ng-template>
+
+      <form [formGroup]="personalInfoFormGroup">
+
+        <div class="registration__title">¿Quién te recomendó usar Apprevenir?</div>
+        <mat-form-field class="width-100">
+          <mat-select formControlName="referralSource" (selectionChange)="onReferralSourceChanged()">
+            <mat-option *ngFor="let source of referralSources" [value]="source.key">
+              {{source.label}}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            Por favor elige quién te recomendó
+          </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="rootReferralHierarchy">
+          <referral-hierarchy [formGroup]="personalInfoFormGroup" [hierarchy]="rootReferralHierarchy"></referral-hierarchy>
+        </div>
+
+        <div>
+          <div class="registration__title">Información personal</div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput required formControlName="name">
+            <mat-error>
+              Nombre es <strong>requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="registration__box">
+          <mat-form-field class="width-48">
+            <mat-label>Primer Apellido</mat-label>
+            <input type="text" matInput required formControlName="maidenName">
+            <mat-error>
+              Primer Apellido es <strong>requerido</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="width-48">
+            <mat-label>Segundo Apellido</mat-label>
+            <input type="text" matInput required formControlName="lastName">
+            <mat-error>
+              Segundo Apellido es <strong>requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" required formControlName="birthDate">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <mat-icon matDatepickerToggleIcon fontSet="material-icons-outlined" class="icon-date">date_range</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>
+            Por favor ingrese una fecha válida
+          </mat-error>
+        </mat-form-field>
+        <div class="registration__gender">Género</div>
+        <mat-radio-group aria-label="Select an option" required formControlName="gender">
+          <mat-radio-button value="1" class="app-m-right">Femenino</mat-radio-button>
+          <mat-radio-button value="2">Masculino</mat-radio-button>
+        </mat-radio-group>
+        <mat-error 
+          class="mat-error" 
+          style="font-size: 75%;"
+          *ngIf="genderSelectionIsInvalid"
+        >
+          Por favor elige tu género
+        </mat-error>
+
+        <div>
+          <mat-form-field class="width-100">
+            <mat-label>Estado Civil</mat-label>
+            <mat-select formControlName="maritalStatus">
+              <mat-option *ngFor="let status of maritalStatusValues" [value]="status.key">
+                {{status.label}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Por favor elige tu estado civil
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div>
+          <mat-form-field class="width-100">
+            <mat-label>Nivel de Estudios</mat-label>
+            <mat-select formControlName="educationLevel">
+              <mat-option *ngFor="let level of educationLevels" [value]="level.key">
+                {{level.label}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Por favor elige tu nivel de estudios
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="app-flex" style="margin-top: 1rem;">
+          <button class="btn btn-secondary app-m-right">Cancelar</button>
+          <button class="btn btn-primary" matStepperNext (click)="onProfileNextClicked()">Siguiente</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="locationFormGroup">
+      <ng-template matStepLabel>Ubicación</ng-template>
+      <div class="registration__title">Cuál es tu ubicación?</div>
+
+      <form [formGroup]="locationFormGroup">
+        <div>
+          <mat-form-field class="width-100">
+            <mat-label>País</mat-label>
+            <mat-select formControlName="country" (selectionChange)="onCountryChanged()">
+              <mat-option *ngFor="let country of countries" [value]="country.id">
+                {{country.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Por favor elige tu País
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div *ngIf="states">
+          <mat-form-field class="width-100">
+            <mat-label>Departamento</mat-label>
+            <mat-select formControlName="state" (selectionChange)="onStateChanged()">
+              <mat-option *ngFor="let state of states" [value]="state.id">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Por favor elige tu Departamento
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="cities">
+          <mat-form-field class="width-100">
+            <mat-label>Ciudad</mat-label>
+            <mat-select formControlName="city">
+              <mat-option *ngFor="let city of cities" [value]="city.id">
+                {{city.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Por favor elige tu Ciudad
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="app-flex" style="margin-top: 1rem;">
+          <button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
+          <button class="btn btn-primary" matStepperNext>Siguiente</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Contacto y Acceso</ng-template>
+
+      <div class="registration__title">Contacto y Acceso</div>
+      <form [formGroup]="loginFormGroup">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Número de Celular</mat-label>
+            <input type="text" matInput required formControlName="phoneNumber">
+            <mat-error>
+              Por favor ingresa tu número de celular
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Correo Electrónico</mat-label>
+            <input type="email" matInput required formControlName="emailAddress">
+            <mat-error>
+              Por favor ingresa un correo electrónico válido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="registration__box">
+          <mat-form-field class="width-48">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput required formControlName="password">
+            <mat-error>
+              La contraseña debe tener entre 8 y 16 caracteres
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="width-48">
+            <mat-label>Confirmación de contraseña</mat-label>
+            <input type="password" matInput required formControlName="passwordConfirmation">
+            <mat-error>
+              La confirmación debe ser igual a la contraseña
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <div class="app-flex" style="margin-top: 1rem;">
+        <button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
+        <button class="btn btn-primary" (click)="onSubmitClicked()">Completar Registro</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
