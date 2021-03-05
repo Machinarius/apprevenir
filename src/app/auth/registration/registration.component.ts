@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, AbstractControl, ValidatorFn } from '@angular/forms';
-import loadUniversities from './constants/universitiesDataSource';
+import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { ReferralSources } from "./constants/referralSources";
 import { MaritalStatusValues } from "./constants/maritalStatusValues";
 import { EducationLevels } from './constants/educationLevels';
@@ -15,12 +14,10 @@ import { getCities, getCountries, getStates } from '@services/geoData/geoDataSou
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
   personalInfoFormGroup: FormGroup;
   locationFormGroup: FormGroup;
+  loginFormGroup: FormGroup;
+
   isEditable = false;
 
   loadingData = true;
@@ -39,6 +36,8 @@ export class RegistrationComponent implements OnInit {
     this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
     this.onCountryChanged = this.onCountryChanged.bind(this);
     this.onStateChanged = this.onStateChanged.bind(this);
+    this.passwordConfirmationValidator = this.passwordConfirmationValidator.bind(this);
+    this.onSubmitClicked = this.onSubmitClicked.bind(this);
   }
 
   get selectedReferralSource() {
@@ -89,6 +88,13 @@ export class RegistrationComponent implements OnInit {
       city: ['', Validators.required]
     });
 
+    this.loginFormGroup = this._formBuilder.group({
+      phoneNumber: ['', Validators.required],
+      emailAddress: ['', Validators.compose([Validators.required, Validators.email])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16)])],
+      passwordConfirmation: ['', Validators.compose([Validators.required, this.passwordConfirmationValidator])]
+    });
+
     this.loadingData = true;
     this.countries = await getCountries();
     this.loadingData = false;
@@ -113,6 +119,19 @@ export class RegistrationComponent implements OnInit {
 
     const possibleDate = new Date(control.value);
     if (possibleDate.getTime() == NaN) {
+      return { required: true };
+    }
+
+    return null;
+  }
+
+  public passwordConfirmationValidator(control: AbstractControl): ValidationErrors {
+    if (!this.loginFormGroup) {
+      return null;
+    }
+
+    const password = this.loginFormGroup.get('password').value;
+    if (password !== control.value) {
       return { required: true };
     }
 
@@ -160,5 +179,25 @@ export class RegistrationComponent implements OnInit {
     this.loadingData = true;
     this.cities = await getCities(selectedStateId);
     this.loadingData = false;
+  }
+
+  public onSubmitClicked() {
+    const formsAreValid = [
+      this.personalInfoFormGroup, 
+      this.locationFormGroup, 
+      this.loginFormGroup
+    ].reduce(
+      (formsValid, form) => {
+        form.markAllAsTouched();
+        form.markAsDirty();
+        return formsValid && form.valid;
+      }, true
+    );
+    
+    if (!formsAreValid) {
+      return;
+    }
+
+    throw new Error("Not implemented");
   }
 }

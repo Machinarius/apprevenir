@@ -13,11 +13,12 @@
 		</div>
 
 		<div class="section-two" [hidden]="loadingData">
-			<div class="section-two__title">Crear una cuenta</div>
-			<mat-horizontal-stepper #stepper linear="true">
+			<mat-horizontal-stepper #stepper>
+				<div class="section-two__title">Crear una cuenta</div>
 				<mat-step [stepControl]="personalInfoFormGroup">
+					<ng-template matStepLabel>Información Personal</ng-template>
+
 					<form [formGroup]="personalInfoFormGroup">
-						<ng-template matStepLabel>Información Personal</ng-template>
 
 						<div class="registration__title">¿Quién te recomendó usar Apprevenir?</div>
 						<mat-form-field class="width-100">
@@ -122,8 +123,10 @@
 
 				</mat-step>
 				<mat-step [stepControl]="locationFormGroup">
+					<ng-template matStepLabel>Ubicación</ng-template>
+					<div class="registration__title">Cuál es tu ubicación?</div>
+
 					<form [formGroup]="locationFormGroup">
-						<ng-template matStepLabel>Ubicación</ng-template>
 						<div>
 							<mat-form-field class="width-100">
 								<mat-label>País</mat-label>
@@ -175,52 +178,50 @@
 
 				<mat-step>
 					<ng-template matStepLabel>Contacto y Acceso</ng-template>
-					<mat-form-field class="example-full-width">
-						<mat-label>Número de Celular</mat-label>
-						<input type="email" matInput>
-						<mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-							Please enter a valid email address
-						</mat-error>
-						<mat-error *ngIf="emailFormControl.hasError('required')">
-							Email is <strong>required</strong>
-						</mat-error>
-					</mat-form-field>
 
-					<mat-form-field class="example-full-width">
-						<mat-label>Correo Electronico</mat-label>
-						<input type="email" matInput>
-						<mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-							Please enter a valid email address
-						</mat-error>
-						<mat-error *ngIf="emailFormControl.hasError('required')">
-							Email is <strong>required</strong>
-						</mat-error>
-					</mat-form-field>
+					<div class="registration__title">Contacto y Acceso</div>
+					<form [formGroup]="loginFormGroup">
+						<div>
+							<mat-form-field class="example-full-width">
+								<mat-label>Número de Celular</mat-label>
+								<input type="text" matInput required formControlName="phoneNumber">
+								<mat-error>
+									Por favor ingresa tu número de celular
+								</mat-error>
+							</mat-form-field>
+						</div>
 
-					<div class="registration__box">
-						<mat-form-field class="width-48">
-							<mat-label>Contraseña</mat-label>
-							<input type="email" matInput >
-							<mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-								Please enter a valid email address
-							</mat-error>
-							<mat-error *ngIf="emailFormControl.hasError('required')">
-								Email is <strong>required</strong>
-							</mat-error>
-						</mat-form-field>
-						<mat-form-field class="width-48">
-							<mat-label>Repetir Contraseña</mat-label>
-							<input type="email" matInput>
-							<mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-								Please enter a valid email address
-							</mat-error>
-							<mat-error *ngIf="emailFormControl.hasError('required')">
-								Email is <strong>required</strong>
-							</mat-error>
-						</mat-form-field>
-					</div>
+						<div>
+							<mat-form-field class="example-full-width">
+								<mat-label>Correo Electrónico</mat-label>
+								<input type="email" matInput required formControlName="emailAddress">
+								<mat-error>
+									Por favor ingresa un correo electrónico válido
+								</mat-error>
+							</mat-form-field>
+						</div>
+						
+						<div class="registration__box">
+							<mat-form-field class="width-48">
+								<mat-label>Contraseña</mat-label>
+								<input type="password" matInput required formControlName="password">
+								<mat-error>
+									La contraseña debe tener entre 8 y 16 caracteres
+								</mat-error>
+							</mat-form-field>
+							<mat-form-field class="width-48">
+								<mat-label>Confirmación de contraseña</mat-label>
+								<input type="password" matInput required formControlName="passwordConfirmation">
+								<mat-error>
+									La confirmación debe ser igual a la contraseña
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</form>
+
 					<div class="app-flex">
 						<button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
+						<button class="btn btn-primary" (click)="onSubmitClicked()">Completar Registro</button>
 					</div>
 				</mat-step>
 			</mat-horizontal-stepper>
