@@ -32,10 +32,10 @@ export async function loadProfileFormData(): Promise<ProfileFormData> {
 
   return {
     personalInfo: {
-      referralSource: clientConfig.client_type,
-      referralHierarchy1: clientConfig.selectA,
-      referralHierarchy2: clientConfig.selectB,
-      referralHierarchy3: clientConfig.selectC,
+      referralSource: clientConfig?.client_type,
+      referralHierarchy1: clientConfig?.selectA,
+      referralHierarchy2: clientConfig?.selectB,
+      referralHierarchy3: clientConfig?.selectC,
       referralHierarchy4: "",
       referralHierarchy5: "",
       birthDate: userProfile.birhday,
