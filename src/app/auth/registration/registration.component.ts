@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, AbstractControl, ValidatorFn } from '@angular/forms';
-import loadFakeUniversities from './constants/fakeUniversities';
-import { OnboardingSources, OnboardingSourcesKeys } from "./constants/onboardingSources";
+import loadUniversities from './constants/universitiesDataSource';
+import { ReferralSources } from "./constants/referralSources";
 import { MaritalStatusValues } from "./constants/maritalStatusValues";
 import { EducationLevels } from './constants/educationLevels';
+import { BackendClientTypes } from '@typedefs/backend';
+import { HierarchyNode } from './referralHierarchy/HierarchyNode';
+import { buildRootHierarchy } from "./referralHierarchy/builders/hierarchyBuilder";
 
 @Component({
   selector: 'app-registration',
@@ -20,22 +23,28 @@ export class RegistrationComponent implements OnInit {
   isEditable = false;
 
   loadingData = true;
-  onboardingSources = OnboardingSources;
+  referralSources = ReferralSources;
+  rootReferralHierarchy: HierarchyNode | null = null;
   maritalStatusValues = MaritalStatusValues;
   educationLevels = EducationLevels;
   universities: { id: number, label: string }[] = [];
 
   constructor(private _formBuilder: FormBuilder) {
-    this.universityRequiredValidator = this.universityRequiredValidator.bind(this);
+    this.referralHierarchyRequiredValidator = this.referralHierarchyRequiredValidator.bind(this);
     this.dateValidator = this.dateValidator.bind(this);
+    this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
   }
 
-  get universitiesDropDownMustBeShown() {
+  get selectedReferralSource() {
+    return this.personalInfoFormGroup.get('referralSource').value;
+  }
+
+  get referralHierarchyMustBeShown() {
     if (!this.personalInfoFormGroup) {
       return false;
     }
 
-    return this.personalInfoFormGroup.get('onboardingSource').value === OnboardingSourcesKeys.UNIVERSITY;
+    return !!this.selectedReferralSource && this.selectedReferralSource !== BackendClientTypes.NaturalPerson;
   }
 
   get genderSelectionIsInvalid() {
@@ -53,8 +62,12 @@ export class RegistrationComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.personalInfoFormGroup = this._formBuilder.group({
-      onboardingSource: ['', Validators.required],
-      university: ['', this.universityRequiredValidator],
+      referralSource: ['', Validators.required],
+      referralHierarchy1: ['', this.referralHierarchyRequiredValidator],
+      referralHierarchy2: [''],
+      referralHierarchy3: [''],
+      referralHierarchy4: [''],
+      referralHierarchy5: [''],
       name: ['', Validators.required],
       maidenName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -69,12 +82,12 @@ export class RegistrationComponent implements OnInit {
     });
 
     this.loadingData = true;
-    this.universities = await loadFakeUniversities();
+    this.universities = await loadUniversities();
     this.loadingData = false;
   }
 
-  public universityRequiredValidator(control: AbstractControl): ValidationErrors {
-    if (!this.universitiesDropDownMustBeShown) {
+  public referralHierarchyRequiredValidator(control: AbstractControl): ValidationErrors {
+    if (!this.referralHierarchyMustBeShown) {
       return null;
     }
 
@@ -96,5 +109,20 @@ export class RegistrationComponent implements OnInit {
     }
 
     return null;
+  }
+
+  public async onReferralSourceChanged() {
+    this.rootReferralHierarchy = null;
+    [1, 2, 3, 4, 5].forEach(
+      index => this.personalInfoFormGroup.get('referralHierarchy' + index).setValue('')
+    );
+
+    if (!this.referralHierarchyMustBeShown) {
+      return;
+    }
+    
+    this.loadingData = true;
+    this.rootReferralHierarchy = await buildRootHierarchy(this.selectedReferralSource);
+    this.loadingData = false;
   }
 }

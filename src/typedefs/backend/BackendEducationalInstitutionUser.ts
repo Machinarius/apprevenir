@@ -2,7 +2,7 @@ import { BackendClientTypes } from "./BackendClientTypes";
 import { BackendTimestamps } from "./BackendTimestamps";
 import { BackendUser } from "./BackendUser";
 
-interface BackendEducationalGrade extends BackendTimestamps {
+export interface BackendEducationalGrade extends BackendTimestamps {
   id: number,
   user_id: number,
   grade: string

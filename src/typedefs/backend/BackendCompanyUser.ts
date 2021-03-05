@@ -2,20 +2,20 @@ import { BackendClientTypes } from "./BackendClientTypes";
 import { BackendTimestamps } from "./BackendTimestamps";
 import { BackendUser } from "./BackendUser";
 
-interface BackendAreaSchedule extends BackendTimestamps {
+export interface BackendAreaSchedule extends BackendTimestamps {
   id: number,
   area_id: number,
   schedul: string // Typo comes from back-end
 }
 
-interface BackendLocationArea extends BackendTimestamps {
+export interface BackendLocationArea extends BackendTimestamps {
   id: number,
   location_id: number,
   area: string,
   schedules: BackendAreaSchedule[]
 }
 
-interface BackendCompanyLocation extends BackendTimestamps {
+export interface BackendCompanyLocation extends BackendTimestamps {
   id: number,
   user_id: number,
   location: string,

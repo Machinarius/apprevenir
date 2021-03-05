@@ -53,6 +53,15 @@ export function storedAuthTokenIsValid(): boolean {
     return now < expirationDate;
 }
 
+export function getAuthToken(): string {
+  const authToken = localStorage.getItem('token');
+  if (!authToken) {
+    throw new Error("The auth token could not be retrieved, is the user logged-in?");
+  }
+
+  return authToken;
+}
+
 export function storeAuhToken(authToken: string) {
   if (!authToken) {
     throw new Error("Can not store a null auth token");

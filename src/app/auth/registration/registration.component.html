@@ -21,8 +21,8 @@
 
 						<div class="registration__title">¿Quién te recomendó usar Apprevenir?</div>
 						<mat-form-field class="width-100">
-							<mat-select formControlName="onboardingSource">
-								<mat-option *ngFor="let source of onboardingSources" [value]="source.key">
+							<mat-select formControlName="referralSource" (selectionChange)="onReferralSourceChanged()">
+								<mat-option *ngFor="let source of referralSources" [value]="source.key">
 									{{source.label}}
 								</mat-option>
 							</mat-select>
@@ -31,18 +31,8 @@
 							</mat-error>
 						</mat-form-field>
 
-						<div *ngIf="universitiesDropDownMustBeShown">
-							<div class="registration__university">Por favor elije tu universidad</div>
-							<mat-form-field class="width-100">
-								<mat-select formControlName="university">
-									<mat-option *ngFor="let university of universities" [value]="university.id">
-										{{university.label}}
-									</mat-option>
-								</mat-select>
-								<mat-error>
-									Por favor elige tu universidad
-								</mat-error>
-							</mat-form-field>
+						<div *ngIf="rootReferralHierarchy">
+							<referral-hierarchy [formGroup]="personalInfoFormGroup" [hierarchy]="rootReferralHierarchy"></referral-hierarchy>
 						</div>
 
 						<div>

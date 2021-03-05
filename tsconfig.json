@@ -18,7 +18,8 @@
     ],
     "paths": {
       "@typedefs/*": ["src/typedefs/*"],
-      "@environments/*": ["src/environments/*"]
+      "@environments/*": ["src/environments/*"],
+      "@services/*": ["src/app/services/*"]
     }
   }
 }
