@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { ReferralSources } from "./constants/referralSources";
 import { MaritalStatusValues } from "./constants/maritalStatusValues";
@@ -11,6 +11,7 @@ import { LocationFormGroup, LoginFormGroup, PersonalInfoFormGroup } from './form
 import { RegistrationResult, submitRegistrationForms } from './forms/registrationSubmitHandler';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { loadProfileFormData } from './forms/profileFormLoader';
 
 @Component({
   selector: 'app-registration',
@@ -18,6 +19,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
+  @Input("profile-update") profileUpdateModeEnabled: boolean;
+
   personalInfoFormGroup: FormGroup;
   locationFormGroup: FormGroup;
   loginFormGroup: FormGroup;
@@ -43,6 +46,7 @@ export class RegistrationComponent implements OnInit {
     this.passwordConfirmationValidator = this.passwordConfirmationValidator.bind(this);
     this.onSubmitClicked = this.onSubmitClicked.bind(this);
     this.handleRegistrationResult = this.handleRegistrationResult.bind(this);
+    this.loadProfileFormDataIfNeeded = this.loadProfileFormDataIfNeeded.bind(this);
   }
 
   get selectedReferralSource() {
@@ -102,6 +106,7 @@ export class RegistrationComponent implements OnInit {
 
     this.loadingData = true;
     this.countries = await getCountries();
+    await this.loadProfileFormDataIfNeeded();
     this.loadingData = false;
   }
 
@@ -219,7 +224,7 @@ export class RegistrationComponent implements OnInit {
 
   async handleRegistrationResult(result: RegistrationResult) {
     if (result.wasSuccessful) {
-      await Swal.fire("Bienvenido", "Has sido registrado exitósamente. Utiliza tu correo y contraseña para ingresar.", "success");
+      await Swal.fire("Bienvenido", "Has sido registrado exitosamente. Utiliza tu correo y contraseña para ingresar.", "success");
 
       this.router.navigate(['']); 
       return;
@@ -231,5 +236,16 @@ export class RegistrationComponent implements OnInit {
     }
 
     Swal.fire("Error", errorMessage, "error");
+  }
+
+  async loadProfileFormDataIfNeeded() {
+    if (!this.profileUpdateModeEnabled) {
+      return;
+    }
+
+    const currentFormData = await loadProfileFormData();
+    this.personalInfoFormGroup.patchValue(currentFormData.personalInfo);
+    this.locationFormGroup.patchValue(currentFormData.location);
+    this.loginFormGroup.patchValue(currentFormData.login);
   }
 }

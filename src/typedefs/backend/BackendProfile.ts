@@ -14,8 +14,8 @@ export interface BackendProfile {
   country_id: number | null,
   state_id: number | null,
   city_id: number | null,
-  client_config: BackendClientConfig | null,
-  created_at: string,
-  updated_at: string,
+  client_config: string | BackendClientConfig | null,
+  created_at: string | null,
+  updated_at: string | null,
   deleted_at: string | null
 }

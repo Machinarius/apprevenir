@@ -3,7 +3,7 @@ import { BackendProfile } from "./BackendProfile";
 
 export interface BackendUser<TClientType extends BackendClientTypes = BackendClientTypes.NaturalPerson> {
   id: number,
-  reference: number,
+  reference: number | null,
   email: string,
   email_verified_at: string,
   client: TClientType,
