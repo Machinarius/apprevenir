@@ -1,10 +1,13 @@
 export const MaritalStatusValues = [{
-  key: "SINGLE",
-  label: "Soltero"
+  key: "1",
+  label: "Soltero/a"
 }, {
-  key: "CIVIL_UNION",
-  label: "Unión libre"
+  key: "2",
+  label: "Casado/a"
 }, {
-  key: "MARRIED",
-  label: "Matrimonio"
+  key: "3",
+  label: "Viudo/a"
+}, {
+  key: "4",
+  label: "Divorciado/a"
 }];

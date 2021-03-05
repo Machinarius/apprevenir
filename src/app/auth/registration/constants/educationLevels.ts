@@ -1,10 +1,16 @@
 export const EducationLevels = [{
-  key: "0",
+  key: "1",
   label: "Primaria"
 }, {
-  key: "1",
+  key: "2",
   label: "Bachillerato"
 }, {
-  key: "2",
+  key: "3",
   label: "Universidad"
+}, {
+  key: "4",
+  label: "Posgrado"
+}, {
+  key: "5",
+  label: "Ninguno"
 }];

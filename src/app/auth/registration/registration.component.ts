@@ -17,12 +17,12 @@ export class RegistrationComponent implements OnInit {
   personalInfoFormGroup: FormGroup;
   locationFormGroup: FormGroup;
   loginFormGroup: FormGroup;
-
-  isEditable = false;
-
+  
   loadingData = true;
+  
   referralSources = ReferralSources;
   rootReferralHierarchy: HierarchyNode | null = null;
+
   maritalStatusValues = MaritalStatusValues;
   educationLevels = EducationLevels;
 
