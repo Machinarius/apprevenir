@@ -27,15 +27,6 @@ export class ProfileComponent implements OnInit {
     'Leve': '#20E57E'
   };
 
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-  
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  isEditable = false;
-
   displayedColumns: string[] = ['Test', 'Fecha', 'Nivel', 'Respuestas'];
   dataSource = [];
   
@@ -46,13 +37,6 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
-
     this.testService.myResults().subscribe(res => {
       this.dataSource = res['data']
     });
