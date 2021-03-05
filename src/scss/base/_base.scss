@@ -10,10 +10,25 @@ body {
   color: var(--color-gray-dark-2);
 }
 
-ul {
-  list-style:none;
+#gif_level > ul > li > a {
+	color: var(--color-primary) !important;
 }
 
+#gif_level > ul  {
+	padding-left: 0 !important;
+  list-style-type: none;
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--color-primary)!important;
+}
+
+.spinner-span {
+    color: var(--color-gray-dark-2);
+		font-size: 16px;
+		font-family: 'KanitMedium';
+    margin-top: 1rem;
+}
 
 .inputContainer {
     display: inline-flex;
@@ -105,4 +120,10 @@ ul {
     outline-style: none !important;
     font-size: 13px;
   }
+}
+
+//Select style
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: var(--color-primary);
 }

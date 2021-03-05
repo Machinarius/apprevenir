@@ -55,6 +55,7 @@
 					</ng-template>
 					<div class="test__tab">
 						<div class="test__type">
+							<mat-icon fontSet="material-icons-outlined" class="test__ico" (click)="openDialogSuppor(test)">help_outline</mat-icon>
 							<div [innerHTML]="gifLevel[resultLevel]"></div>
             				<div [style]="colorsLevel[resultLevel]" class="test__result">{{resultLevel}}</div>
 						</div>
@@ -79,7 +80,7 @@
 						Ayuda
 					</ng-template>
 					<div class="test__tab">
-						<div class="test__type info-text" [innerHTML]="professional_help">
+						<div class="test__info-text" [innerHTML]="professional_help">
 						</div>
 					</div>
 				</mat-tab>
@@ -90,10 +91,10 @@
 						Enlaces
 					</ng-template>
 					<div class="test__tab">
-						<div>
+						<div class="test__info-box">
 							<div class="test__school">
 								<mat-icon fontSet="material-icons-outlined">school</mat-icon>
-								<div class="test__interest" [innerHTML]="url_interest"></div>
+								<div [innerHTML]="url_interest" id="gif_level"></div>
 							</div>
 						</div>
 					</div>

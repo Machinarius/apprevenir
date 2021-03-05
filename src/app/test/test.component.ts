@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl, FormA
 import { MatDialog } from '@angular/material/dialog';
 import { InformationModalComponent } from './information-modal/information-modal.component';
 import { ConfidentialModalComponent } from './confidential-modal/confidential-modal.component';
+import { LeveModalComponent } from './leve-modal/leve-modal.component';
 
 @Component({
   selector: 'app-test',
@@ -85,7 +86,19 @@ export class TestComponent implements OnInit {
 
   openDialogConfidential() {
     const dialogRef = this.dialog.open(ConfidentialModalComponent, {
-      id: "modal-home-padding"
+      id: "modal-confidencial-width"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openDialogSuppor(test) {
+    const dialogRef = this.dialog.open(LeveModalComponent, {
+      data: {
+        test: test
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {

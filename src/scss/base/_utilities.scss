@@ -84,8 +84,15 @@
   margin-bottom: 0 !important;
 }
 
+.icon-color {
+  color: var(--color-gray-dark-2);
+}
+
 #modal-width {
   width: 768px;
+}
+#modal-confidencial-width {
+  width: 500px;
 }
 
 .terms-modal {

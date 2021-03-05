@@ -19,7 +19,7 @@
 					<mat-error *ngIf="loginForm.get('email').hasError('required')">
 						El correo electrónico es <strong>necesario</strong>
 					</mat-error>
-					<img src="./../../../assets/icons/email_outline.svg" alt="" matSuffix>
+					<mat-icon fontSet="material-icons-outlined" matSuffix class="icon-color">email</mat-icon>
 				</mat-form-field>
 				<div class="section-two__forgot-box">
 					<a routerLink="/recovery" class="section-two__forgot">¿Olvídaste tu contraseña?</a>
@@ -30,8 +30,9 @@
 					<mat-error *ngIf="loginForm.get('password').hasError('required')">
 						La contraseña es <strong>necesaria</strong>
 					</mat-error>
-					<img [src]="show ? './../../../assets/icons/material-visibility.svg' : './../../../assets/icons/material-visibility-off.svg'"alt="" matSuffix class="app-m-rigth width-icon" (click)="password()">
-					<img src="./../../../assets/icons/lock_outline.svg" alt="" matSuffix>
+					<mat-icon  matSuffix *ngIf="show" (click)="password()" class="app-m-rigth icon-color app-cursor">visibility</mat-icon>
+					<mat-icon  matSuffix *ngIf="!show" (click)="password()" class="app-m-rigth icon-color app-cursor">visibility_off</mat-icon>
+					<mat-icon fontSet="material-icons-outlined" class="icon-color " matSuffix>https</mat-icon>
 				</mat-form-field>
 				<div class="box-checkbox">
 					<input type="checkbox" id="test1" />

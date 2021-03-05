@@ -15,13 +15,17 @@
     </div>
     </mat-dialog-content>
     <div class="modal-home__para modal-home__drugs">
-        <p>{{ data.description }}</p>
+        <p class="modal-home__text-p">{{ data.description }}</p>
         <form [formGroup]="addiction" (ngSubmit)="onSubmit(data.id)">
-            <select formControlName="addiction_id" required>
-              <option value="">Elige una opción</option>
-              <option [value]="addiction.pivot.addiction_id+' '+addiction.name" *ngFor="let addiction of data.addictions">{{ addiction.name }}</option>
-            </select>
-            <button class="modal-test__btn test" type="submit">Hacer test</button>
+          <mat-form-field class="width-100">
+            <mat-select formControlName="addiction_id" required>
+              <mat-option value="">Elige una opción</mat-option>
+              <mat-option [value]="addiction.pivot.addiction_id+' '+addiction.name" *ngFor="let addiction of data.addictions">{{ addiction.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div style="text-align: center;">
+            <button class="btn btn-primary" type="submit">Hacer test</button>
+          </div>
           </form>
     </div>
     <div align="end" class="btn-cancel">

@@ -1,0 +1,15 @@
+.confidencial {
+        color: var(--color-normal-grey);
+        font-size: 16px;
+        font-family: 'FiratRegular';
+        text-align: center;
+    &__img {
+        width: 8rem;
+    }
+    &__strong {
+        font-weight: bold;
+    }
+    &__text {
+        margin: 1rem;
+    }
+}
