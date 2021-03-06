@@ -7,7 +7,7 @@ import { BackendCity, BackendClientTypes, BackendCountry, BackendState } from '@
 import { HierarchyNode } from '../referralHierarchy/HierarchyNode';
 import { buildRootHierarchy } from "../referralHierarchy/builders/hierarchyBuilder";
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
-import { LocationFormGroup, LoginFormGroup, PersonalInfoFormGroup } from '../forms/FormKeys';
+import { LocationFormSchema, LoginFormSchema, PersonalInfoFormSchema } from '../forms/FormKeys';
 import { RegistrationResult, submitRegistrationForms } from '../forms/registrationSubmitHandler';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -74,7 +74,7 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.personalInfoFormGroup = this._formBuilder.group({
+    const personalInfoFormSchema: PersonalInfoFormSchema = {
       referralSource: ['', Validators.required],
       referralHierarchy1: ['', this.referralHierarchyRequiredValidator],
       referralHierarchy2: [''],
@@ -88,20 +88,24 @@ export class ProfileFormComponent implements OnInit {
       gender: ['', Validators.required],
       maritalStatus: ['', Validators.required],
       educationLevel: ['', Validators.required]
-    } as PersonalInfoFormGroup);
+    };
 
-    this.locationFormGroup = this._formBuilder.group({
+    const locationFormSchema: LocationFormSchema = {
       country: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required]
-    } as LocationFormGroup);
+    };
 
-    this.loginFormGroup = this._formBuilder.group({
+    const loginFormSchema: LoginFormSchema = {
       phoneNumber: ['', Validators.required],
       emailAddress: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16)])],
       passwordConfirmation: ['', Validators.compose([Validators.required, this.passwordConfirmationValidator])]
-    } as LoginFormGroup);
+    };
+
+    this.personalInfoFormGroup = this._formBuilder.group(personalInfoFormSchema);
+    this.locationFormGroup = this._formBuilder.group(locationFormSchema);
+    this.loginFormGroup = this._formBuilder.group(loginFormSchema);
 
     await this.showLoadingIndicator(async () => {
       this.countries = await getCountries();
