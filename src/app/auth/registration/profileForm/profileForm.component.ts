@@ -150,7 +150,7 @@ export class ProfileFormComponent implements OnInit {
     
     await this.showLoadingIndicator(async () => {
       try {
-        const result = await submitRegistrationForms(...allForms);
+        const result = await submitRegistrationForms(this.profileUpdateModeEnabled, ...allForms);
         this.handleRegistrationResult(result);
       } catch (error) {
         console.error("Error while trying to submit the registration data", error);
