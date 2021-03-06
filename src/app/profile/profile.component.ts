@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule,FormsModule, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { getStoredProfileInfo, IProfileInfo, ProfileChangedMessage } from '@services/auth/authStore';
+import { EventBus } from '@services/messaging/EventBus';
+import { KnownMessageKeys } from '@services/messaging/EventMessage';
+import { Subscription } from 'rxjs';
 import { TestService } from '../services/test/test.service';
 import { ProfileModalComponent } from './profile-modal/profile-modal.component';
 
@@ -19,7 +23,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+  firstNames = "Nombres";
+  lastNames = "Apellidos";
   
   color = {
     'Severo': '#FF4E60',
@@ -36,10 +42,30 @@ export class ProfileComponent implements OnInit {
     private testService: TestService
   ) { }
 
+  profileSubscription: Subscription | null;
+
   ngOnInit(): void {
     this.testService.myResults().subscribe(res => {
       this.dataSource = res['data']
     });
+
+    this.updateProfileData(getStoredProfileInfo());
+    this.profileSubscription = EventBus.instance.messages<ProfileChangedMessage>(
+      KnownMessageKeys.ProfileChanged
+    ).subscribe((profileMessage) => {
+      this.updateProfileData(profileMessage.payload);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.profileSubscription) {
+      this.profileSubscription.unsubscribe();
+    }
+  }
+
+  private updateProfileData(profile: IProfileInfo) {
+    this.firstNames = profile.firstNames;
+    this.lastNames = profile.lastNames;
   }
   
   openDialogProfile(test) {
