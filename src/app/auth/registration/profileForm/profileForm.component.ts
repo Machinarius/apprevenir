@@ -242,9 +242,16 @@ export class ProfileFormComponent implements OnInit {
     }
 
     const currentFormData = await loadProfileFormData();
+    this.rootReferralHierarchy = await buildRootHierarchy(
+      currentFormData.personalInfo.referralSource as BackendClientTypes
+    );
+
     this.personalInfoFormGroup.patchValue(currentFormData.personalInfo);
     this.locationFormGroup.patchValue(currentFormData.location);
     this.loginFormGroup.patchValue(currentFormData.login);
+    
+    await this.onCountryChanged();
+    await this.onStateChanged();
   }
 
   loadingReferences = 0;

@@ -3,6 +3,7 @@ import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from 
 import { RawFormData } from "./FormKeys";
 import { environment } from "@environments/environment";
 import * as dayjs from "dayjs";
+
 export interface RegistrationResult {
   wasSuccessful: boolean,
   errorMessages: string[]
@@ -33,15 +34,13 @@ export async function submitRegistrationForms(
     password_confirmation: rawFormData.passwordConfirmation,
     phone: rawFormData.phoneNumber,
     reference: rawFormData.referralHierarchy1,
-    selectA: rawFormData.referralHierarchy2,
-    selectB: rawFormData.referralHierarchy3,
-    selectC: rawFormData.referralHierarchy4,
     client_config: {
-      client: BackendClientTypes.NaturalPerson,
       client_type: rawFormData.referralSource as BackendClientTypes,
+      client: rawFormData.referralHierarchy1,
       selectA: rawFormData.referralHierarchy2,
       selectB: rawFormData.referralHierarchy3,
-      selectC: rawFormData.referralHierarchy4
+      selectC: rawFormData.referralHierarchy4,
+      selectD: rawFormData.referralHierarchy5
     }
   };
 

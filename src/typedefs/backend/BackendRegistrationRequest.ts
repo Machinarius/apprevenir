@@ -20,8 +20,5 @@ export interface BackendRegistrationRequest {
   password_confirmation: string,
   phone: string,
   reference: string,
-  selectA: string,
-  selectB: string,
-  selectC: string,
   state_id: string
 }
