@@ -8,7 +8,7 @@ import * as dayjs from "dayjs";
 interface ProfileFormData {
   personalInfo: Record<Exclude<PersonalInfoFormKeys, "birthDate">, string> & { birthDate: Date | null },
   location: Record<LocationFormKeys, string | number>,
-  login: Record<Exclude<LoginFormKeys, "password" | "passwordConfirmation">, string>
+  login: Record<Exclude<LoginFormKeys, "password" | "passwordConfirmation" | "currentPassword">, string>
 }
 
 export async function loadProfileFormData(): Promise<ProfileFormData> {

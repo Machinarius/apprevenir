@@ -24,13 +24,8 @@ export type LoginFormKeys =
   | "phoneNumber"
   | "emailAddress"
   | "password"
-  | "passwordConfirmation";
+  | "passwordConfirmation"
+  | "currentPassword" ;
 
 type AllFormKeys = PersonalInfoFormKeys | LocationFormKeys | LoginFormKeys;
-
-export type FormValidationTuple = [string] | [string, ValidatorFn];
-export type PersonalInfoFormSchema = Record<PersonalInfoFormKeys, FormValidationTuple>;
-export type LocationFormSchema = Record<LocationFormKeys, FormValidationTuple>;
-export type LoginFormSchema = Record<LoginFormKeys, FormValidationTuple>;
-
 export type RawFormData = Record<Exclude<AllFormKeys, "birthDate">, string | number> & { birthDate: Date };
