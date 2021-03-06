@@ -242,16 +242,24 @@ export class ProfileFormComponent implements OnInit {
     }
 
     const currentFormData = await loadProfileFormData();
-    this.rootReferralHierarchy = await buildRootHierarchy(
-      currentFormData.personalInfo.referralSource as BackendClientTypes
-    );
+
+    if (currentFormData.personalInfo.referralSource) {
+      this.rootReferralHierarchy = await buildRootHierarchy(
+        currentFormData.personalInfo.referralSource as BackendClientTypes
+      );
+    }
+
+    if (typeof currentFormData.location.country === "number") {
+      this.states = await getStates(currentFormData.location.country);
+    }
+
+    if (typeof currentFormData.location.state === "number") {
+      this.cities = await getCities(currentFormData.location.state);
+    }
 
     this.personalInfoFormGroup.patchValue(currentFormData.personalInfo);
     this.locationFormGroup.patchValue(currentFormData.location);
     this.loginFormGroup.patchValue(currentFormData.login);
-    
-    await this.onCountryChanged();
-    await this.onStateChanged();
   }
 
   loadingReferences = 0;
