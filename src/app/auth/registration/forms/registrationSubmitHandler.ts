@@ -3,7 +3,8 @@ import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from 
 import { RawFormData } from "./FormKeys";
 import { environment } from "@environments/environment";
 import * as dayjs from "dayjs";
-import { getAuthToken, getStoredProfileInfo } from "@services/auth/authStore";
+import { getAuthToken, getStoredProfileInfo, updateStoredProfile } from "@services/auth/authStore";
+import { getUserData } from "@services/user/usersDataSource";
 
 export interface RegistrationResult {
   wasSuccessful: boolean,
@@ -75,6 +76,12 @@ export async function submitRegistrationForms(
     if (responsePayload.errors) {
       const errors = responsePayload.errors;
       resultObject.errorMessages = Object.keys(errors).reduce((messages, key) => [...messages, ...errors[key]], []);
+    }
+  } else {
+    if (isEditingProfile) {
+      const currentProfile = getStoredProfileInfo();
+      const profileResult = await getUserData(currentProfile.id);
+      updateStoredProfile(profileResult);
     }
   }
 

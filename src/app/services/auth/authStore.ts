@@ -1,5 +1,6 @@
 import { EventBus } from "@services/messaging/EventBus";
 import { EventMessageWithPayload, KnownMessageKeys } from "@services/messaging/EventMessage";
+import { BackendUser } from "@typedefs/backend";
 
 enum Roles {
   Root = "root",
@@ -73,6 +74,24 @@ export function storeAuhToken(authToken: string) {
   localStorage.setItem('token', authToken);
 }
 
+export function updateStoredProfile(user: BackendUser) {
+  const currentProfile = getStoredProfileInfo();
+  currentProfile.firstNames = user.profile.first_names;
+  currentProfile.lastNames = user.profile.last_names;
+  currentProfile.phoneNumber = user.profile.phone;
+  currentProfile.birthday = user.profile.birthday; // TODO: dayjs this...
+  currentProfile.educationLevelId = user.profile.education_level_id;
+  currentProfile.isStudent = user.profile.is_student == 1;
+  currentProfile.genderId = user.profile.gender_id;
+  currentProfile.civilStatusId = user.profile.civil_status_id;
+  currentProfile.countryId = user.profile.country_id;
+  currentProfile.stateId = user.profile.state_id;
+  currentProfile.cityId = user.profile.city_id;
+  currentProfile.clientConfig = user.profile.client_config; // TODO: Normalize this...
+
+  storeProfileInLocalStorage(currentProfile);
+}
+
 export function storeProfileInfo(profileInfo: any) {
   if (!profileInfo) {
     throw new Error("Can not store null profile data");
@@ -85,7 +104,7 @@ export function storeProfileInfo(profileInfo: any) {
     firstNames: profileInfo.first_names,
     lastNames: profileInfo.last_names,
     phoneNumber: profileInfo.phone,
-    birthday: profileInfo.birthday,
+    birthday: profileInfo.birthday, // TODO: dayjs this...
     educationLevelId: profileInfo.education_level_id,
     isStudent: profileInfo.is_student == 1, // Bruh...
     genderId: profileInfo.gender_id,
@@ -93,15 +112,19 @@ export function storeProfileInfo(profileInfo: any) {
     countryId: profileInfo.country_id,
     stateId: profileInfo.state_id,
     cityId: profileInfo.city_id,
-    clientConfig: profileInfo.client_config,
+    clientConfig: profileInfo.client_config, // TODO: Normalize this...
     role: profileInfo.role as Roles,
     createdAt: new Date(profileInfo.created_at),
     updatedAt: profileInfo.updated_at == null ? null : new Date(profileInfo.updated_at)
   };
 
-  localStorage.setItem('profile', JSON.stringify(normalizedProfile));
+  storeProfileInLocalStorage(normalizedProfile);
+}
 
-  const message = new ProfileChangedMessage(normalizedProfile);
+function storeProfileInLocalStorage(profile: IProfileInfo) {
+  localStorage.setItem('profile', JSON.stringify(profile));
+
+  const message = new ProfileChangedMessage(profile);
   EventBus.instance.publishMessage(message);
 }
 

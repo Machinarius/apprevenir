@@ -1,7 +1,6 @@
 import { LocationFormKeys, LoginFormKeys, PersonalInfoFormKeys } from "./FormKeys";
-import { environment } from "@environments/environment";
-import { getAuthToken, getStoredProfileInfo } from "@services/auth/authStore";
-import { ensureResponseIsSuccessful } from "@services/common";
+import { getStoredProfileInfo } from "@services/auth/authStore";
+import { getUserData } from "@services/user/usersDataSource";
 import { BackendClientConfig, BackendUser } from "@typedefs/backend";
 import * as dayjs from "dayjs";
 
@@ -13,13 +12,7 @@ interface ProfileFormData {
 
 export async function loadProfileFormData(): Promise<ProfileFormData> {
   const currentProfile = getStoredProfileInfo();
-  const userResponse = await ensureResponseIsSuccessful<BackendUser>(
-    fetch(`${environment.url}/api/v1/users/${currentProfile.id}`, {
-      headers: {
-        "Authorization": `Bearer ${getAuthToken()}`
-      }
-    })
-  );
+  const userResponse = await getUserData(currentProfile.id);
 
   const userProfile = userResponse.profile;
   let clientConfig = userProfile.client_config;
