@@ -3,6 +3,7 @@ import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from 
 import { RawFormData } from "./FormKeys";
 import { environment } from "@environments/environment";
 import * as dayjs from "dayjs";
+import { getAuthToken, getStoredProfileInfo } from "@services/auth/authStore";
 
 export interface RegistrationResult {
   wasSuccessful: boolean,
@@ -10,6 +11,7 @@ export interface RegistrationResult {
 }
 
 export async function submitRegistrationForms(
+  isEditingProfile: boolean,
   ...forms: FormGroup[]
 ): Promise<RegistrationResult> {
   const rawFormData: RawFormData = forms.reduce((data, form) => Object.assign(data, form.value), {});
@@ -44,12 +46,26 @@ export async function submitRegistrationForms(
     }
   };
 
-  const response = await fetch(`${environment.url}/api/v1/register`, {
+  let url = `${environment.url}/api/v1/register`;
+  let method = "POST";
+  let headers: { [key: string]: string } = {
+    "Content-Type": "application/json"
+  };
+
+  if (isEditingProfile) {
+    const currentProfile = getStoredProfileInfo();
+    url = `${environment.url}/api/v1/users/${currentProfile.id}`;
+    method = "PUT";
+    headers = {
+      ...headers,
+      "Authorization": `Bearer ${getAuthToken()}`
+    };
+  }
+
+  const response = await fetch(url, {
     body: JSON.stringify(registrationPayload),
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    }
+    method,
+    headers
   });
 
   const resultObject: RegistrationResult = { wasSuccessful: true, errorMessages: [] };
