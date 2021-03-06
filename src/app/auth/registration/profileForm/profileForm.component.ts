@@ -160,8 +160,15 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async handleRegistrationResult(result: RegistrationResult) {
+    let successTitle = "Bienvenido";
+    let successMessage = "Has sido registrado exitosamente. Utiliza tu correo y contraseña para ingresar.";
+    if (this.profileUpdateModeEnabled) {
+      successTitle = "Perfil Actualizado";
+      successMessage = "Tus datos han sido actualizados correctamente";
+    }
+
     if (result.wasSuccessful) {
-      await Swal.fire("Bienvenido", "Has sido registrado exitosamente. Utiliza tu correo y contraseña para ingresar.", "success");
+      await Swal.fire(successTitle, successMessage, "success");
 
       this.router.navigate(['']); 
       return;
