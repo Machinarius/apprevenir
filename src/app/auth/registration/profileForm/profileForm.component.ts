@@ -25,8 +25,6 @@ export class ProfileFormComponent implements OnInit {
   locationFormGroup: FormGroup;
   loginFormGroup: FormGroup;
   
-  loadingData = true;
-  
   referralSources = ReferralSources;
   rootReferralHierarchy: HierarchyNode | null = null;
 
@@ -47,6 +45,7 @@ export class ProfileFormComponent implements OnInit {
     this.onSubmitClicked = this.onSubmitClicked.bind(this);
     this.handleRegistrationResult = this.handleRegistrationResult.bind(this);
     this.loadProfileFormDataIfNeeded = this.loadProfileFormDataIfNeeded.bind(this);
+    this.showLoadingIndicator = this.showLoadingIndicator.bind(this);
   }
 
   get selectedReferralSource() {
@@ -104,10 +103,10 @@ export class ProfileFormComponent implements OnInit {
       passwordConfirmation: ['', Validators.compose([Validators.required, this.passwordConfirmationValidator])]
     } as LoginFormGroup);
 
-    this.loadingData = true;
-    this.countries = await getCountries();
-    await this.loadProfileFormDataIfNeeded();
-    this.loadingData = false;
+    await this.showLoadingIndicator(async () => {
+      this.countries = await getCountries();
+      await this.loadProfileFormDataIfNeeded();
+    });
   }
 
   public referralHierarchyRequiredValidator(control: AbstractControl): ValidationErrors {
@@ -158,9 +157,9 @@ export class ProfileFormComponent implements OnInit {
       return;
     }
     
-    this.loadingData = true;
-    this.rootReferralHierarchy = await buildRootHierarchy(this.selectedReferralSource);
-    this.loadingData = false;
+    await this.showLoadingIndicator(async () => {
+      this.rootReferralHierarchy = await buildRootHierarchy(this.selectedReferralSource);
+    });
   }
 
   public async onCountryChanged() {
@@ -173,9 +172,9 @@ export class ProfileFormComponent implements OnInit {
     this.locationFormGroup.get('city').setValue('');
     this.cities = null;
 
-    this.loadingData = true;
-    this.states = await getStates(selectedCountryId);
-    this.loadingData = false;
+    await this.showLoadingIndicator(async () => {
+      this.states = await getStates(selectedCountryId);
+    });
   }
 
   public async onStateChanged() {
@@ -186,9 +185,9 @@ export class ProfileFormComponent implements OnInit {
 
     this.locationFormGroup.get('city').setValue('');
 
-    this.loadingData = true;
-    this.cities = await getCities(selectedStateId);
-    this.loadingData = false;
+    await this.showLoadingIndicator(async () => {
+      this.cities = await getCities(selectedStateId);
+    });
   }
 
   public async onSubmitClicked() {
@@ -210,16 +209,15 @@ export class ProfileFormComponent implements OnInit {
       return;
     }
     
-    this.loadingData = true;
-    try {
-      const result = await submitRegistrationForms(...allForms);
-      this.handleRegistrationResult(result);
-    } catch (error) {
-      console.error("Error while trying to submit the registration data", error);
-      this.handleRegistrationResult({ wasSuccessful: false, errorMessages: [] });
-    } finally {
-      this.loadingData = false;
-    }
+    await this.showLoadingIndicator(async () => {
+      try {
+        const result = await submitRegistrationForms(...allForms);
+        this.handleRegistrationResult(result);
+      } catch (error) {
+        console.error("Error while trying to submit the registration data", error);
+        this.handleRegistrationResult({ wasSuccessful: false, errorMessages: [] });
+      }
+    });
   }
 
   async handleRegistrationResult(result: RegistrationResult) {
@@ -247,5 +245,17 @@ export class ProfileFormComponent implements OnInit {
     this.personalInfoFormGroup.patchValue(currentFormData.personalInfo);
     this.locationFormGroup.patchValue(currentFormData.location);
     this.loginFormGroup.patchValue(currentFormData.login);
+  }
+
+  loadingReferences = 0;
+  async showLoadingIndicator<TReturn>(promiseFactory: () => Promise<TReturn>): Promise<TReturn> {
+    this.loadingReferences++;
+    const result = await promiseFactory();
+    this.loadingReferences--;
+    return result;
+  }
+
+  get loadingData() {
+    return this.loadingReferences > 0;
   }
 }
