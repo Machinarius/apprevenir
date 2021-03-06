@@ -188,6 +188,16 @@
             </mat-error>
           </mat-form-field>
         </div>
+
+        <div *ngIf="profileUpdateModeEnabled">
+          <mat-form-field class="example-full-width">
+            <mat-label>Contraseña actual</mat-label>
+            <input type="password" matInput required formControlName="currentPassword">
+            <mat-error>
+              Por favor ingresa tu contraseña actual si deseas cambiarla
+            </mat-error>
+          </mat-form-field>
+        </div>
         
         <div class="registration__box">
           <mat-form-field class="width-48">

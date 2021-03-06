@@ -55,8 +55,28 @@ export function buildLoginFormGroup(formBuilder: FormBuilder, isEditingProfile: 
   };
 
   return formBuilder.group(loginFormSchema, {
-    validators: [buildPasswordChangeValidator(isEditingProfile), passwordConfirmationValidator]
+    validators: [
+      buildPasswordChangeValidator(isEditingProfile), 
+      buildPasswordEditMinLengthOverride(isEditingProfile),
+      passwordConfirmationValidator
+    ]
   });
+}
+
+function buildPasswordEditMinLengthOverride(isEditingProfile: boolean): (group: FormGroup) => ValidationErrors | null {
+  if (!isEditingProfile) {
+    return () => null;
+  }
+
+  return (group: FormGroup) => {
+    const passwordControl = group.get("password");
+    if (!passwordControl?.value) {
+      passwordControl?.markAsPristine();
+      passwordControl?.setErrors(null);
+    }
+
+    return null;
+  };
 }
 
 function buildPasswordChangeValidator(isEditingProfile: boolean): (group: FormGroup) => ValidationErrors | null {
@@ -67,8 +87,10 @@ function buildPasswordChangeValidator(isEditingProfile: boolean): (group: FormGr
   return (group: FormGroup) => {
     const passwordControl = group.get("password");
     const currentPwControl = group.get("currentPassword");
+    const confirmationControl = group.get("passwordConfirmation");
 
-    if (passwordControl?.value && !currentPwControl?.value) {
+    if ((passwordControl?.value || confirmationControl?.value) && !currentPwControl?.value) {
+      currentPwControl.markAsTouched();
       currentPwControl.setErrors({ missing: true });
     } else {
       currentPwControl.setErrors(null);
