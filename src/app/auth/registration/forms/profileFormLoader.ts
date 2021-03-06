@@ -3,9 +3,10 @@ import { environment } from "@environments/environment";
 import { getAuthToken, getStoredProfileInfo } from "@services/auth/authStore";
 import { ensureResponseIsSuccessful } from "@services/common";
 import { BackendClientConfig, BackendUser } from "@typedefs/backend";
+import * as dayjs from "dayjs";
 
 interface ProfileFormData {
-  personalInfo: Record<PersonalInfoFormKeys, string>,
+  personalInfo: Record<Exclude<PersonalInfoFormKeys, "birthDate">, string> & { birthDate: Date | null },
   location: Record<LocationFormKeys, string>,
   login: Record<Exclude<LoginFormKeys, "password" | "passwordConfirmation">, string>
 }
@@ -26,6 +27,14 @@ export async function loadProfileFormData(): Promise<ProfileFormData> {
     clientConfig = JSON.parse(clientConfig) as BackendClientConfig;
   }
 
+  let birthdayValue: Date | null = null;
+  if (userProfile.birthday) {
+    const birthdayObject = dayjs(userProfile.birthday, "YYYY-MM-DD");
+    if (birthdayObject.isValid()) {
+      birthdayValue = birthdayObject.toDate();
+    }
+  }
+
   const lastNameComponents = userProfile.last_names?.split(" ") || [];
   const lastName = lastNameComponents.length > 1 ? lastNameComponents[1] : "";
   const maidenName = lastNameComponents.length > 0 ? lastNameComponents[0] : "";
@@ -38,7 +47,7 @@ export async function loadProfileFormData(): Promise<ProfileFormData> {
       referralHierarchy3: clientConfig?.selectC,
       referralHierarchy4: "",
       referralHierarchy5: "",
-      birthDate: userProfile.birhday,
+      birthDate: birthdayValue,
       educationLevel: userProfile.education_level_id?.toString(),
       gender: userProfile.gender_id?.toString(),
       lastName,

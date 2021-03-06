@@ -33,4 +33,4 @@ export type PersonalInfoFormGroup = Record<PersonalInfoFormKeys, FormValidationT
 export type LocationFormGroup = Record<LocationFormKeys, FormValidationTuple>;
 export type LoginFormGroup = Record<LoginFormKeys, FormValidationTuple>;
 
-export type RawFormData = Record<AllFormKeys, string>;
+export type RawFormData = Record<Exclude<AllFormKeys, "birthDate">, string> & { birthDate: Date };

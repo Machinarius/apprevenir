@@ -4,7 +4,7 @@
 </div>
 
 <div class="section-two" [hidden]="loadingData">
-  <mat-horizontal-stepper #stepper>
+  <mat-horizontal-stepper #stepper [linear]="!profileUpdateModeEnabled">
     <div class="section-two__title">Crear una cuenta</div>
     <mat-step [stepControl]="personalInfoFormGroup">
       <ng-template matStepLabel>Información Personal</ng-template>

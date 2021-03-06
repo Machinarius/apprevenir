@@ -6,7 +6,7 @@ export interface BackendProfile {
   first_names: string,
   last_names: string,
   phone: string | null,
-  birhday: string | null,
+  birthday: string | null,
   education_level_id: number,
   is_student: number, // It really is a boolean, BRUH...
   gender_id: number | null,

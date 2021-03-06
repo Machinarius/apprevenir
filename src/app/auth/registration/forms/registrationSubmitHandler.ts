@@ -2,11 +2,7 @@ import { FormGroup } from "@angular/forms";
 import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from "@typedefs/backend";
 import { RawFormData } from "./FormKeys";
 import { environment } from "@environments/environment";
-
-function formatDateComponent(dateComponent: number) {
-  return dateComponent.toString().padStart(2, "0");
-}
-
+import * as dayjs from "dayjs";
 export interface RegistrationResult {
   wasSuccessful: boolean,
   errorMessages: string[]
@@ -16,9 +12,7 @@ export async function submitRegistrationForms(
   ...forms: FormGroup[]
 ): Promise<RegistrationResult> {
   const rawFormData: RawFormData = forms.reduce((data, form) => Object.assign(data, form.value), {});
-  const birthday = new Date(rawFormData.birthDate);
-  const birthdayValue = 
-  `${birthday.getFullYear()}-${formatDateComponent(birthday.getMonth() + 1)}-${formatDateComponent(birthday.getDate())}`;
+  const birthdayValue = dayjs(rawFormData.birthDate).format("YYYY-MM-DD");
 
   const registrationPayload: BackendRegistrationRequest = {
     birthday: birthdayValue,
