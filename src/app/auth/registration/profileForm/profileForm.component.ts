@@ -7,11 +7,11 @@ import { BackendCity, BackendClientTypes, BackendCountry, BackendState } from '@
 import { HierarchyNode } from '../referralHierarchy/HierarchyNode';
 import { buildRootHierarchy } from "../referralHierarchy/builders/hierarchyBuilder";
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
-import { LocationFormSchema, LoginFormSchema, PersonalInfoFormSchema } from '../forms/FormKeys';
 import { RegistrationResult, submitRegistrationForms } from '../forms/registrationSubmitHandler';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { loadProfileFormData } from '../forms/profileFormLoader';
+import { buildLocationFormGroup, buildLoginFormGroup, buildPersonalInfoFormGroup } from './formSchema';
 
 @Component({
   selector: 'profile-form',
@@ -36,12 +36,9 @@ export class ProfileFormComponent implements OnInit {
   cities: BackendCity[] | null = null;
 
   constructor(private _formBuilder: FormBuilder, private router: Router) {
-    this.referralHierarchyRequiredValidator = this.referralHierarchyRequiredValidator.bind(this);
-    this.dateValidator = this.dateValidator.bind(this);
     this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
     this.onCountryChanged = this.onCountryChanged.bind(this);
     this.onStateChanged = this.onStateChanged.bind(this);
-    this.passwordConfirmationValidator = this.passwordConfirmationValidator.bind(this);
     this.onSubmitClicked = this.onSubmitClicked.bind(this);
     this.handleRegistrationResult = this.handleRegistrationResult.bind(this);
     this.loadProfileFormDataIfNeeded = this.loadProfileFormDataIfNeeded.bind(this);
@@ -74,38 +71,9 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    const personalInfoFormSchema: PersonalInfoFormSchema = {
-      referralSource: ['', Validators.required],
-      referralHierarchy1: ['', this.referralHierarchyRequiredValidator],
-      referralHierarchy2: [''],
-      referralHierarchy3: [''],
-      referralHierarchy4: [''],
-      referralHierarchy5: [''],
-      name: ['', Validators.required],
-      maidenName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      birthDate: ['', Validators.compose([Validators.required, this.dateValidator])],
-      gender: ['', Validators.required],
-      maritalStatus: ['', Validators.required],
-      educationLevel: ['', Validators.required]
-    };
-
-    const locationFormSchema: LocationFormSchema = {
-      country: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required]
-    };
-
-    const loginFormSchema: LoginFormSchema = {
-      phoneNumber: ['', Validators.required],
-      emailAddress: ['', Validators.compose([Validators.required, Validators.email])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16)])],
-      passwordConfirmation: ['', Validators.compose([Validators.required, this.passwordConfirmationValidator])]
-    };
-
-    this.personalInfoFormGroup = this._formBuilder.group(personalInfoFormSchema);
-    this.locationFormGroup = this._formBuilder.group(locationFormSchema);
-    this.loginFormGroup = this._formBuilder.group(loginFormSchema);
+    this.personalInfoFormGroup = buildPersonalInfoFormGroup(this._formBuilder);
+    this.locationFormGroup = buildLocationFormGroup(this._formBuilder);
+    this.loginFormGroup = buildLoginFormGroup(this._formBuilder, this.profileUpdateModeEnabled);
 
     await this.showLoadingIndicator(async () => {
       this.countries = await getCountries();
@@ -113,48 +81,13 @@ export class ProfileFormComponent implements OnInit {
     });
   }
 
-  public referralHierarchyRequiredValidator(control: AbstractControl): ValidationErrors {
-    if (!this.referralHierarchyMustBeShown) {
-      return null;
-    }
-
-    if (!control.value) {
-      return { required: true };
-    }
-
-    return null;
-  }
-
-  public dateValidator(control: AbstractControl): ValidationErrors {
-    if (!control.value) {
-      return null;
-    }
-
-    const possibleDate = new Date(control.value);
-    if (possibleDate.getTime() == NaN) {
-      return { required: true };
-    }
-
-    return null;
-  }
-
-  public passwordConfirmationValidator(control: AbstractControl): ValidationErrors {
-    if (!this.loginFormGroup) {
-      return null;
-    }
-
-    const password = this.loginFormGroup.get('password').value;
-    if (password !== control.value) {
-      return { required: true };
-    }
-
-    return null;
-  }
-
   public async onReferralSourceChanged() {
     this.rootReferralHierarchy = null;
     [1, 2, 3, 4, 5].forEach(
-      index => this.personalInfoFormGroup.get('referralHierarchy' + index).setValue('')
+      index => {
+        const hierarchyKey = 'referralHierarchy' + index;
+        this.personalInfoFormGroup.get(hierarchyKey).setValue('');
+      }
     );
 
     if (!this.referralHierarchyMustBeShown) {
