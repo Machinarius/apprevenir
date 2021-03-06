@@ -1,9 +1,12 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import {Router, ActivatedRoute, RouterEvent, Event, NavigationStart} from '@angular/router';
+import { EventBus } from '@services/messaging/EventBus';
+import { KnownMessageKeys } from '@services/messaging/EventMessage';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
-import { getStoredProfileInfo } from "../services/auth/authStore";
+import { getStoredProfileInfo, IProfileInfo, ProfileChangedMessage } from "../services/auth/authStore";
 
 interface MenuElement {
   name: string;
@@ -70,8 +73,7 @@ const MENU_ELEMENTS : MenuElement[] = [{
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
-
+export class NavigationComponent implements OnInit, OnDestroy {
   public userIsAdmin = false;
   public userName = "Nombre de usuario";
 
@@ -98,23 +100,39 @@ export class NavigationComponent implements OnInit {
     private authService: AuthService,
   ) { 
     this.dataSource.data = MENU_ELEMENTS;
+    this.updateProfileData = this.updateProfileData.bind(this);
   }
 
+  profileSubscription: Subscription | null;
+
   ngOnInit(): void {
-    const profile = getStoredProfileInfo();
-    this.userName = `${profile.firstNames} ${profile.lastNames}`;
+    this.updateProfileData(getStoredProfileInfo());
     this.userIsAdmin = this.router.url.startsWith("/app/admin");
 
     this.router.events.subscribe((routerEvent:Event)=> {
       if (routerEvent instanceof NavigationStart){
         this.userIsAdmin = routerEvent.url.startsWith("/app/admin");
       }
-    })
+    });
+
+    this.profileSubscription = EventBus.instance.messages<ProfileChangedMessage>(
+      KnownMessageKeys.ProfileChanged
+    ).subscribe((profileMessage) => {
+      this.updateProfileData(profileMessage.payload);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.profileSubscription) {
+      this.profileSubscription.unsubscribe();
+    }
+  }
+
+  private updateProfileData(profile: IProfileInfo) {
+    this.userName = `${profile.firstNames} ${profile.lastNames}`;
   }
 
   logout() {
-    
     this.authService.logout();
   }
-
 }

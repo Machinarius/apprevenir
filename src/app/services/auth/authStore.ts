@@ -1,3 +1,6 @@
+import { EventBus } from "@services/messaging/EventBus";
+import { EventMessageWithPayload, KnownMessageKeys } from "@services/messaging/EventMessage";
+
 enum Roles {
   Root = "root",
   Admin = "admin",
@@ -97,6 +100,9 @@ export function storeProfileInfo(profileInfo: any) {
   };
 
   localStorage.setItem('profile', JSON.stringify(normalizedProfile));
+
+  const message = new ProfileChangedMessage(normalizedProfile);
+  EventBus.instance.publishMessage(message);
 }
 
 export function isUserAdmin() {
@@ -123,4 +129,15 @@ export function getStoredProfileInfo(): IProfileInfo {
 export function clearAuthStore() {
   localStorage.removeItem('token');
   localStorage.removeItem('profile');
+}
+
+export class ProfileChangedMessage extends EventMessageWithPayload<IProfileInfo> {
+  public constructor(
+    private readonly profileInfo: IProfileInfo
+  ) { 
+    super();
+  }
+  
+  get key() { return KnownMessageKeys.ProfileChanged; }
+  get payload() { return this.profileInfo; }
 }
