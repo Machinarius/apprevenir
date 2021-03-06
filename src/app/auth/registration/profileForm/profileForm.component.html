@@ -3,7 +3,7 @@
   <div class="spinner-span">Cargando Datos...</div>
 </div>
 
-<div class="section-two" [hidden]="loadingData">
+<div class="section-two" style="background-color: white;" [hidden]="loadingData">
   <mat-horizontal-stepper #stepper [linear]="!profileUpdateModeEnabled">
     <div class="section-two__title">Crear una cuenta</div>
     <mat-step [stepControl]="personalInfoFormGroup">
@@ -104,7 +104,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="app-flex" style="margin-top: 1rem;">
+        <div class="app-flex" style="margin-top: 1rem;" *ngIf="!profileUpdateModeEnabled">
           <button class="btn btn-secondary app-m-right">Cancelar</button>
           <button class="btn btn-primary" matStepperNext (click)="onProfileNextClicked()">Siguiente</button>
         </div>
@@ -157,7 +157,7 @@
           </mat-form-field>
         </div>
 
-        <div class="app-flex" style="margin-top: 1rem;">
+        <div class="app-flex" style="margin-top: 1rem;" *ngIf="!profileUpdateModeEnabled">
           <button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
           <button class="btn btn-primary" matStepperNext>Siguiente</button>
         </div>
@@ -217,10 +217,12 @@
         </div>
       </form>
 
-      <div class="app-flex" style="margin-top: 1rem;">
+      <div class="app-flex" style="margin-top: 1rem;" *ngIf="!profileUpdateModeEnabled">
         <button class="btn btn-secondary app-m-right" matStepperPrevious>Anterior</button>
         <button class="btn btn-primary" (click)="onSubmitClicked()">Completar Registro</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>
+  
+  <button class="btn btn-primary" (click)="onSubmitClicked()" *ngIf="profileUpdateModeEnabled">Guardar Datos</button>
 </div>

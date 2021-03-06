@@ -3,7 +3,7 @@ import { BackendClientTypes } from "@typedefs/backend";
 import { PersonalInfoFormKeys, LocationFormKeys, LoginFormKeys } from "../forms/FormKeys";
 import * as dayjs from "dayjs";
 
-type FormValidationTuple = [string] | [string, ValidatorFn];
+type FormValidationTuple = [string] | [string | { value: string, disabled?: boolean } , ValidatorFn];
 type PersonalInfoFormSchema = Record<PersonalInfoFormKeys, FormValidationTuple>;
 type LocationFormSchema = Record<LocationFormKeys, FormValidationTuple>;
 type LoginFormSchema = Record<LoginFormKeys, FormValidationTuple>;
@@ -48,7 +48,7 @@ export function buildLoginFormGroup(formBuilder: FormBuilder, isEditingProfile: 
 
   const loginFormSchema: LoginFormSchema = {
     phoneNumber: ['', Validators.required],
-    emailAddress: ['', Validators.compose([Validators.required, Validators.email])],
+    emailAddress: [{ value: '', disabled: isEditingProfile }, Validators.compose([Validators.required, Validators.email])],
     password: ['', Validators.compose([...passwordValidators, Validators.minLength(8), Validators.maxLength(16)])],
     passwordConfirmation: ['', Validators.compose(passwordValidators)],
     currentPassword: ['']

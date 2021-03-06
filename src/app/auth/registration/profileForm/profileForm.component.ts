@@ -71,6 +71,8 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.profileUpdateModeEnabled = !!this.profileUpdateModeEnabled;
+
     this.personalInfoFormGroup = buildPersonalInfoFormGroup(this._formBuilder);
     this.locationFormGroup = buildLocationFormGroup(this._formBuilder);
     this.loginFormGroup = buildLoginFormGroup(this._formBuilder, this.profileUpdateModeEnabled);
