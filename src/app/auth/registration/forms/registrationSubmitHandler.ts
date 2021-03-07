@@ -13,6 +13,7 @@ export interface RegistrationResult {
 
 export async function submitRegistrationForms(
   isEditingProfile: boolean,
+  adminModeEnabled: boolean,
   ...forms: FormGroup[]
 ): Promise<RegistrationResult> {
   const rawFormData: RawFormData = forms.reduce((data, form) => Object.assign(data, form.value), {});
@@ -78,7 +79,7 @@ export async function submitRegistrationForms(
       resultObject.errorMessages = Object.keys(errors).reduce((messages, key) => [...messages, ...errors[key]], []);
     }
   } else {
-    if (isEditingProfile) {
+    if (isEditingProfile && !adminModeEnabled) {
       const currentProfile = getStoredProfileInfo();
       const profileResult = await getUserData(currentProfile.id);
       updateStoredProfile(profileResult);

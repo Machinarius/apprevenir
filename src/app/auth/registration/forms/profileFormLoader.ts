@@ -10,10 +10,16 @@ interface ProfileFormData {
   login: Record<Exclude<LoginFormKeys, "password" | "passwordConfirmation" | "currentPassword">, string>
 }
 
-export async function loadProfileFormData(): Promise<ProfileFormData> {
-  const currentProfile = getStoredProfileInfo();
-  const userResponse = await getUserData(currentProfile.id);
+export async function loadProfileFormData(userIdOveride: string | null = null): Promise<ProfileFormData> {
+  let userId: string | number;
+  if (userIdOveride) {
+    userId = userIdOveride;
+  } else {
+    const currentProfile = getStoredProfileInfo();
+    userId = currentProfile.id;
+  }
 
+  const userResponse = await getUserData(userId);
   const userProfile = userResponse.profile;
   let clientConfig = userProfile.client_config;
   if (typeof clientConfig === "string") {

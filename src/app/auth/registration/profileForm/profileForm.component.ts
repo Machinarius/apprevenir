@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { ReferralSources } from "../constants/referralSources";
 import { MaritalStatusValues } from "../constants/maritalStatusValues";
@@ -20,6 +21,8 @@ import { buildLocationFormGroup, buildLoginFormGroup, buildPersonalInfoFormGroup
 })
 export class ProfileFormComponent implements OnInit {
   @Input("profile-update") profileUpdateModeEnabled: boolean;
+  @Input("admin-mode") adminModeEnabled: boolean;
+  @Input("user-id-override") userIdOverride: string | null;
 
   personalInfoFormGroup: FormGroup;
   locationFormGroup: FormGroup;
@@ -35,7 +38,13 @@ export class ProfileFormComponent implements OnInit {
   states: BackendState[] | null = null;
   cities: BackendCity[] | null = null;
 
-  constructor(private _formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private _formBuilder: FormBuilder, private _router: Router,
+    private _location: Location
+  ) {
+    this.profileUpdateModeEnabled = !!this.profileUpdateModeEnabled;
+    this.adminModeEnabled = !!this.adminModeEnabled;
+
     this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
     this.onCountryChanged = this.onCountryChanged.bind(this);
     this.onStateChanged = this.onStateChanged.bind(this);
@@ -71,8 +80,6 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.profileUpdateModeEnabled = !!this.profileUpdateModeEnabled;
-
     this.personalInfoFormGroup = buildPersonalInfoFormGroup(this._formBuilder);
     this.locationFormGroup = buildLocationFormGroup(this._formBuilder);
     this.loginFormGroup = buildLoginFormGroup(this._formBuilder, this.profileUpdateModeEnabled);
@@ -150,7 +157,7 @@ export class ProfileFormComponent implements OnInit {
     
     await this.showLoadingIndicator(async () => {
       try {
-        const result = await submitRegistrationForms(this.profileUpdateModeEnabled, ...allForms);
+        const result = await submitRegistrationForms(this.profileUpdateModeEnabled, this.adminModeEnabled, ...allForms);
         this.handleRegistrationResult(result);
       } catch (error) {
         console.error("Error while trying to submit the registration data", error);
@@ -160,17 +167,32 @@ export class ProfileFormComponent implements OnInit {
   }
 
   async handleRegistrationResult(result: RegistrationResult) {
-    let successTitle = "Bienvenido";
-    let successMessage = "Has sido registrado exitosamente. Utiliza tu correo y contraseña para ingresar.";
-    if (this.profileUpdateModeEnabled) {
-      successTitle = "Perfil Actualizado";
-      successMessage = "Tus datos han sido actualizados correctamente";
-    }
-
     if (result.wasSuccessful) {
+      let successTitle = "Bienvenido";
+      let successMessage = "Has sido registrado exitosamente. Utiliza tu correo y contraseña para ingresar.";
+      
+      if (this.profileUpdateModeEnabled) {
+        successTitle = "Perfil Actualizado";
+        successMessage = "Tus datos han sido actualizados correctamente";
+      }
+
+      if (this.adminModeEnabled) {
+        if (this.profileUpdateModeEnabled) {
+          successTitle = "Perfil Actualizado";
+          successMessage = "Los datos del usuario han sido actualizados";
+        } else {
+          successTitle = "Usuario creado";
+          successMessage = "El usuario ha sido creado correctamente";
+        }
+      }
+      
       await Swal.fire(successTitle, successMessage, "success");
 
-      this.router.navigate(['']); 
+      if (this.profileUpdateModeEnabled) {
+        this._location.back();
+      } else {
+        this._router.navigate(['']); 
+      }
       return;
     }
 
@@ -187,8 +209,7 @@ export class ProfileFormComponent implements OnInit {
       return;
     }
 
-    const currentFormData = await loadProfileFormData();
-
+    const currentFormData = await loadProfileFormData(this.userIdOverride);
     if (currentFormData.personalInfo.referralSource) {
       this.rootReferralHierarchy = await buildRootHierarchy(
         currentFormData.personalInfo.referralSource as BackendClientTypes
