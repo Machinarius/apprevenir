@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { getAllUsers } from '@services/user/usersDataSource';
 import { BackendUser } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
@@ -35,6 +36,11 @@ export class EditFinalUserComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(LoaderComponent) loader: LoaderComponent;
 
+  constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute
+  ) { }
+
   async ngAfterViewInit() {
     await this.loader.showLoadingIndicator(async () => {
       const users = await getAllUsers();
@@ -57,6 +63,6 @@ export class EditFinalUserComponent implements AfterViewInit {
   }
 
   onEditRequested(userId: number) {
-    console.log("edit requested: " + userId);
+    this._router.navigate([userId], { relativeTo: this._activatedRoute });
   }
 }

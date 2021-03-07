@@ -20,6 +20,7 @@ import { EditClientComponent } from './admin/edit-client/edit-client.component';
 
 import { AuthGuardService } from '../app/services/auth/auth-guard.service';
 import { AnonGuardService } from '../app/services/auth/anon-guard.service';
+import { EditFinalUserForm } from './admin/edit-final-user/form/edit-final-user-form.component';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent, canActivate: [AnonGuardService] },
@@ -33,11 +34,12 @@ const appRoutes: Routes = [
       { path: 'home', component: HomeComponent},
       { path: 'admin-test', component: AdminTestComponent },
       { path: 'admin-report', component: ReportComponent },
-      { path: 'admin-edit-final-user', component: EditFinalUserComponent },
       { path: 'admin-create-client', component: AdminComponent },
       { path: 'admin-system-user', component: SystemUserComponent },
       { path: 'admin-edit-system-user', component: EditSystemUserComponent },
       { path: 'admin-edit-client', component: EditClientComponent },
+      { path: 'admin-edit-final-user', component: EditFinalUserComponent },
+      { path: "admin-edit-final-user/:userId", component: EditFinalUserForm }
     ],
     canActivate: [AuthGuardService],
   },
