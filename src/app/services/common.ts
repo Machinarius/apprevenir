@@ -1,4 +1,11 @@
 import { BackendResponse } from "@typedefs/backend";
+import { getAuthToken } from "./auth/authStore";
+
+export function getAuthHeaders() {
+  return {
+    "Authorization": `Bearer ${getAuthToken()}`
+  };
+}
 
 export async function ensureResponseIsSuccessful<TPayload>(requestPromise: ReturnType<typeof fetch>): Promise<TPayload> {
   const result = await requestPromise;
