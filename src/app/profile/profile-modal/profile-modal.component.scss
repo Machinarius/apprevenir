@@ -1,6 +1,7 @@
 .level {
     display: flex;
     align-items: center;
+    margin-bottom: 1.5rem;
     &__title {
         color: var(--color-normal-grey);
         font-family: "KanitRegular";

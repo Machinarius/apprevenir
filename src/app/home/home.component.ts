@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
 
   openDialogHome(test) {
     const dialogRef = this.dialog.open(HomeModalComponent, {
-      id: "modal-home-padding",
+      id: "modal-drugs-width",
       data: test
     });
 

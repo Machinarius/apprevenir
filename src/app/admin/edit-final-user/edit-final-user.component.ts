@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ReactiveFormsModule,FormsModule, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '@services/user/user.service';
 
 @Component({
   selector: 'app-edit-final-user',
@@ -14,15 +15,24 @@ export class EditFinalUserComponent implements AfterViewInit {
   public displayedColumns: string[] = [
     'idUser', 
     'name', 
-    'type', 
+    'lastNames', 
+    'email', 
     'test', 
     'date'
   ];
-  public dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  public dataSource = new MatTableDataSource<PeriodicElement>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  constructor (
+    private userService: UserService
+  ) {}
+
   ngAfterViewInit() {
+    this.userService.getUsers().subscribe(res => {
+      this.dataSource = res['data'];
+    });
+    
     this.dataSource.paginator = this.paginator;
   }
 }
@@ -30,7 +40,8 @@ export class EditFinalUserComponent implements AfterViewInit {
 export interface PeriodicElement {
   idUser: string;
   name: string;
-  type: string;
+  lastNames: string;
+  email: string,
   test: string;
   date: string;
 }
@@ -38,7 +49,8 @@ export interface PeriodicElement {
 const ELEMENT_DATA: PeriodicElement[] = [
   { idUser: '001', 
     name: 'Industrias Noel', 
-    type: 'Empresa', 
+    lastNames: 'Industrias Noel 2',
+    email: 'test@test.com',
     test: 'Activo', 
     date: 'icon'
   }

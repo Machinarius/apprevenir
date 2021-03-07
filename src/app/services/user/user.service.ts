@@ -111,6 +111,10 @@ export class UserService {
       });
   }
 
+  getUsers() {
+    return this.http.get(`${this.url}/api/v1/users`, {headers: this.headers});
+  }
+
   getClientsList(clientType) {
 
     return this.http.get(`${this.url}/api/v1/clients?client=${clientType}`);

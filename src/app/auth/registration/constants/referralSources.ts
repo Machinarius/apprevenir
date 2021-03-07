@@ -11,7 +11,7 @@ export const ReferralSources = [{
   label: "Institución Educativa"
 }, {
   key: BackendClientTypes.NaturalPerson,
-  label: "Persona Natural"
+  label: "Ninguno"
 }, {
   key: BackendClientTypes.EducationBureau,
   label: "Secretaría de Educación"

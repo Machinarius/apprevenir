@@ -88,12 +88,22 @@
   color: var(--color-gray-dark-2);
 }
 
+.span-uppercase {
+  text-transform: uppercase !important;
+  font-family: 'FiratMedium';
+}
+
 #modal-width {
   width: 768px;
 }
 #modal-confidencial-width {
   width: 500px;
 }
+#modal-drugs-width {
+  width: 500px !important;
+  padding: 0 0 15px 0 !important;
+}
+
 
 .terms-modal {
   cursor: pointer;

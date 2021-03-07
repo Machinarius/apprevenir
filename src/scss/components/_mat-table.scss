@@ -19,3 +19,8 @@ table {
     font-size: 13px;
 		font-family: 'FiratRegular';
   }
+
+  .table-container {
+    height: 600px;
+    overflow: auto;
+  }

@@ -8,11 +8,19 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class LeveModalComponent implements OnInit {
 
+  level: any;
+  gifLevel: any;
+  colorsLevel: any;
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
 
   ngOnInit(): void {
+
+    this.level = this.data.level;
+    this.gifLevel = this.data.gifLevel;
+    this.colorsLevel = this.data.colorsLevel;
   }
 
 }
