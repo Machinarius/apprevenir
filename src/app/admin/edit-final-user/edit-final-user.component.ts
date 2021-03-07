@@ -1,8 +1,18 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ReactiveFormsModule,FormsModule, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '@services/user/user.service';
+import { getAllUsers } from '@services/user/usersDataSource';
+import { BackendUser } from '@typedefs/backend';
+import { LoaderComponent } from 'src/app/core/loader/loader.component';
+
+type UserRow = {
+  userId: number;
+  firstNames: string;
+  lastNames: string;
+  email: string,
+  statusLabel: string;
+}
+type UserTableColumnLabels = keyof UserRow | "actions";
 
 @Component({
   selector: 'app-edit-final-user',
@@ -10,48 +20,43 @@ import { UserService } from '@services/user/user.service';
   styleUrls: ['./edit-final-user.component.scss']
 })
 export class EditFinalUserComponent implements AfterViewInit {
-  
   public resultsLength = 0;
-  public displayedColumns: string[] = [
-    'idUser', 
-    'name', 
+  public displayedColumns: UserTableColumnLabels[] = [
+    'userId', 
+    'firstNames', 
     'lastNames', 
     'email', 
-    'test', 
-    'date'
+    'statusLabel', 
+    'actions'
   ];
-  public dataSource = new MatTableDataSource<PeriodicElement>([]);
+
+  public dataSource = new MatTableDataSource<UserRow>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(LoaderComponent) loader: LoaderComponent;
 
-  constructor (
-    private userService: UserService
-  ) {}
-
-  ngAfterViewInit() {
-    this.userService.getUsers().subscribe(res => {
-      this.dataSource = res['data'];
+  async ngAfterViewInit() {
+    await this.loader.showLoadingIndicator(async () => {
+      const users = await getAllUsers();
+      this.resultsLength = users.length;
+      this.updateUsersTable(users);
     });
-    
+  }
+
+  updateUsersTable(users: BackendUser[]) {
+    const userRows: UserRow[] = users.map(user => ({
+      userId: user.id,
+      firstNames: user.profile.first_names,
+      lastNames: user.profile.last_names,
+      email: user.email,
+      statusLabel: user.status == 1 ? "Activo" : "Inactivo"
+    }));
+
+    this.dataSource = new MatTableDataSource<UserRow>(userRows);
     this.dataSource.paginator = this.paginator;
   }
-}
 
-export interface PeriodicElement {
-  idUser: string;
-  name: string;
-  lastNames: string;
-  email: string,
-  test: string;
-  date: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { idUser: '001', 
-    name: 'Industrias Noel', 
-    lastNames: 'Industrias Noel 2',
-    email: 'test@test.com',
-    test: 'Activo', 
-    date: 'icon'
+  onEditRequested(userId: number) {
+    console.log("edit requested: " + userId);
   }
-];
+}
