@@ -1,9 +1,6 @@
-<div class="loader" [hidden]="!loadingData">
-  <mat-spinner></mat-spinner>
-  <div class="spinner-span">Cargando Datos...</div>
-</div>
+<app-loader #loader></app-loader>
 
-<div class="section-two" style="background-color: white;" [hidden]="loadingData">
+<div class="section-two" style="background-color: white;" [hidden]="loader.loadingData">
   <mat-horizontal-stepper #stepper [linear]="!profileUpdateModeEnabled">
     <div class="section-two__title">Crear una cuenta</div>
     <mat-step [stepControl]="personalInfoFormGroup">
@@ -105,7 +102,7 @@
           </mat-form-field>
         </div>
         <div class="app-flex" style="margin-top: 1rem;" *ngIf="!profileUpdateModeEnabled">
-          <button class="btn btn-secondary app-m-right">Cancelar</button>
+          <button class="btn btn-secondary app-m-right" (click)="onCancelClicked()">Cancelar</button>
           <button class="btn btn-primary" matStepperNext (click)="onProfileNextClicked()">Siguiente</button>
         </div>
       </form>

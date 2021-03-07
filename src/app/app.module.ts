@@ -35,6 +35,7 @@ import { HomeModalComponent } from './home/home-modal/home-modal.component';
 import { ConfidentialModalComponent } from './test/confidential-modal/confidential-modal.component';
 import { LeveModalComponent } from './test/leve-modal/leve-modal.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
+import { LoaderComponent } from './core/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { RegistrationComponent } from './auth/registration/registration.componen
     HomeModalComponent,
     ConfidentialModalComponent,
     LeveModalComponent,
+    LoaderComponent
     ],
   imports: [
     BrowserModule,
