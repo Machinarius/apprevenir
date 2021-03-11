@@ -1,10 +1,10 @@
-import { BackendClientTypes } from "./BackendClientTypes";
+import { ClientTypes } from "./ClientTypes";
 
-export interface BackendClientConfig {
+export interface UserClientConfig {
   /**
    * The type of user who referred this user
    */
-  client_type: BackendClientTypes,
+  client_type: ClientTypes,
   /**
    * The id of the user that referred this user
    */

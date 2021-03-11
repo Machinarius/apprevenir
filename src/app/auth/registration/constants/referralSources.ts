@@ -1,21 +1,21 @@
-import { BackendClientTypes } from "@typedefs/backend";
+import { ClientTypes } from "@typedefs/backend";
 
 export const ReferralSources = [{
-  key: BackendClientTypes.Company,
+  key: ClientTypes.Company,
   label: "Empresa"
 }, {
-  key: BackendClientTypes.TerritorialEntity,
+  key: ClientTypes.TerritorialEntity,
   label: "Entidad Territorial"
 }, {
-  key: BackendClientTypes.EducationalInstitution,
+  key: ClientTypes.EducationalInstitution,
   label: "Institución Educativa"
 }, {
-  key: BackendClientTypes.NaturalPerson,
+  key: ClientTypes.NaturalPerson,
   label: "Ninguno"
 }, {
-  key: BackendClientTypes.EducationBureau,
+  key: ClientTypes.EducationBureau,
   label: "Secretaría de Educación"
 }, {
-  key: BackendClientTypes.University,
+  key: ClientTypes.University,
   label: "Universidad"
 }];

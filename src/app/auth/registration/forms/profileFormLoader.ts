@@ -1,7 +1,7 @@
 import { LocationFormKeys, LoginFormKeys, PersonalInfoFormKeys } from "./FormKeys";
 import { getStoredProfileInfo } from "@services/auth/authStore";
 import { getUserData } from "@services/user/usersDataSource";
-import { BackendClientConfig, BackendUser } from "@typedefs/backend";
+import { UserClientConfig } from "@typedefs/backend";
 import * as dayjs from "dayjs";
 
 interface ProfileFormData {
@@ -23,7 +23,7 @@ export async function loadProfileFormData(userIdOveride: string | null = null): 
   const userProfile = userResponse.profile;
   let clientConfig = userProfile.client_config;
   if (typeof clientConfig === "string") {
-    clientConfig = JSON.parse(clientConfig) as BackendClientConfig;
+    clientConfig = JSON.parse(clientConfig) as UserClientConfig;
   }
 
   let birthdayValue: Date | null = null;

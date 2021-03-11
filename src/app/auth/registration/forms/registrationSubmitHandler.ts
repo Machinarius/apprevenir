@@ -1,5 +1,5 @@
 import { FormGroup } from "@angular/forms";
-import { BackendClientTypes, BackendRegistrationRequest, BackendResponse } from "@typedefs/backend";
+import { ClientTypes, RegistrationRequest, BackendResponse } from "@typedefs/backend";
 import { RawFormData } from "./FormKeys";
 import { environment } from "@environments/environment";
 import * as dayjs from "dayjs";
@@ -19,14 +19,14 @@ export async function submitRegistrationForms(
   const rawFormData: RawFormData = forms.reduce((data, form) => Object.assign(data, form.value), {});
   const birthdayValue = dayjs(rawFormData.birthDate).format("YYYY-MM-DD");
 
-  const registrationPayload: BackendRegistrationRequest = {
+  const registrationPayload: RegistrationRequest = {
     birthday: birthdayValue,
     country_id: rawFormData.country as string,
     state_id: rawFormData.state as string,
     city_id: rawFormData.city as string,
     civil_status_id: rawFormData.maritalStatus as string,
     client: "persona natual",
-    client_type: rawFormData.referralSource as BackendClientTypes,
+    client_type: rawFormData.referralSource as ClientTypes,
     education_level_id: rawFormData.educationLevel as string,
     email: rawFormData.emailAddress as string,
     first_name_two: rawFormData.lastName as string,
@@ -39,7 +39,7 @@ export async function submitRegistrationForms(
     phone: rawFormData.phoneNumber as string,
     reference: rawFormData.referralHierarchy1 as string,
     client_config: {
-      client_type: rawFormData.referralSource as BackendClientTypes,
+      client_type: rawFormData.referralSource as ClientTypes,
       client: rawFormData.referralHierarchy1 as string,
       selectA: rawFormData.referralHierarchy2 as string,
       selectB: rawFormData.referralHierarchy3 as string,

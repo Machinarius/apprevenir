@@ -4,9 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReferralSources } from "../constants/referralSources";
 import { MaritalStatusValues } from "../constants/maritalStatusValues";
 import { EducationLevels } from '../constants/educationLevels';
-import { BackendCity, BackendClientTypes, BackendCountry, BackendState } from '@typedefs/backend';
-import { HierarchyNode } from '../referralHierarchy/HierarchyNode';
-import { buildRootHierarchy } from "../referralHierarchy/builders/hierarchyBuilder";
+import { City, ClientTypes, Country, State } from '@typedefs/backend';
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
 import { RegistrationResult, submitRegistrationForms } from '../forms/registrationSubmitHandler';
 import Swal from 'sweetalert2';
@@ -37,9 +35,9 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
   maritalStatusValues = MaritalStatusValues;
   educationLevels = EducationLevels;
 
-  countries: BackendCountry[] | null = null;
-  states: BackendState[] | null = null;
-  cities: BackendCity[] | null = null;
+  countries: Country[] | null = null;
+  states: State[] | null = null;
+  cities: City[] | null = null;
 
   constructor(
     private _formBuilder: FormBuilder, private _router: Router,
@@ -65,7 +63,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    return !!this.selectedReferralSource && this.selectedReferralSource !== BackendClientTypes.NaturalPerson;
+    return !!this.selectedReferralSource && this.selectedReferralSource !== ClientTypes.NaturalPerson;
   }
 
   get genderSelectionIsInvalid() {
@@ -220,10 +218,10 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
     const currentFormData = await loadProfileFormData(this.userIdOverride);
     if (
       currentFormData.personalInfo.referralSource &&
-      currentFormData.personalInfo.referralSource != BackendClientTypes.NaturalPerson
+      currentFormData.personalInfo.referralSource != ClientTypes.NaturalPerson
     ) {
       this.rootReferralHierarchy = await buildRootHierarchy(
-        currentFormData.personalInfo.referralSource as BackendClientTypes
+        currentFormData.personalInfo.referralSource as ClientTypes
       );
     }
 

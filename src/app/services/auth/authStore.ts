@@ -1,6 +1,6 @@
 import { EventBus } from "@services/messaging/EventBus";
 import { EventMessageWithPayload, KnownMessageKeys } from "@services/messaging/EventMessage";
-import { BackendUser } from "@typedefs/backend";
+import { User } from "@typedefs/backend";
 
 export enum Roles {
   Root = "root",
@@ -75,7 +75,7 @@ export function storeAuhToken(authToken: string) {
   localStorage.setItem('token', authToken);
 }
 
-export function updateStoredProfile(user: BackendUser) {
+export function updateStoredProfile(user: User) {
   const currentProfile = getStoredProfileInfo();
   currentProfile.firstNames = user.profile.first_names;
   currentProfile.lastNames = user.profile.last_names;

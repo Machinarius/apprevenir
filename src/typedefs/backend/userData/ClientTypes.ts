@@ -1,4 +1,4 @@
-export enum BackendClientTypes {
+export enum ClientTypes {
   NaturalPerson = "persona natural",
   TerritorialEntity = "entidades territoriales",
   EducationBureau = "secretarias de educacion",

@@ -1,6 +1,6 @@
-import { BackendClientConfig } from "./BackendClientConfig";
+import { UserClientConfig } from "./UserClientConfig";
 
-export interface BackendProfile {
+export interface UserProfile {
   id: number,
   user_id: number,
   first_names: string,
@@ -14,7 +14,7 @@ export interface BackendProfile {
   country_id: number | null,
   state_id: number | null,
   city_id: number | null,
-  client_config: string | BackendClientConfig | null,
+  client_config: string | UserClientConfig | null,
   created_at: string | null,
   updated_at: string | null,
   deleted_at: string | null

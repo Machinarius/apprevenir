@@ -1,5 +1,5 @@
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { BackendClientTypes } from "@typedefs/backend";
+import { ClientTypes } from "@typedefs/backend";
 import { PersonalInfoFormKeys, LocationFormKeys, LoginFormKeys } from "../forms/FormKeys";
 import * as dayjs from "dayjs";
 
@@ -118,7 +118,7 @@ function referralHierarchyValidator(group: FormGroup): ValidationErrors | null {
   const selectedReferralSource = group.get("referralSource").value;
   const referralHierarchyMustBeShown = 
     typeof selectedReferralSource === "string" && 
-    selectedReferralSource !== BackendClientTypes.NaturalPerson;
+    selectedReferralSource !== ClientTypes.NaturalPerson;
   
   if (!referralHierarchyMustBeShown || !!referralTypeControl.value) {
     referralTypeControl.setErrors(null);
