@@ -1,4 +1,4 @@
-import { BackendCommuneNeighborhood, BackendTerritorialEntityUser, BackendTerritorialEntityZone, BackendZoneCommunes } from "@typedefs/backend/BackendTerritorialEntityUser";
+import { BackendCommuneNeighborhood, BackendTerritorialEntityUser, BackendTerritorialEntityZone, BackendZoneCommune } from "@typedefs/backend/BackendTerritorialEntityUser";
 import { HierarchyNode } from "../HierarchyNode";
 
 function buildNeighborhoodsHierarchy(neighborhoods: BackendCommuneNeighborhood[]) {
@@ -13,7 +13,7 @@ function buildNeighborhoodsHierarchy(neighborhoods: BackendCommuneNeighborhood[]
   };
 }
 
-function buildCommunesHierarchy(communes: BackendZoneCommunes[]): HierarchyNode {
+function buildCommunesHierarchy(communes: BackendZoneCommune[]): HierarchyNode {
   return {
     label: "Comuna",
     depth: 3,

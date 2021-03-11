@@ -8,6 +8,10 @@ export interface BackendEducationalGrade extends BackendTimestamps {
   grade: string
 }
 
+export interface BackendEducationalGradeClientConfigData {
+  grades: BackendEducationalGrade[]
+}
+
 export interface BackendEducationalInstitutionUser extends BackendUser<BackendClientTypes.EducationalInstitution> {
-  educational_grades: BackendEducationalGrade[]
+  clientTypeConfig: BackendEducationalGradeClientConfigData
 }

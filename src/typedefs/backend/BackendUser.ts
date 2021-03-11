@@ -1,5 +1,6 @@
 import { BackendClientTypes } from "./BackendClientTypes";
 import { BackendProfile } from "./BackendProfile";
+import { BackendUniversityClientConfigData } from "./BackendUniversityUser";
 
 export interface BackendUser<TClientType extends BackendClientTypes = BackendClientTypes.NaturalPerson> {
   id: number,
