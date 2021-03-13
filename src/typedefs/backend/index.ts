@@ -3,7 +3,7 @@ export { UserProfile } from "./userData/UserProfile";
 export { BackendResponse } from "./common/BackendResponse";
 export { User } from "./userData/User";
 export { UserClientConfig } from "./userData/UserClientConfig"; 
-export { TerritorialEntityUser } from "./userData/TerritorialEntityUser";
+export { TerritorialEntityUser, CommuneType } from "./userData/TerritorialEntityUser";
 export { UniversityUser } from "./userData/UniversityUser";
 export { EducationBureauUser } from "./userData/EducationBureauUser";
 export { EducationalInstitutionUser } from "./userData/EducationalInstitutionUser";
