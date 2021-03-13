@@ -1,12 +1,9 @@
-import { ValidatorFn } from "@angular/forms";
+export type ReferralHierarchyLevels = 1 | 2 | 3 | 4 | 5;
+export type ReferralHierarchyKeys = `referralHierarchy${ReferralHierarchyLevels}`
 
 export type PersonalInfoFormKeys =
   | "referralSource"
-  | "referralHierarchy1"
-  | "referralHierarchy2"
-  | "referralHierarchy3"
-  | "referralHierarchy4"
-  | "referralHierarchy5"
+  | ReferralHierarchyKeys
   | "name"
   | "maidenName"
   | "lastName"
@@ -25,7 +22,7 @@ export type LoginFormKeys =
   | "emailAddress"
   | "password"
   | "passwordConfirmation"
-  | "currentPassword" ;
+  | "currentPassword";
 
 type AllFormKeys = PersonalInfoFormKeys | LocationFormKeys | LoginFormKeys;
 export type RawFormData = Record<Exclude<AllFormKeys, "birthDate">, string | number> & { birthDate: Date };

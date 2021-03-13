@@ -6,7 +6,7 @@ const NeighborhoodTypeLabels: { [key in ZoneType]: string } = {
   [ZoneType.Urban]: "Barrio"
 };
 
-function buildNeighborhoodsHierarchy(neighborhoods: TerritorialEntityNeighborhood[], zoneType: ZoneType) {
+function buildNeighborhoodsHierarchy(neighborhoods: TerritorialEntityNeighborhood[], zoneType: ZoneType): HierarchyNode {
   return {
     label: NeighborhoodTypeLabels[zoneType],
     depth: 4,
