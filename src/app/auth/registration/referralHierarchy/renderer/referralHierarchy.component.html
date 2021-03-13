@@ -1,0 +1,14 @@
+<div class="referral__select">Por favor elige tu {{label}}</div>
+<mat-form-field class="width-100" [formGroup]="formGroup">
+  <mat-select #keySelector [formControlName]="formControlName">
+    <mat-option *ngFor="let choice of choices" [value]="choice.key">
+      {{choice.value}}
+    </mat-option>
+  </mat-select>
+  <mat-error>
+    Por favor elige tu {{label}}
+  </mat-error>
+</mat-form-field>
+<div *ngIf="nextHierarchyNode">
+  <referral-hierarchy [formGroup]="formGroup" [hierarchy]="nextHierarchyNode"></referral-hierarchy>
+</div>
