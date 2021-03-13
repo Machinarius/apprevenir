@@ -2,7 +2,7 @@ import { ClientTypes } from "./ClientTypes";
 import { TimestampedObject } from "../common/TimestampedObject";
 import { User } from "./User";
 
-export enum CommuneType {
+export enum ZoneType {
   Urban = "urbana",
   Rural = "rural"
 }
@@ -17,12 +17,12 @@ export interface TerritorialEntityCommune extends TimestampedObject {
   id: number,
   user_id: number,
   commune: string,
-  zone_type: CommuneType,
+  zone_type: ZoneType,
   neighborhoods: TerritorialEntityNeighborhood[]
 }
 
 export type TerritorialEntityClientConfigData = {
-  [type in CommuneType]: TerritorialEntityCommune[]
+  [type in ZoneType]: TerritorialEntityCommune[]
 }
 
 export interface TerritorialEntityUser extends User<ClientTypes.TerritorialEntity> {
