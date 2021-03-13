@@ -57,7 +57,7 @@ function buildZonesHierarchy(configData: TerritorialEntityClientConfigData): Hie
       value: kvp.label
     })),
     descendants: zoneKvps.reduce((map, zone) => {
-      const hierarchy = buildCommunesHierarchy(configData[zone.key], zone.key);
+      const hierarchy = buildCommunesHierarchy(configData.communes[zone.key], zone.key);
       map[zone.key] = hierarchy;
       return map;
     }, {})

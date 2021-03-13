@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatSelect } from "@angular/material/select";
+import { ReferralHierarchyKeys } from "../../../forms/FormKeys";
 import { HierarchyNode } from "../HierarchyNode";
 
 @Component({
@@ -28,8 +29,8 @@ export class ReferralHierarchyComponent implements AfterViewInit {
     return this.hierarchy.choices;
   }
 
-  get formControlName() {
-    return "referralHierarchy" + this.hierarchy.depth;
+  get formControlName(): ReferralHierarchyKeys {
+    return `referralHierarchy${this.hierarchy.depth}` as ReferralHierarchyKeys;
   }
 
   get selectedKey() {

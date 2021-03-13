@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Location } from "@angular/common";
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReferralSources } from "../constants/referralSources";
 import { MaritalStatusValues } from "../constants/maritalStatusValues";
 import { EducationLevels } from '../constants/educationLevels';
-import { City, ClientTypes, Country, State } from '@typedefs/backend';
+import { City, Country, State } from '@typedefs/backend';
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
 import { RegistrationResult, submitRegistrationForms } from '../forms/registrationSubmitHandler';
 import Swal from 'sweetalert2';
@@ -12,6 +11,7 @@ import { Router } from '@angular/router';
 import { loadProfileFormData } from '../forms/profileFormLoader';
 import { buildLocationFormGroup, buildLoginFormGroup, buildPersonalInfoFormGroup } from './formSchema';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
+import { ClientConfigComponent } from '../clientConfig/client-config.component';
 
 @Component({
   selector: 'profile-form',
@@ -24,13 +24,11 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
   @Input("user-id-override") userIdOverride: string | null;
 
   @ViewChild(LoaderComponent) loader: LoaderComponent;
+  @ViewChild(ClientConfigComponent) clientConfigurator: ClientConfigComponent;
 
   personalInfoFormGroup: FormGroup;
   locationFormGroup: FormGroup;
   loginFormGroup: FormGroup;
-  
-  referralSources = ReferralSources;
-  rootReferralHierarchy: HierarchyNode | null = null;
 
   maritalStatusValues = MaritalStatusValues;
   educationLevels = EducationLevels;
@@ -46,24 +44,11 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
     this.profileUpdateModeEnabled = !!this.profileUpdateModeEnabled;
     this.adminModeEnabled = !!this.adminModeEnabled;
 
-    this.onReferralSourceChanged = this.onReferralSourceChanged.bind(this);
     this.onCountryChanged = this.onCountryChanged.bind(this);
     this.onStateChanged = this.onStateChanged.bind(this);
     this.onSubmitClicked = this.onSubmitClicked.bind(this);
     this.handleRegistrationResult = this.handleRegistrationResult.bind(this);
     this.loadProfileFormDataIfNeeded = this.loadProfileFormDataIfNeeded.bind(this);
-  }
-
-  get selectedReferralSource() {
-    return this.personalInfoFormGroup.get('referralSource').value;
-  }
-
-  get referralHierarchyMustBeShown() {
-    if (!this.personalInfoFormGroup) {
-      return false;
-    }
-
-    return !!this.selectedReferralSource && this.selectedReferralSource !== ClientTypes.NaturalPerson;
   }
 
   get genderSelectionIsInvalid() {
@@ -93,24 +78,6 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
     await this.loader.showLoadingIndicator(async () => {
       this.countries = await getCountries();
       await this.loadProfileFormDataIfNeeded();
-    });
-  }
-
-  public async onReferralSourceChanged() {
-    this.rootReferralHierarchy = null;
-    [1, 2, 3, 4, 5].forEach(
-      index => {
-        const hierarchyKey = 'referralHierarchy' + index;
-        this.personalInfoFormGroup.get(hierarchyKey).setValue('');
-      }
-    );
-
-    if (!this.referralHierarchyMustBeShown) {
-      return;
-    }
-    
-    await this.loader.showLoadingIndicator(async () => {
-      this.rootReferralHierarchy = await buildRootHierarchy(this.selectedReferralSource);
     });
   }
 
@@ -216,14 +183,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit {
     }
 
     const currentFormData = await loadProfileFormData(this.userIdOverride);
-    if (
-      currentFormData.personalInfo.referralSource &&
-      currentFormData.personalInfo.referralSource != ClientTypes.NaturalPerson
-    ) {
-      this.rootReferralHierarchy = await buildRootHierarchy(
-        currentFormData.personalInfo.referralSource as ClientTypes
-      );
-    }
+    await this.clientConfigurator.ingestFormData(currentFormData);
 
     if (typeof currentFormData.location.country === "number") {
       this.states = await getStates(currentFormData.location.country);

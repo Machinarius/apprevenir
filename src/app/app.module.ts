@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { LoginComponent } from './auth/login/login.component';
 import { ProfileFormComponent } from './auth/registration/profileForm/profileForm.component';
-import { ReferralHierarchyComponent } from "./auth/registration/referralHierarchy/renderer/referralHierarchy.component";
+import { ReferralHierarchyComponent } from "./auth/registration/clientConfig/referralHierarchy/renderer/referralHierarchy.component";
 import { HomeComponent } from './home/home.component';
 import { ModalComponent } from './auth/modal/modal.component';
 import { TestComponent } from './test/test.component';
@@ -38,6 +38,7 @@ import { RegistrationComponent } from './auth/registration/registration.componen
 import { LoaderComponent } from './core/loader/loader.component';
 import { EditFinalUserForm } from './admin/edit-final-user/form/edit-final-user-form.component';
 import { NotFoundComponent } from './navigation/not-found/not-found.component';
+import { ClientConfigComponent } from './auth/registration/clientConfig/client-config.component';
 
 @NgModule({
   declarations: [
@@ -71,8 +72,9 @@ import { NotFoundComponent } from './navigation/not-found/not-found.component';
     LeveModalComponent,
     LoaderComponent,
     EditFinalUserForm,
-    NotFoundComponent
-    ],
+    NotFoundComponent,
+    ClientConfigComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

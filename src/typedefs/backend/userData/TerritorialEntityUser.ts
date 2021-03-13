@@ -22,7 +22,9 @@ export interface TerritorialEntityCommune extends TimestampedObject {
 }
 
 export type TerritorialEntityClientConfigData = {
-  [type in ZoneType]: TerritorialEntityCommune[]
+  communes: {
+    [type in ZoneType]: TerritorialEntityCommune[]
+  }
 }
 
 export interface TerritorialEntityUser extends User<ClientTypes.TerritorialEntity> {

@@ -9,20 +9,7 @@
       <form [formGroup]="personalInfoFormGroup">
 
         <div class="registration__title">¿Quién te recomendó usar Apprevenir?</div>
-        <mat-form-field class="width-100">
-          <mat-select formControlName="referralSource" (selectionChange)="onReferralSourceChanged()">
-            <mat-option *ngFor="let source of referralSources" [value]="source.key">
-              {{source.label}}
-            </mat-option>
-          </mat-select>
-          <mat-error>
-            Por favor elige quién te recomendó
-          </mat-error>
-        </mat-form-field>
-
-        <div *ngIf="rootReferralHierarchy">
-          <referral-hierarchy [formGroup]="personalInfoFormGroup" [hierarchy]="rootReferralHierarchy"></referral-hierarchy>
-        </div>
+        <client-config [personalInfoForm]="personalInfoFormGroup" [loader]="loader"></client-config>
 
         <div>
           <div class="registration__title">Información personal</div>

@@ -4,7 +4,7 @@ import { getUserData } from "@services/user/usersDataSource";
 import { UserClientConfig } from "@typedefs/backend";
 import * as dayjs from "dayjs";
 
-interface ProfileFormData {
+export interface ProfileFormData {
   personalInfo: Record<Exclude<PersonalInfoFormKeys, "birthDate">, string> & { birthDate: Date | null },
   location: Record<LocationFormKeys, string | number>,
   login: Record<Exclude<LoginFormKeys, "password" | "passwordConfirmation" | "currentPassword">, string>

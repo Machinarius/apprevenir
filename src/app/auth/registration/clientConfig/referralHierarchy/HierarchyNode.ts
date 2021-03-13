@@ -1,4 +1,4 @@
-import { ReferralHierarchyLevels } from "../forms/FormKeys";
+import { ReferralHierarchyLevels } from "../../forms/FormKeys";
 
 export interface HierarchyNode {
   label: string,
