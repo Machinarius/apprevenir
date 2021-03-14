@@ -12,3 +12,33 @@
 <div *ngIf="rootReferralHierarchy">
   <referral-hierarchy [formGroup]="personalInfoFormGroup" [hierarchy]="rootReferralHierarchy"></referral-hierarchy>
 </div>
+
+<div *ngIf="referralConfigDS">
+  <div class="referral__select">Por favor elige tu {{referralConfigDS.label}}</div>
+  <mat-form-field class="width-100" [formGroup]="personalInfoFormGroup">
+    <mat-select [formControlName]="referralConfigDS.formKey" (selectionChange)="onReferralConfigRootChanged()">
+      <mat-option *ngFor="let option of referralConfigDS.options" [value]="option.key">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+    <mat-error>
+      Por favor elige tu {{referralConfigDS.label}}
+    </mat-error>
+  </mat-form-field>
+
+  <div *ngIf="referralConfigAttributes">
+    <div *ngFor="let attr of referralConfigAttributes">
+      <div class="referral__select">Por favor elige tu {{attr.label}}</div>
+      <mat-form-field class="width-100" [formGroup]="personalInfoFormGroup">
+        <mat-select [formControlName]="attr.formKey">
+          <mat-option *ngFor="let option of attr.options" [value]="option.key">
+            {{option.label}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          Por favor elige tu {{attr.label}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

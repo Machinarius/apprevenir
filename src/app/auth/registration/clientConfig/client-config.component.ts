@@ -4,6 +4,7 @@ import { ClientTypes } from "@typedefs/backend";
 import { LoaderComponent } from "src/app/core/loader/loader.component";
 import { ReferralSources } from "../constants/referralSources";
 import { ProfileFormData } from "../forms/profileFormLoader";
+import { buildReferralConfigDataSource, ReferralConfigAttribute, ReferralConfigDataSource, ReferralConfigRootKey } from "./referralAttributes";
 import { buildRootHierarchy } from "./referralHierarchy/builders/hierarchyBuilder";
 import { HierarchyNode } from "./referralHierarchy/HierarchyNode";
 
@@ -17,6 +18,8 @@ export class ClientConfigComponent {
   
   referralSources = ReferralSources;
   rootReferralHierarchy: HierarchyNode | null = null;
+  referralConfigDS: ReferralConfigDataSource | null = null;
+  referralConfigAttributes: ReferralConfigAttribute[] | null = null;
 
   get selectedReferralSource(): ClientTypes {
     return this.personalInfoFormGroup.get('referralSource').value;
@@ -51,7 +54,14 @@ export class ClientConfigComponent {
       return;
     }
 
-    
+    await this.loader.showLoadingIndicator(async () => {
+      this.referralConfigDS = await buildReferralConfigDataSource(this.selectedReferralSource);
+    });
+  }
+
+  public onReferralConfigRootChanged() {
+    const selectedConfigRootKey = this.personalInfoFormGroup.get(ReferralConfigRootKey).value;
+    this.referralConfigAttributes = this.referralConfigDS.options.find(option => option.key == selectedConfigRootKey)?.attributes;
   }
 
   public async ingestFormData(formData: ProfileFormData): Promise<void> {

@@ -9,7 +9,7 @@ export interface EducationalInstitutionGrade extends TimestampedObject {
 }
 
 export interface EducationalInstitutionClientConfigData {
-  grades: EducationalInstitutionGrade[]
+  educationalGrades: EducationalInstitutionGrade[]
 }
 
 export interface EducationalInstitutionUser extends User<ClientTypes.EducationalInstitution> {
