@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl, FormArray  } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
+import { City, Country, State } from '@typedefs/backend';
+import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { CommunesModalComponent } from './communes-modal/communes-modal.component';
 import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
@@ -46,7 +49,7 @@ const CORRECTIONS_ELEMENT_DATA: CorrectionsElement[] = [
   styleUrls: ['./admin.component.scss']
 })
 
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, AfterViewInit {
   public disabled = false;
   public color: ThemePalette = 'primary';
   public touchUi = false;
@@ -62,18 +65,23 @@ export class AdminComponent implements OnInit {
     'vereda', 
     'edit'
   ];
-  colorCtr: AbstractControl = new FormControl(null);
-  selectedFiles : any;
   clientForm: FormGroup;
-  countries = [];
-  states = [];
-  cities = [];
+
+  countries: Country[] | null = null;
+  states: State[] | null = null;
+  cities: City[] | null = null;
+
   data: Data = {
     users: [
     {name: 'User1', id: 0},
     {name: 'User2', id: 1},
     {name: 'User3', id: 2},
   ]};
+
+  colorCtr: AbstractControl = new FormControl(null);
+  selectedFiles : any;
+
+  @ViewChild(LoaderComponent) loader: LoaderComponent; 
 
   constructor(
     public userService: UserService,
@@ -88,52 +96,59 @@ export class AdminComponent implements OnInit {
       phone: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      password_confirmation: ['', Validators.required],
-      country_id: ['', Validators.required],
-      state_id: ['', Validators.required],
-      city_id: ['', Validators.required],
+      passwordConfirmation: ['', Validators.required],
+      country: [ { value: '', disabled: true }, Validators.required],
+      state: [ { value: '', disabled: true }, Validators.required],
+      city: [ { value: '', disabled: true }, Validators.required],
       communes: [[]],
       neighborhoods: [[]],
       locations: [[]],
       areas: [[]],
       shifts: [[]],
       schools: [[]]
-    }); 
-
-    this.getCountries();
+    });
   }
 
-  getCountries() {
-    this.userService.countries().subscribe( res => {
-        this.countries = res['data'];
-      });
+  async ngAfterViewInit() {
+    await this.loader.showLoadingIndicator(async () => {
+      this.countries = await getCountries();
+      this.clientForm.get('country').enable();
+      //await this.loadProfileFormDataIfNeeded();
+    });
+  }
+
+  public async onCountryChanged() {
+    const selectedCountryId = this.clientForm.get('country').value;
+    if (!selectedCountryId) {
+      return;
+    }
+
+    this.clientForm.get('state').setValue('');
+    this.clientForm.get('city').setValue('');
+    this.cities = null;
+
+    await this.loader.showLoadingIndicator(async () => {
+      this.states = await getStates(selectedCountryId);
+      this.clientForm.get('state').enable();
+    });
+  }
+
+  public async onStateChanged() {
+    const selectedStateId = this.clientForm.get('state').value;
+    if (!selectedStateId) {
+      return;
+    }
+
+    this.clientForm.get('city').setValue('');
+
+    await this.loader.showLoadingIndicator(async () => {
+      this.cities = await getCities(selectedStateId);
+      this.clientForm.get('city').enable();
+    });
   }
 
   selectFile(event) {
     this.selectedFiles = event.target.files;
-  }
-
-  getStates(country) {
-    
-    if (country != '') {
-      this.userService.states(country).subscribe( res => {
-         this.states = res['data'];
-        });
-    } else {
-      this.states = [];
-      this.getCities('');
-    }
-  }
-
-  getCities(state) {
-
-    if (state != '') {
-      this.userService.cities(state).subscribe( res => {
-         this.cities = res['data'];
-        });
-    } else {
-      this.cities = [];
-    }
   }
 
   onSubmit() {

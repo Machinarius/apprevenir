@@ -2,7 +2,8 @@
 <div class="admin">
 	<h1 class="admin__title app-m-top">Crear cliente</h1>
 	<div class="admin__card">
-		<div class="admin__box">
+		<app-loader #loader></app-loader>
+		<div class="admin__box" [hidden]="loader.loadingData">
 			<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
 				<div class="admin__sub-title app-m-top">Información General</div>
 				<mat-form-field class="width-100">
@@ -16,20 +17,20 @@
 					</mat-select>
 				</mat-form-field>
 				<mat-form-field class="width-100">
-					<mat-label>Pais</mat-label>
-					<mat-select formControlName="country_id" #country (selectionChange)="getStates(country.value)">
+					<mat-label>País</mat-label>
+					<mat-select formControlName="country" (selectionChange)="onCountryChanged()">
 						<mat-option value="{{country.id}}" *ngFor="let country of countries">{{ country.name }}</mat-option>
 					</mat-select>
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Departamento</mat-label>
-					<mat-select formControlName="state_id" #state (selectionChange)="getCities(state.value)">
+					<mat-select formControlName="state" (selectionChange)="onStateChanged()">
 						<mat-option value="{{state.id}}" *ngFor="let state of states">{{ state.name }}</mat-option>
 					</mat-select>
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Ciudad</mat-label>
-					<mat-select formControlName="city_id">
+					<mat-select formControlName="city">
 						<mat-option value="{{city.id}}" *ngFor="let city of cities">{{ city.name }}</mat-option>
 					</mat-select>
 				</mat-form-field>
