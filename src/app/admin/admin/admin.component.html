@@ -8,7 +8,7 @@
 				<div class="admin__sub-title app-m-top">Información General</div>
 				<mat-form-field class="width-100">
 					<mat-label>Tipo de cliente</mat-label>
-					<mat-select formControlName="client">
+					<mat-select formControlName="clientType">
 						<mat-option value="entidades territoriales">Entidades Territoriales</mat-option>
 						<mat-option value="secretarias de educacion">Secretarías de Educación</mat-option>
 						<mat-option value="instituciones educativas">Instituciones Educativas</mat-option>
@@ -36,11 +36,11 @@
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Nombre</mat-label>
-					<input type="text" matInput formControlName="first_names">
+					<input type="text" matInput formControlName="names">
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Nit. o C.C.</mat-label>
-					<input type="email" matInput>
+					<input type="text" matInput formControlName="nationalId">
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Número de Contacto</mat-label>
@@ -56,7 +56,7 @@
 				</mat-form-field>
 				<mat-form-field class="width-100">
 					<mat-label>Repetir contraseña</mat-label>
-					<input type="password" matInput formControlName="password_confirmation">
+					<input type="password" matInput formControlName="passwordConfirmation">
 				</mat-form-field>
 				<div class="field-icons">
 					<mat-form-field class="columns">
@@ -74,7 +74,7 @@
 				<div class="field-icons">
 					<mat-form-field>
 						<mat-label>Color principal</mat-label>
-						<input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr" [disabled]="disabled">
+						<input matInput [ngxMatColorPicker]="picker" formControlName="brandColor">
 					</mat-form-field>
 					<div class="field-icons__picker">
 						<ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>

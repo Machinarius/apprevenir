@@ -9,6 +9,7 @@ import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { CommunesModalComponent } from './communes-modal/communes-modal.component';
 import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
+import { buildClientFormGroup } from './formSchema';
 
 interface User {
   name: string;
@@ -50,7 +51,6 @@ const CORRECTIONS_ELEMENT_DATA: CorrectionsElement[] = [
 })
 
 export class AdminComponent implements OnInit, AfterViewInit {
-  public disabled = false;
   public color: ThemePalette = 'primary';
   public touchUi = false;
   public dataSource = new MatTableDataSource<CommunesElement>(COMMUNES_ELEMENT_DATA);
@@ -90,23 +90,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.clientForm = this.formBuilder.group({
-      client: ['', Validators.required],
-      first_names: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirmation: ['', Validators.required],
-      country: [ { value: '', disabled: true }, Validators.required],
-      state: [ { value: '', disabled: true }, Validators.required],
-      city: [ { value: '', disabled: true }, Validators.required],
-      communes: [[]],
-      neighborhoods: [[]],
-      locations: [[]],
-      areas: [[]],
-      shifts: [[]],
-      schools: [[]]
-    });
+    this.clientForm = buildClientFormGroup(this.formBuilder);
   }
 
   async ngAfterViewInit() {
