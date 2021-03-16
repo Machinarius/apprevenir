@@ -5,7 +5,8 @@ import { MatChipInputEvent } from "@angular/material/chips";
 
 export interface ChipInputTerm {
 	id: number | null,
-	label: string
+	label: string,
+	deletedByUser: boolean
 }
 
 @Component({
@@ -24,7 +25,10 @@ export class ChipInputComponent implements OnInit {
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	inputControl = new FormControl();
 
-	userTerms: ChipInputTerm[] = [];
+	allTerms: ChipInputTerm[] = [];
+	get userTerms(): ChipInputTerm[] {
+		return this.allTerms.filter(term => !term.deletedByUser);
+	}
 
 	ngOnInit(): void {
 		this.loadTermsFromForm();
@@ -39,9 +43,10 @@ export class ChipInputComponent implements OnInit {
     const value = event.value;
 
     if ((value || '').trim()) {
-      this.userTerms.push({
+      this.allTerms.push({
 				id: null,
-				label: value.trim()
+				label: value.trim(),
+				deletedByUser: false
 			});
 			
 			this.storeTermsIntoForm();
@@ -56,16 +61,16 @@ export class ChipInputComponent implements OnInit {
     const index = this.userTerms.indexOf(term);
 
     if (index >= 0) {
-      this.userTerms.splice(index, 1);
+			this.userTerms[index].deletedByUser = true;
 			this.storeTermsIntoForm();
     }
   }
 
 	private loadTermsFromForm() {
-		this.userTerms = this.formControl.value || [];
+		this.allTerms = this.formControl.value || [];
 	}
 
 	private storeTermsIntoForm() {
-		this.formControl.setValue(this.userTerms);
+		this.formControl.setValue(this.allTerms);
 	}
 }
