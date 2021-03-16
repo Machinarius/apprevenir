@@ -7,7 +7,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { CommunesModalComponent } from './communes-modal/communes-modal.component';
 import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { PillOption } from './pill-component/pill.component';
+import { PillOption } from './chip-autocomplete/chip-autocomplete.component';
 
 interface User {
   name: string;

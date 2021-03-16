@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PillOption } from '../pill-component/pill.component';
+import { PillOption } from '../chip-autocomplete/chip-autocomplete.component';
 @Component({
   selector: 'app-corrections-modal',
   templateUrl: './corrections-modal.component.html',

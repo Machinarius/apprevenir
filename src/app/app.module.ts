@@ -39,7 +39,7 @@ import { EditFinalUserForm } from './admin/edit-final-user/form/edit-final-user-
 import { NotFoundComponent } from './navigation/not-found/not-found.component';
 import { ClientConfigComponent } from './auth/registration/clientConfig/client-config.component';
 import { PolicyModalComponent } from './auth/policy-modal/policy-modal.component';
-import { PillComponent } from './admin/admin/pill-component/pill.component';
+import { ChipAutoCompleteComponent } from './admin/admin/chip-autocomplete/chip-autocomplete.component';
 import { ReportModalComponent } from './admin/report/report-modal/report-modal.component';
 
 @NgModule({
@@ -75,7 +75,7 @@ import { ReportModalComponent } from './admin/report/report-modal/report-modal.c
     NotFoundComponent,
     ClientConfigComponent,
     PolicyModalComponent,
-    PillComponent,
+    ChipAutoCompleteComponent,
     ReportModalComponent
   ],
   imports: [

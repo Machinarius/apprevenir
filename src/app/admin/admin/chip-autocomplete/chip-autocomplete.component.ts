@@ -12,9 +12,9 @@ export interface PillOption {
 
 @Component({
     selector: "chip-input",
-    templateUrl: "./pill.component.html"
+    templateUrl: "./chip-autocomplete.component.html"
 })
-export class PillComponent implements OnInit {
+export class ChipAutoCompleteComponent implements OnInit {
 	@Input() description: string;
 	@Input() title: string;
 	@Input() placeholder: string;
