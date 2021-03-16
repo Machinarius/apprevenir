@@ -18,6 +18,9 @@
 					<mat-select formControlName="country" (selectionChange)="onCountryChanged()">
 						<mat-option value="{{country.id}}" *ngFor="let country of countries">{{ country.name }}</mat-option>
 					</mat-select>
+					<mat-error>
+						Por favor elige tu País
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
@@ -25,6 +28,9 @@
 					<mat-select formControlName="state" (selectionChange)="onStateChanged()">
 						<mat-option value="{{state.id}}" *ngFor="let state of states">{{ state.name }}</mat-option>
 					</mat-select>
+					<mat-error>
+						Por favor elige tu Departamento
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
@@ -32,36 +38,57 @@
 					<mat-select formControlName="city">
 						<mat-option value="{{city.id}}" *ngFor="let city of cities">{{ city.name }}</mat-option>
 					</mat-select>
+					<mat-error>
+						Por favor elige tu Ciudad
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
 					<mat-label>Nombre</mat-label>
 					<input type="text" matInput formControlName="names">
+					<mat-error>
+						Nombre es <strong>requerido</strong>
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
 					<mat-label>Nit. o C.C.</mat-label>
 					<input type="text" matInput formControlName="nationalId">
+					<mat-error>
+						Nit. o C.C. es <strong>requerido</strong>
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
 					<mat-label>Número de Contacto</mat-label>
 					<input type="text" matInput formControlName="phone">
+					<mat-error>
+						Número de Contacto es <strong>requerido</strong>
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
 					<mat-label>Email</mat-label>
 					<input type="email" matInput formControlName="email">
+					<mat-error>
+						Email es <strong>requerido</strong>
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
-					<mat-label>Password</mat-label>
+					<mat-label>Contraseña</mat-label>
 					<input type="password" matInput formControlName="password">
+					<mat-error>
+						La contraseña debe tener entre 8 y 16 caracteres
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
 					<mat-label>Repetir contraseña</mat-label>
 					<input type="password" matInput formControlName="passwordConfirmation">
+					<mat-error>
+						La confirmación debe ser igual a la contraseña
+					</mat-error>
 				</mat-form-field>
 
 				<div class="field-icons">
@@ -91,7 +118,7 @@
 			</form>
 
 			<div class="admin__sub-title">Información Específica</div>
-			
+
 			<div class="admin__box-text">
 				<div class="admin__text">Comunas y Barrios</div>
 				<button mat-mini-fab color="primary" (click)="openDialogCommunes()">
