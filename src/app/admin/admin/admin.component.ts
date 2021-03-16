@@ -6,8 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from 'src/app/services/user/user.service';
 import { CommunesModalComponent } from './communes-modal/communes-modal.component';
 import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { PillOption } from './chip-autocomplete/chip-autocomplete.component';
 
 interface User {
   name: string;
@@ -77,14 +75,6 @@ export class AdminComponent implements OnInit {
     {name: 'User3', id: 2},
   ]};
 
-  possibleAreas: PillOption[] = [{
-    key: "1",
-    label: "Producción"
-  }, {
-    key: "2",
-    label: "Investigación"
-  }];
-
   constructor(
     public userService: UserService,
     private formBuilder: FormBuilder,
@@ -92,7 +82,6 @@ export class AdminComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.clientForm = this.formBuilder.group({
       client: ['', Validators.required],
       first_names: ['', Validators.required],
@@ -103,6 +92,12 @@ export class AdminComponent implements OnInit {
       country_id: ['', Validators.required],
       state_id: ['', Validators.required],
       city_id: ['', Validators.required],
+      communes: [[]],
+      neighborhoods: [[]],
+      locations: [[]],
+      areas: [[]],
+      shifts: [[]],
+      schools: [[]]
     }); 
 
     this.getCountries();

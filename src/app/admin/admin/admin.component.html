@@ -137,32 +137,32 @@
 			<chip-input 
 				description="Ingrese las sedes separadas por coma o presionando (Enter)" 
 				title="Sedes"
-				[options]="possibleAreas"
-				formKey="selectedAreas"
+				[form]="clientForm"
+				formKey="locations"
 				placeholder="Sedes">
 			</chip-input>
 
 			<chip-input 
 				description="Ingrese las áreas separadas por coma o presionando (Enter)" 
 				title="Área"
-				[options]="possibleAreas"
-				formKey="selectedAreas"
+				[form]="clientForm"
+				formKey="areas"
 				placeholder="Áreas">
 			</chip-input>
 
 			<chip-input 
 				description="Ingrese los turnos separados por coma o presionando (Enter)" 
 				title="Turnos"
-				[options]="possibleAreas"
-				formKey="selectedAreas"
+				[form]="clientForm"
+				formKey="shifts"
 				placeholder="Turnos">
 			</chip-input>
 
 			<chip-input 
 				description="Ingrese las instituciones educativas separadas por coma o presionando (Enter)" 
 				title="Instituciones educativas"
-				[options]="possibleAreas"
-				formKey="selectedAreas"
+				[form]="clientForm"
+				formKey="schools"
 				placeholder="Instituciones educativas">
 			</chip-input>
 

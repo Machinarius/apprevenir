@@ -1,0 +1,22 @@
+<div class="admin__turno">{{description}}</div>
+<mat-form-field class="example-chip-list">
+    <mat-label>{{title}}</mat-label>
+    <mat-chip-list #chipList>
+        <mat-chip
+            *ngFor="let term of userTerms"
+            [selectable]="false"
+            [removable]="true"
+            (removed)="removeTerm(term)"
+        >
+            {{term.label}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+            placeholder="{{placeholder}}..."
+            #termInput
+            [formControl]="inputControl"     
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addTerm($event)">
+    </mat-chip-list>
+</mat-form-field>
