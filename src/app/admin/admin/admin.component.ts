@@ -8,6 +8,7 @@ import { City, Country, State } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { CommunesModalComponent } from './communes-modal/communes-modal.component';
+import { NewClientTypes } from './constants/newClientTypes';
 import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
 import { buildClientFormGroup } from './formSchema';
 
@@ -80,6 +81,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   colorCtr: AbstractControl = new FormControl(null);
   selectedFiles : any;
+
+  newClientTypes = NewClientTypes;
 
   @ViewChild(LoaderComponent) loader: LoaderComponent; 
 
