@@ -95,14 +95,14 @@
 					<mat-form-field class="columns">
 						<mat-label *ngIf="selectedFiles; else newFile">{{selectedFiles.item(0).name}}</mat-label>
 						<ng-template #newFile>
-							<mat-label>Choose file</mat-label>
+							<mat-label>Logo (JPG o PNG - 200x55px)</mat-label>
 						</ng-template>
 						<input matInput disabled>
 					</mat-form-field>
 					<button mat-icon-button matSuffix (click)="fileInput.click()"  class="icon-upload">
 						<mat-icon>upload</mat-icon>
 					</button>
-					<input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
+					<input hidden (change)="onFilesSelected($event)" #fileInput type="file" id="file" accept="image/png, image/jpeg">
 				</div>
 
 				<div class="field-icons">
@@ -233,7 +233,7 @@
 			</section>
 
 			<div>
-				<button class="btn btn-primary app-m-top" type="submit">Guardar</button>
+				<button class="btn btn-primary app-m-top" (click)="onSubmitClicked()">Guardar</button>
 			</div>
 		</div>
 	</div>

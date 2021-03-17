@@ -35,7 +35,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   cities: City[] | null = null;
   
   colorCtr: AbstractControl = new FormControl(null);
-  selectedFiles : any;
+  selectedFiles: FileList;
 
   newClientTypes = NewClientTypes;
 
@@ -103,8 +103,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
     });
   }
 
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
+  onFilesSelected(event: Event) {
+    const element = event.target as HTMLInputElement;
+    this.selectedFiles = element.files;
   }
 
   onSubmit() {
@@ -182,6 +183,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
   deleteUrbanZone(currentZone: UserZone) {
     currentZone.deletedByUser = true;
     this.urbanZonesDS.data = this.activeUrbanZones;
+  }
+
+  onSubmitClicked() {
+    
   }
 }
 
