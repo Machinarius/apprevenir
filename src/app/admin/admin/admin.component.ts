@@ -4,85 +4,46 @@ import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
-import { City, Country, State } from '@typedefs/backend';
+import { City, Country, State, ZoneType } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
 import { buildClientFormGroup } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
+import { UserZone } from './models/UserZone';
 
-interface User {
-  name: string;
-  id: number;
-}
-
-interface Data {
-  users: User[];
-}
-
-export interface CommunesElement {
-  comuna: string;
-  barrio: string;
-  edit: string;
-}
-export interface CorrectionsElement {
-  corregimiento: string;
-  vereda: string;
-  edit: string;
-}
-
-const COMMUNES_ELEMENT_DATA: CommunesElement[] = [
-  { comuna: '001', 
-    barrio: 'Industrias Noel', 
-    edit: 'icon'
-  }
-];
-
-const CORRECTIONS_ELEMENT_DATA: CorrectionsElement[] = [
-  { corregimiento: '001', 
-    vereda: 'Industrias Noel', 
-    edit: 'icon'
-  }
-];
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-
 export class AdminComponent implements OnInit, AfterViewInit {
   public color: ThemePalette = 'primary';
   public touchUi = false;
-  public dataSource = new MatTableDataSource<CommunesElement>(COMMUNES_ELEMENT_DATA);
-  public data_Source = new MatTableDataSource<CorrectionsElement>(CORRECTIONS_ELEMENT_DATA);
-  public displayedColumns: string[] = [
-    'comuna', 
-    'barrio', 
-    'edit'
+
+  public zoneTableColumns: string[] = [
+    'name', 
+    'children', 
+    'actions'
   ];
-  public displayedColumn: string[] = [
-    'corregimiento', 
-    'vereda', 
-    'edit'
-  ];
+  
   clientForm: FormGroup;
 
   countries: Country[] | null = null;
   states: State[] | null = null;
   cities: City[] | null = null;
-
-  data: Data = {
-    users: [
-    {name: 'User1', id: 0},
-    {name: 'User2', id: 1},
-    {name: 'User3', id: 2},
-  ]};
-
+  
   colorCtr: AbstractControl = new FormControl(null);
   selectedFiles : any;
 
   newClientTypes = NewClientTypes;
+
+  allUrbanZones: UserZone[] = [];
+  allRuralZones: UserZone[] = [];
+
+  public urbanZonesDS = new MatTableDataSource<UserZone>(this.allUrbanZones);
+  public ruralZonesDS = new MatTableDataSource<UserZone>(this.allRuralZones);
 
   @ViewChild(LoaderComponent) loader: LoaderComponent; 
 
@@ -91,6 +52,14 @@ export class AdminComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
   ) { }
+
+  get activeUrbanZones() {
+    return this.allUrbanZones.filter(zone => !zone.deletedByUser);
+  }
+
+  get activeRuralZones() {
+    return this.allRuralZones.filter(zone => !zone.deletedByUser);
+  }
 
   ngOnInit() {
     this.clientForm = buildClientFormGroup(this.formBuilder);
@@ -151,29 +120,68 @@ export class AdminComponent implements OnInit, AfterViewInit {
     this.userService.client(formData);
   }
 
-  openDialogCorrection() {
-    /*
-    const dialogRef = this.dialog.open(CorrectionsModalComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-    */
-  }
-
-  async openDialogCommunes() {
+  async openRuralZoneEditDialog(currentZone?: UserZone) {
     const config: ZoneInputConfig = {
-      ...urbanZoneConfigTemplate,
-      currentChildTerms: [],
-      currentZoneName: ""
+      ...ruralZoneConfigTemplate,
+      currentChildTerms: [...currentZone?.children || []],
+      currentZoneName: currentZone?.name || ""
     };
 
     const result = await ZoneEditModalComponent.show(this.dialog, config);
     if (!result.userConfirmed) {
       return;
     }
+
+    if (currentZone) {
+      currentZone.name = result.zoneName;
+      currentZone.children = result.childTerms;
+      return;
+    }
     
-    console.log("User confirmed content", result);
+    const createdZone = new UserZone();
+    createdZone.name = result.zoneName;
+    createdZone.type = ZoneType.Rural;
+    createdZone.children = result.childTerms;
+
+    this.allRuralZones.push(createdZone);
+    this.ruralZonesDS.data = this.activeRuralZones;
+  }
+
+  deleteRuralZone(currentZone: UserZone) {
+    currentZone.deletedByUser = true;
+    this.ruralZonesDS.data = this.activeUrbanZones;
+  }
+
+  async openUrbanZoneEditDialog(currentZone?: UserZone) {
+    const config: ZoneInputConfig = {
+      ...urbanZoneConfigTemplate,
+      currentChildTerms: [...currentZone?.children || []],
+      currentZoneName: currentZone?.name || ""
+    };
+
+    const result = await ZoneEditModalComponent.show(this.dialog, config);
+    if (!result.userConfirmed) {
+      return;
+    }
+
+    if (currentZone) {
+      currentZone.name = result.zoneName;
+      currentZone.children = result.childTerms;
+      return;
+    }
+    
+    const createdZone = new UserZone();
+    createdZone.name = result.zoneName;
+    createdZone.type = ZoneType.Urban;
+    createdZone.children = result.childTerms;
+
+    this.allUrbanZones.push(createdZone);
+    this.urbanZonesDS.data = this.activeUrbanZones;
+  }
+
+  deleteUrbanZone(currentZone: UserZone) {
+    currentZone.deletedByUser = true;
+    this.urbanZonesDS.data = this.activeUrbanZones;
   }
 }
 
