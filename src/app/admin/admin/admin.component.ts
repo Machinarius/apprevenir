@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,13 +12,14 @@ import { NewClientTypes } from './constants/newClientTypes';
 import { buildClientFormGroup } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
 import { UserZone } from './models/UserZone';
+import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit, AfterViewInit {
+export class AdminComponent implements AfterViewInit {
   public color: ThemePalette = 'primary';
   public touchUi = false;
 
@@ -48,10 +49,12 @@ export class AdminComponent implements OnInit, AfterViewInit {
   @ViewChild(LoaderComponent) loader: LoaderComponent; 
 
   constructor(
-    public userService: UserService,
-    private formBuilder: FormBuilder,
-    public dialog: MatDialog,
-  ) { }
+    private userService: UserService,
+    private dialog: MatDialog,
+    formBuilder: FormBuilder
+  ) {
+    this.clientForm = buildClientFormGroup(formBuilder);
+  }
 
   get activeUrbanZones() {
     return this.allUrbanZones.filter(zone => !zone.deletedByUser);
@@ -61,8 +64,28 @@ export class AdminComponent implements OnInit, AfterViewInit {
     return this.allRuralZones.filter(zone => !zone.deletedByUser);
   }
 
-  ngOnInit() {
-    this.clientForm = buildClientFormGroup(this.formBuilder);
+  get selectedClientType() {
+    return this.clientForm.get("clientType").value as ClientTypes;
+  }
+
+  get clientIsTerritorialEntity() {
+    return this.selectedClientType == ClientTypes.TerritorialEntity;
+  }
+
+  get clientIsCompany() {
+    return this.selectedClientType == ClientTypes.Company;
+  }
+
+  get clientIsEducationBureau() {
+    return this.selectedClientType == ClientTypes.EducationBureau;
+  }
+
+  get clientIsUniversity() {
+    return this.selectedClientType == ClientTypes.University;
+  }
+
+  get clientIsEducationalInstitution() {
+    return this.selectedClientType == ClientTypes.EducationalInstitution;
   }
 
   async ngAfterViewInit() {

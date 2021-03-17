@@ -117,91 +117,141 @@
 				</div>
 			</form>
 
-			<div class="admin__sub-title">Información Específica</div>
+			<div class="admin__sub-title" [hidden]="!selectedClientType">Información Específica</div>
 
-			<div class="admin__box-text">
-				<div class="admin__text">Comunas y Barrios</div>
-				<button mat-mini-fab color="primary" (click)="openUrbanZoneEditDialog()">
-					<mat-icon>add</mat-icon>
-				</button>
+			<div [hidden]="!clientIsTerritorialEntity">
+				<div class="admin__box-text">
+					<div class="admin__text">Comunas y Barrios</div>
+					<button mat-mini-fab color="primary" (click)="openUrbanZoneEditDialog()">
+						<mat-icon>add</mat-icon>
+					</button>
+				</div>
+				<table class="test-table" mat-table [dataSource]="urbanZonesDS">
+					<ng-container matColumnDef="name">
+					<th mat-header-cell *matHeaderCellDef>Comuna</th>
+					<td mat-cell *matCellDef="let element"> {{element.name}} </td>
+					</ng-container>
+					<ng-container matColumnDef="children">
+					<th mat-header-cell *matHeaderCellDef> Barrio</th>
+					<td mat-cell *matCellDef="let element"> {{element.childrenStrings}} </td>
+					</ng-container>
+					<ng-container matColumnDef="actions">
+					<th mat-header-cell *matHeaderCellDef>Edición</th>
+					<td mat-cell *matCellDef="let element">
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="openUrbanZoneEditDialog(element)">edit</mat-icon>
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="deleteUrbanZone(element)">delete</mat-icon>
+					</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="zoneTableColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: zoneTableColumns;"></tr>
+				</table>
+				
+				<div class="admin__box-text">
+					<div class="admin__text">Corregimientos y Veredas</div>
+					<button mat-mini-fab color="primary" (click)="openRuralZoneEditDialog()">
+						<mat-icon>add</mat-icon>
+					</button>
+				</div>
+				<table class="test-table" mat-table [dataSource]="ruralZonesDS">
+					<ng-container matColumnDef="name">
+					<th mat-header-cell *matHeaderCellDef>Corregimiento</th>
+					<td mat-cell *matCellDef="let element"> {{element.name}} </td>
+					</ng-container>
+					<ng-container matColumnDef="children">
+					<th mat-header-cell *matHeaderCellDef> Vereda</th>
+					<td mat-cell *matCellDef="let element"> {{element.childrenStrings}} </td>
+					</ng-container>
+					<ng-container matColumnDef="actions">
+					<th mat-header-cell *matHeaderCellDef>Edición</th>
+					<td mat-cell *matCellDef="let element">
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="openRuralZoneEditDialog(element)">edit</mat-icon>
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="deleteRuralZone(element)">delete</mat-icon>
+					</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="zoneTableColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: zoneTableColumns;"></tr>
+				</table>
 			</div>
-			<table class="test-table" mat-table [dataSource]="urbanZonesDS">
-				<ng-container matColumnDef="name">
-				<th mat-header-cell *matHeaderCellDef>Comuna</th>
-				<td mat-cell *matCellDef="let element"> {{element.name}} </td>
-				</ng-container>
-				<ng-container matColumnDef="children">
-				<th mat-header-cell *matHeaderCellDef> Barrio</th>
-				<td mat-cell *matCellDef="let element"> {{element.childrenStrings}} </td>
-				</ng-container>
-				<ng-container matColumnDef="actions">
-				<th mat-header-cell *matHeaderCellDef>Edición</th>
-				<td mat-cell *matCellDef="let element">
-					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="openUrbanZoneEditDialog(element)">edit</mat-icon>
-					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="deleteUrbanZone(element)">delete</mat-icon>
-				</td>
-				</ng-container>
-				<tr mat-header-row *matHeaderRowDef="zoneTableColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: zoneTableColumns;"></tr>
-			</table>
-			
-			<div class="admin__box-text">
-				<div class="admin__text">Corregimientos y Veredas</div>
-				<button mat-mini-fab color="primary" (click)="openRuralZoneEditDialog()">
-					<mat-icon>add</mat-icon>
-				</button>
+
+			<div [hidden]="!clientIsCompany">
+				<chip-input 
+					description="Ingrese las sedes separadas por coma o presionando (Enter)" 
+					title="Sedes"
+					[form]="clientForm"
+					formKey="locations"
+					placeholder="Sedes">
+				</chip-input>
+
+				<chip-input 
+					description="Ingrese las áreas separadas por coma o presionando (Enter)" 
+					title="Área"
+					[form]="clientForm"
+					formKey="areas"
+					placeholder="Áreas">
+				</chip-input>
+
+				<chip-input 
+					description="Ingrese los turnos separados por coma o presionando (Enter)" 
+					title="Turnos"
+					[form]="clientForm"
+					formKey="shifts"
+					placeholder="Turnos">
+				</chip-input>
 			</div>
-			<table class="test-table" mat-table [dataSource]="ruralZonesDS">
-				<ng-container matColumnDef="name">
-				<th mat-header-cell *matHeaderCellDef>Corregimiento</th>
-				<td mat-cell *matCellDef="let element"> {{element.name}} </td>
-				</ng-container>
-				<ng-container matColumnDef="children">
-				<th mat-header-cell *matHeaderCellDef> Vereda</th>
-				<td mat-cell *matCellDef="let element"> {{element.childrenStrings}} </td>
-				</ng-container>
-				<ng-container matColumnDef="actions">
-				<th mat-header-cell *matHeaderCellDef>Edición</th>
-				<td mat-cell *matCellDef="let element">
-					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="openRuralZoneEditDialog(element)">edit</mat-icon>
-					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="deleteRuralZone(element)">delete</mat-icon>
-				</td>
-				</ng-container>
-				<tr mat-header-row *matHeaderRowDef="zoneTableColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: zoneTableColumns;"></tr>
-			</table>
 
-			<chip-input 
-				description="Ingrese las sedes separadas por coma o presionando (Enter)" 
-				title="Sedes"
-				[form]="clientForm"
-				formKey="locations"
-				placeholder="Sedes">
-			</chip-input>
+			<div [hidden]="!clientIsEducationBureau">
+				<chip-input 
+					description="Ingrese las instituciones educativas separadas por coma o presionando (Enter)" 
+					title="Instituciones educativas"
+					[form]="clientForm"
+					formKey="schools"
+					placeholder="Instituciones educativas">
+				</chip-input>
 
-			<chip-input 
-				description="Ingrese las áreas separadas por coma o presionando (Enter)" 
-				title="Área"
-				[form]="clientForm"
-				formKey="areas"
-				placeholder="Áreas">
-			</chip-input>
+				<chip-input 
+					description="Ingrese los grados separadas por coma o presionando (Enter)" 
+					title="Grados"
+					[form]="clientForm"
+					formKey="grades"
+					placeholder="Grados">
+				</chip-input>
+			</div>
 
-			<chip-input 
-				description="Ingrese los turnos separados por coma o presionando (Enter)" 
-				title="Turnos"
-				[form]="clientForm"
-				formKey="shifts"
-				placeholder="Turnos">
-			</chip-input>
+			<div [hidden]="!clientIsUniversity">
+				<chip-input 
+					description="Ingrese los programas separados por coma o presionando (Enter)" 
+					title="Programas"
+					[form]="clientForm"
+					formKey="programs"
+					placeholder="Programas">
+				</chip-input>
 
-			<chip-input 
-				description="Ingrese las instituciones educativas separadas por coma o presionando (Enter)" 
-				title="Instituciones educativas"
-				[form]="clientForm"
-				formKey="schools"
-				placeholder="Instituciones educativas">
-			</chip-input>
+				<chip-input 
+					description="Ingrese las modalidades separadas por coma o presionando (Enter)" 
+					title="Modalidades"
+					[form]="clientForm"
+					formKey="modalities"
+					placeholder="Modalidades">
+				</chip-input>
+
+				<chip-input 
+					description="Ingrese los semestres separadas por coma o presionando (Enter)" 
+					title="Semestres"
+					[form]="clientForm"
+					formKey="semesters"
+					placeholder="Semestres">
+				</chip-input>
+			</div>
+
+			<div [hidden]="!clientIsEducationalInstitution">
+				<chip-input 
+					description="Ingrese los grados separadas por coma o presionando (Enter)" 
+					title="Grados"
+					[form]="clientForm"
+					formKey="schoolGrades"
+					placeholder="Grados">
+				</chip-input>
+			</div>
 
 			<div class="admin__title app-m-bottom">Tests habilitados</div>
 			<section class="app-flex" style="   justify-content: space-between;">

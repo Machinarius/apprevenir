@@ -12,12 +12,12 @@ export type ClientFormKeys =
   | "country"
   | "state"
   | "city"
-  | "communes"
-  | "neighborhoods"
   | "locations"
   | "areas"
   | "shifts"
-  | "schools";
+  | "schools"
+  | "grades"
+  | "schoolGrades";
 
 export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
   return formBuilder.group({
@@ -32,11 +32,14 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     country: [ { value: '', disabled: true }, Validators.required],
     state: [ { value: '', disabled: true }, Validators.required],
     city: [ { value: '', disabled: true }, Validators.required],
-    communes: [[]],
-    neighborhoods: [[]],
     locations: [[]],
     areas: [[]],
     shifts: [[]],
-    schools: [[]]
+    schools: [[]],
+    grades: [[]],
+    programs: [[]],
+    modalities: [[]],
+    semesters: [[]],
+    schoolGrades: [[]]
   });
 }
