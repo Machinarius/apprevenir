@@ -163,12 +163,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   async openDialogCommunes() {
     const config: ZoneInputConfig = {
-      zoneTypeName: "Comuna",
-      zoneNameInputLabel: "Nombre de la Comuna",
-      zoneNameRequiredMessage: "Por favor ingresa un nombre válido",
-      childrenInputTitle: "Barrios",
-      childrenInputDescription: "Ingrese los barrios separadas por coma o presionando (Enter)",
-      childrenRequiredMessage: "Por favor ingresa al menos un barrio",
+      ...urbanZoneConfigTemplate,
       currentChildTerms: [],
       currentZoneName: ""
     };
@@ -181,3 +176,21 @@ export class AdminComponent implements OnInit, AfterViewInit {
     console.log("User confirmed content", result);
   }
 }
+
+const urbanZoneConfigTemplate: Omit<ZoneInputConfig, "currentChildTerms" | "currentZoneName"> = {
+  zoneTypeName: "Comuna",
+  zoneNameInputLabel: "Nombre de la Comuna",
+  zoneNameRequiredMessage: "Por favor ingresa un nombre válido",
+  childrenInputTitle: "Barrios",
+  childrenInputDescription: "Ingrese los barrios separadas por coma o presionando (Enter)",
+  childrenRequiredMessage: "Por favor ingresa al menos un barrio"
+};
+
+const ruralZoneConfigTemplate: Omit<ZoneInputConfig, "currentChildTerms" | "currentZoneName"> = {
+  zoneTypeName: "Corregimiento",
+  zoneNameInputLabel: "Nombre de la Vereda",
+  zoneNameRequiredMessage: "Por favor ingresa un nombre válido",
+  childrenInputTitle: "Veredes",
+  childrenInputDescription: "Ingrese las veredas separadas por coma o presionando (Enter)",
+  childrenRequiredMessage: "Por favor ingresa al menos una vereda"
+};
