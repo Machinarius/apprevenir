@@ -1,17 +1,12 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
-import { MatChipInputEvent } from "@angular/material/chips";
-
-export interface ChipInputTerm {
-	id: number | null,
-	label: string,
-	deletedByUser: boolean
-}
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { MatChip, MatChipInputEvent, MatChipList } from "@angular/material/chips";
+import { UserInputTerm } from "../models/UserInputTerm";
 
 @Component({
-    selector: "chip-input",
-    templateUrl: "./chip-input.component.html"
+	selector: "chip-input",
+	templateUrl: "./chip-input.component.html"
 })
 export class ChipInputComponent implements OnInit {
 	@Input() description: string;
@@ -19,14 +14,17 @@ export class ChipInputComponent implements OnInit {
 	@Input() placeholder: string;
 	@Input() form: FormGroup;
 	@Input() formKey: string;
+	@Input() valuesAreRequired: boolean;
+	@Input() valuesMissingError: string;
 
 	@ViewChild('termInput') termInput: ElementRef<HTMLInputElement>;
+	@ViewChild(MatChipList) chipList: MatChipList;
 
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	inputControl = new FormControl();
 
-	allTerms: ChipInputTerm[] = [];
-	get userTerms(): ChipInputTerm[] {
+	allTerms: UserInputTerm[] = [];
+	get userTerms(): UserInputTerm[] {
 		return this.allTerms.filter(term => !term.deletedByUser);
 	}
 
@@ -49,7 +47,7 @@ export class ChipInputComponent implements OnInit {
 				deletedByUser: false
 			});
 			
-			this.storeTermsIntoForm();
+			this.validateAndStoreTermsIntoForm();
     }
 
     if (input) {
@@ -57,12 +55,12 @@ export class ChipInputComponent implements OnInit {
     }
   }
 
-  removeTerm(term: ChipInputTerm): void {
+  removeTerm(term: UserInputTerm): void {
     const index = this.userTerms.indexOf(term);
 
     if (index >= 0) {
 			this.userTerms[index].deletedByUser = true;
-			this.storeTermsIntoForm();
+			this.validateAndStoreTermsIntoForm();
     }
   }
 
@@ -70,7 +68,21 @@ export class ChipInputComponent implements OnInit {
 		this.allTerms = this.formControl.value || [];
 	}
 
-	private storeTermsIntoForm() {
+	public runValidations() {
+		if (this.valuesAreRequired) {
+			if (this.userTerms.length == 0) {
+				this.chipList.errorState = true;
+				this.chipList._markAsTouched(); // Why would this be a private API? :thinking:
+				this.formControl.setErrors({ required: true });
+			} else {
+				this.chipList.errorState = false;
+				this.formControl.setErrors(null);
+			}
+		}
+	}
+
+	private validateAndStoreTermsIntoForm() {
 		this.formControl.setValue(this.allTerms);
+		this.runValidations();
 	}
 }

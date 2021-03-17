@@ -19,4 +19,7 @@
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             (matChipInputTokenEnd)="addTerm($event)">
     </mat-chip-list>
+    <mat-error>
+        {{valuesMissingError}}
+    </mat-error>
 </mat-form-field>

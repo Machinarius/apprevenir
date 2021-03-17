@@ -7,10 +7,10 @@ import { getCities, getCountries, getStates } from '@services/geoData/geoDataSou
 import { City, Country, State } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
-import { CommunesModalComponent } from './communes-modal/communes-modal.component';
+import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
-import { CorrectionsModalComponent } from './corrections-modal/corrections-modal.component';
 import { buildClientFormGroup } from './formSchema';
+import { ZoneInputConfig } from './models/ZoneInputConfig';
 
 interface User {
   name: string;
@@ -152,18 +152,32 @@ export class AdminComponent implements OnInit, AfterViewInit {
   }
 
   openDialogCorrection() {
+    /*
     const dialogRef = this.dialog.open(CorrectionsModalComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+    */
   }
 
-  openDialogCommunes() {
-    const dialogRef = this.dialog.open(CommunesModalComponent);
+  async openDialogCommunes() {
+    const config: ZoneInputConfig = {
+      zoneTypeName: "Comuna",
+      zoneNameInputLabel: "Nombre de la Comuna",
+      zoneNameRequiredMessage: "Por favor ingresa un nombre válido",
+      childrenInputTitle: "Barrios",
+      childrenInputDescription: "Ingrese los barrios separadas por coma o presionando (Enter)",
+      childrenRequiredMessage: "Por favor ingresa al menos un barrio",
+      currentChildTerms: [],
+      currentZoneName: ""
+    };
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    const result = await ZoneEditModalComponent.show(this.dialog, config);
+    if (!result.userConfirmed) {
+      return;
+    }
+    
+    console.log("User confirmed content", result);
   }
 }

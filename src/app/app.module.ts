@@ -27,8 +27,7 @@ import { EditClientComponent } from './admin/edit-client/edit-client.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { InformationModalComponent } from './test/information-modal/information-modal.component';
-import { CommunesModalComponent } from './admin/admin/communes-modal/communes-modal.component';
-import { CorrectionsModalComponent } from './admin/admin/corrections-modal/corrections-modal.component';
+import { ZoneEditModalComponent } from './admin/admin/zone-edit-modal/zone-edit-modal.component';
 import { ProfileModalComponent } from './profile/profile-modal/profile-modal.component';
 import { HomeModalComponent } from './home/home-modal/home-modal.component';
 import { ConfidentialModalComponent } from './test/confidential-modal/confidential-modal.component';
@@ -64,8 +63,7 @@ import { ReportModalComponent } from './admin/report/report-modal/report-modal.c
     EditSystemUserComponent,
     EditClientComponent,
     InformationModalComponent,
-    CommunesModalComponent,
-    CorrectionsModalComponent,
+    ZoneEditModalComponent,
     ProfileModalComponent,
     HomeModalComponent,
     ConfidentialModalComponent,

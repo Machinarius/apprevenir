@@ -1,0 +1,25 @@
+<div>
+    <div class="admin__text">Añadir {{config.zoneTypeName}}</div>
+    <form [formGroup]="inputForm">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{config.zoneNameInputLabel}}</mat-label>
+            <input matInput type="text" [placeholder]="config.zoneNameInputLabel" formControlName="zoneName">
+            <mat-error>
+                {{config.zoneNameRequiredMessage}}
+            </mat-error>
+        </mat-form-field>
+    </form>
+    <chip-input 
+        [description]="config.childrenInputDescription"
+        [title]="config.childrenInputTitle"
+        [form]="inputForm"
+        [placeholder]="config.childrenInputTitle"
+        formKey="childTerms"
+        valuesAreRequired="true"
+        [valuesMissingError]="config.childrenRequiredMessage">
+    </chip-input>
+    <div style="text-align: right;">
+        <button class="btn btn-primary app-m-top" mat-button (click)="onCancelClicked()" style="margin-right: 1em;" >Cancelar</button>
+        <button class="btn btn-primary app-m-top" mat-button (click)="onConfirmClicked()">Confirmar</button>
+    </div>
+</div>
