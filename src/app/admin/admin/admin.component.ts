@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -38,7 +38,6 @@ export class AdminComponent implements AfterViewInit {
   cities: City[] | null = null;
   tests: Test[] = [];
   
-  colorCtr: AbstractControl = new FormControl(null);
   selectedFiles: FileList;
 
   newClientTypes = NewClientTypes;

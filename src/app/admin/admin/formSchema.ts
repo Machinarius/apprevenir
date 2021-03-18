@@ -29,7 +29,7 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     email: ['', Validators.required],
     password: ['', Validators.required],
     passwordConfirmation: ['', Validators.required],
-    brandColor: ['', Validators.required],
+    brandColor: ['', validateColor],
     country: [ { value: '', disabled: true }, Validators.required],
     state: [ { value: '', disabled: true }, Validators.required],
     city: [ { value: '', disabled: true }, Validators.required],
@@ -70,6 +70,14 @@ const validateSelectedTests: ValidatorFn = (control) => {
     .some(value => value);
 
   if (!testAreSelected) {
+    return { required: true };
+  }
+
+  return null;
+}
+
+const validateColor: ValidatorFn = (control) => {
+  if (!/[A-Fa-f0-9]{6}/.test(control.value?.hex)) {
     return { required: true };
   }
 
