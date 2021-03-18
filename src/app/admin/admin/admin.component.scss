@@ -108,6 +108,17 @@
         display: flex;
         justify-content: space-between;
     }
+
+    &__tests-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        > mat-checkbox {
+            color: var(--color-normal-grey);
+            font-family: "FiratRegular";
+            font-size: 16px;
+        }
+    }
 }
 
 .test-table {

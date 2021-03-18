@@ -1,4 +1,5 @@
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Test } from "@typedefs/backend";
 
 export type ClientFormKeys =
   | "clientType"
@@ -40,6 +41,21 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     programs: [[]],
     modalities: [[]],
     semesters: [[]],
-    schoolGrades: [[]]
+    schoolGrades: [[]],
+    enabledTests: [[]]
   });
+}
+
+export function configureTestsControl(formGroup: FormGroup, tests: Test[]) {
+  tests.forEach(test => {
+    const control = new FormControl(false);
+    control.valueChanges.subscribe(generateTestEnabledChangeHandler(test));
+    formGroup.addControl(`tests[${test.id}]`, control);
+  });
+}
+
+function generateTestEnabledChangeHandler(test: Test) {
+  return (value: boolean) => {
+    // TODO
+  };
 }

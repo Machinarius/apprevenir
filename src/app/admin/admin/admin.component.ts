@@ -4,16 +4,17 @@ import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
-import { City, Country, State, ZoneType } from '@typedefs/backend';
+import { City, Country, State, Test, ZoneType } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
-import { buildClientFormGroup } from './formSchema';
+import { buildClientFormGroup, configureTestsControl } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
 import { UserZone } from './models/UserZone';
 import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
 import { ChipInputComponent } from './chip-autocomplete/chip-input.component';
+import { getAllTests } from '@services/test/testsDataSource';
 
 @Component({
   selector: 'app-admin',
@@ -35,6 +36,7 @@ export class AdminComponent implements AfterViewInit {
   countries: Country[] | null = null;
   states: State[] | null = null;
   cities: City[] | null = null;
+  tests: Test[] = [];
   
   colorCtr: AbstractControl = new FormControl(null);
   selectedFiles: FileList;
@@ -113,6 +115,10 @@ export class AdminComponent implements AfterViewInit {
     ];
 
     await this.loader.showLoadingIndicator(async () => {
+      const tests = await getAllTests();
+      configureTestsControl(this.clientForm, tests);
+      this.tests = tests;
+
       this.countries = await getCountries();
       this.clientForm.get('country').enable();
       //await this.loadProfileFormDataIfNeeded();
