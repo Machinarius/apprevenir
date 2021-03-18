@@ -9,7 +9,7 @@ import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
-import { buildClientFormGroup, configureTestsControl } from './formSchema';
+import { buildClientFormGroup, configureTestsControl, storeBrandImageFiles } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
 import { UserZone } from './models/UserZone';
 import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
@@ -38,8 +38,6 @@ export class AdminComponent implements AfterViewInit {
   cities: City[] | null = null;
   tests: Test[] = [];
   
-  selectedFiles: FileList;
-
   newClientTypes = NewClientTypes;
 
   allUrbanZones: UserZone[] = [];
@@ -159,9 +157,18 @@ export class AdminComponent implements AfterViewInit {
     });
   }
 
+  get selectedBrandImageFileName(): string | null {
+    const files = this.clientForm.get("brandImageFiles").value as FileList | null;
+    if (!files || !files.length) {
+      return null;
+    }
+
+    return files.item(0).name;
+  }
+
   onFilesSelected(event: Event) {
     const element = event.target as HTMLInputElement;
-    this.selectedFiles = element.files;
+    storeBrandImageFiles(this.clientForm, element.files);
   }
 
   onSubmit() {
