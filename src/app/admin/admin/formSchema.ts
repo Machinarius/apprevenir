@@ -57,9 +57,7 @@ export function configureTestsControl(formGroup: FormGroup, tests: Test[]) {
 
 export function storeBrandImageFiles(formGroup: FormGroup, fileList: FileList) {
   fileList["toString"] = () => fileList.item(0)?.name || "";
-  //formGroup.get("brandImageFiles").enable(); // To get validations to work
   formGroup.get("brandImageFiles").setValue(fileList);
-  //formGroup.get("brandImageFiles").disable();
 }
 
 function generateTestEnabledChangeHandler(test: Test, formGroup: FormGroup) {
