@@ -8,7 +8,7 @@
 				<div class="admin__sub-title app-m-top">Información General</div>
 				<mat-form-field class="width-100">
 					<mat-label>Tipo de cliente</mat-label>
-					<mat-select formControlName="clientType">
+					<mat-select formControlName="clientType" (selectionChange)="onClientTypeChanged()">
 						<mat-option *ngFor="let clientType of newClientTypes" [value]="clientType.key">{{clientType.label}}</mat-option>
 					</mat-select>
 				</mat-form-field>
@@ -175,81 +175,108 @@
 
 			<div [hidden]="!clientIsCompany">
 				<chip-input 
+					#companyLocationsInput
 					description="Ingrese las sedes separadas por coma o presionando (Enter)" 
 					title="Sedes"
 					[form]="clientForm"
 					formKey="locations"
-					placeholder="Sedes">
+					placeholder="Sedes"
+					[valuesAreRequired]="clientIsCompany"
+					valuesMissingError="Por favor ingrese al menos una sede">
 				</chip-input>
 
 				<chip-input 
+					#companyAreasInput
 					description="Ingrese las áreas separadas por coma o presionando (Enter)" 
 					title="Área"
 					[form]="clientForm"
 					formKey="areas"
-					placeholder="Áreas">
+					placeholder="Áreas"
+					[valuesAreRequired]="clientIsCompany"
+					valuesMissingError="Por favor ingrese al menos un área">
 				</chip-input>
 
 				<chip-input 
+					#companyShiftsInput
 					description="Ingrese los turnos separados por coma o presionando (Enter)" 
 					title="Turnos"
 					[form]="clientForm"
 					formKey="shifts"
-					placeholder="Turnos">
+					placeholder="Turnos"
+					[valuesAreRequired]="clientIsCompany"
+					valuesMissingError="Por favor ingrese al menos un turno">
 				</chip-input>
 			</div>
 
 			<div [hidden]="!clientIsEducationBureau">
 				<chip-input 
+					#edBureauSchoolsInput
 					description="Ingrese las instituciones educativas separadas por coma o presionando (Enter)" 
 					title="Instituciones educativas"
 					[form]="clientForm"
 					formKey="schools"
-					placeholder="Instituciones educativas">
+					placeholder="Instituciones educativas"
+					[valuesAreRequired]="clientIsEducationBureau"
+					valuesMissingError="Por favor ingrese al menos una institución educativa">
 				</chip-input>
 
 				<chip-input 
+					#edBureauGradesInput
 					description="Ingrese los grados separadas por coma o presionando (Enter)" 
 					title="Grados"
 					[form]="clientForm"
 					formKey="grades"
-					placeholder="Grados">
+					placeholder="Grados"
+					[valuesAreRequired]="clientIsEducationBureau"
+					valuesMissingError="Por favor ingrese al menos un grado">
 				</chip-input>
 			</div>
 
 			<div [hidden]="!clientIsUniversity">
 				<chip-input 
+					#universityProgramsInput
 					description="Ingrese los programas separados por coma o presionando (Enter)" 
 					title="Programas"
 					[form]="clientForm"
 					formKey="programs"
-					placeholder="Programas">
+					placeholder="Programas"
+					[valuesAreRequired]="clientIsUniversity"
+					valuesMissingError="Por favor ingrese al menos un programa">
 				</chip-input>
 
 				<chip-input 
+					#universityModalitiesInput
 					description="Ingrese las modalidades separadas por coma o presionando (Enter)" 
 					title="Modalidades"
 					[form]="clientForm"
 					formKey="modalities"
-					placeholder="Modalidades">
+					placeholder="Modalidades"
+					[valuesAreRequired]="clientIsUniversity"
+					valuesMissingError="Por favor ingrese al menos una modalidad">
 				</chip-input>
 
 				<chip-input 
+					#universitySemestersInput
 					description="Ingrese los semestres separadas por coma o presionando (Enter)" 
 					title="Semestres"
 					[form]="clientForm"
 					formKey="semesters"
-					placeholder="Semestres">
+					placeholder="Semestres"
+					[valuesAreRequired]="clientIsUniversity"
+					valuesMissingError="Por favor ingrese al menos un semestre">
 				</chip-input>
 			</div>
 
 			<div [hidden]="!clientIsEducationalInstitution">
 				<chip-input 
+					#schoolGradesInput
 					description="Ingrese los grados separadas por coma o presionando (Enter)" 
 					title="Grados"
 					[form]="clientForm"
 					formKey="schoolGrades"
-					placeholder="Grados">
+					placeholder="Grados"
+					[valuesAreRequired]="clientIsEducationalInstitution"
+					valuesMissingError="Por favor ingrese al menos un grado">
 				</chip-input>
 			</div>
 

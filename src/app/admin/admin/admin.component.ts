@@ -13,6 +13,7 @@ import { buildClientFormGroup } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
 import { UserZone } from './models/UserZone';
 import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
+import { ChipInputComponent } from './chip-autocomplete/chip-input.component';
 
 @Component({
   selector: 'app-admin',
@@ -47,6 +48,16 @@ export class AdminComponent implements AfterViewInit {
   public ruralZonesDS = new MatTableDataSource<UserZone>(this.allRuralZones);
 
   @ViewChild(LoaderComponent) loader: LoaderComponent; 
+
+  @ViewChild("companyLocationsInput") companyLocationsInput: ChipInputComponent;
+  @ViewChild("companyAreasInput") companyAreasInput: ChipInputComponent;
+  @ViewChild("companyShiftsInput") companyShiftsInput: ChipInputComponent;
+  @ViewChild("edBureauSchoolsInput") edBureauSchoolsInput: ChipInputComponent;
+  @ViewChild("edBureauGradesInput") edBureauGradesInput: ChipInputComponent;
+  @ViewChild("universityProgramsInput") universityProgramsInput: ChipInputComponent;
+  @ViewChild("universityModalitiesInput") universityModalitiesInput: ChipInputComponent;
+  @ViewChild("universitySemestersInput") universitySemestersInput: ChipInputComponent;
+  @ViewChild("schoolGradesInput") schoolGradesInput: ChipInputComponent;
 
   constructor(
     private userService: UserService,
@@ -89,6 +100,18 @@ export class AdminComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
+    this.allChipInputs = [
+      this.companyLocationsInput,
+      this.companyAreasInput,
+      this.companyShiftsInput,
+      this.edBureauSchoolsInput,
+      this.edBureauGradesInput,
+      this.universityProgramsInput,
+      this.universityModalitiesInput,
+      this.universitySemestersInput,
+      this.schoolGradesInput
+    ];
+
     await this.loader.showLoadingIndicator(async () => {
       this.countries = await getCountries();
       this.clientForm.get('country').enable();
@@ -208,8 +231,18 @@ export class AdminComponent implements AfterViewInit {
     this.urbanZonesDS.data = this.activeUrbanZones;
   }
 
+  allChipInputs: ChipInputComponent[] = [];
+
+  onClientTypeChanged() {
+    this.allChipInputs.forEach(input => input.clearErrorState());
+  }
+
+  runValidationsOnChipInputs() {
+    this.allChipInputs.forEach(input => input.runValidations());
+  }
+
   onSubmitClicked() {
-    
+    this.runValidationsOnChipInputs();
   }
 }
 

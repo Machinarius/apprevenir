@@ -74,11 +74,17 @@ export class ChipInputComponent implements OnInit {
 				this.chipList.errorState = true;
 				this.chipList._markAsTouched(); // Why would this be a private API? :thinking:
 				this.formControl.setErrors({ required: true });
-			} else {
-				this.chipList.errorState = false;
-				this.formControl.setErrors(null);
-			}
+
+				return;
+			} 
 		}
+
+		this.clearErrorState();
+	}
+
+	public clearErrorState() {
+		this.chipList.errorState = false;
+		this.formControl.setErrors(null);
 	}
 
 	private validateAndStoreTermsIntoForm() {
