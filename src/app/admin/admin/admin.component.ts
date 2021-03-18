@@ -101,6 +101,11 @@ export class AdminComponent implements AfterViewInit {
     return this.selectedClientType == ClientTypes.EducationalInstitution;
   }
 
+  get userMustSelectATest(): boolean {
+    const control = this.clientForm.get("selectedTests");
+    return control.touched && control.hasError("required");
+  }
+
   async ngAfterViewInit() {
     this.allChipInputs = [
       this.companyLocationsInput,

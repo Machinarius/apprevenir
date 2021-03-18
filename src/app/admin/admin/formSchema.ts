@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { Test } from "@typedefs/backend";
 
 export type ClientFormKeys =
@@ -42,20 +42,36 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     modalities: [[]],
     semesters: [[]],
     schoolGrades: [[]],
-    enabledTests: [[]]
+    selectedTests: [{}, validateSelectedTests]
   });
 }
 
 export function configureTestsControl(formGroup: FormGroup, tests: Test[]) {
   tests.forEach(test => {
     const control = new FormControl(false);
-    control.valueChanges.subscribe(generateTestEnabledChangeHandler(test));
+    control.valueChanges.subscribe(generateTestEnabledChangeHandler(test, formGroup));
     formGroup.addControl(`tests[${test.id}]`, control);
   });
 }
 
-function generateTestEnabledChangeHandler(test: Test) {
+function generateTestEnabledChangeHandler(test: Test, formGroup: FormGroup) {
   return (value: boolean) => {
-    // TODO
+    const testsControl = formGroup.get("selectedTests");
+    testsControl.value[test.id] = value;
+    testsControl.setValue(testsControl.value); // Trigger a validation
+    testsControl.markAsDirty();
+    testsControl.markAsTouched();
   };
+}
+
+const validateSelectedTests: ValidatorFn = (control) => {
+  const testAreSelected = Object.keys(control.value)
+    .map(key => control.value[key])
+    .some(value => value);
+
+  if (!testAreSelected) {
+    return { required: true };
+  }
+
+  return null;
 }

@@ -284,6 +284,7 @@
 			<div class="admin__tests-container" [formGroup]="clientForm">
 				<mat-checkbox color="primary" *ngFor="let test of tests" formControlName="tests[{{test.id}}]">{{test.name}}</mat-checkbox>
 			</div>
+			<p *ngIf="userMustSelectATest">Por favor habilita al menos un test</p>
 
 			<div>
 				<button class="btn btn-primary app-m-top" (click)="onSubmitClicked()">Guardar</button>
