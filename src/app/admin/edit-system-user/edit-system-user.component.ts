@@ -1,6 +1,20 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoaderComponent } from 'src/app/core/loader/loader.component';
+import { getAllUsers } from '@services/user/usersDataSource';
+import { User } from '@typedefs/backend';
+import { getStoredProfileInfo } from "@services/auth/authStore";
+
+type UserRow = {
+  userId: number;
+  firstNames: string;
+  lastNames: string;
+  email: string,
+  statusLabel: string;
+}
+type UserTableColumnLabels = keyof UserRow | "actions";
 
 @Component({
   selector: 'app-edit-system-user',
@@ -9,54 +23,51 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class EditSystemUserComponent implements  AfterViewInit {
   
+  userId = 0;
   public resultsLength = 0;
-  public displayedColumns: string[] = [
-    'idUser', 
-    'id', 
-    'type', 
-    'test', 
-    'date', 
-    'time', 
-    'user', 
-    'city',
-    'type_user',
-    'level',
-    'answer',
+  public displayedColumns: UserTableColumnLabels[] = [
+    'userId', 
+    'firstNames', 
+    'lastNames', 
+    'email', 
+    'statusLabel', 
+    'actions'
   ];
-  public dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+
+  public dataSource = new MatTableDataSource<UserRow>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(LoaderComponent) loader: LoaderComponent;
 
-  ngAfterViewInit() {
+  constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute
+  ) { }
+
+  async ngAfterViewInit() {
+    await this.loader.showLoadingIndicator(async () => {
+      const users = await getAllUsers(true);
+      this.resultsLength = users.length;
+      this.updateUsersTable(users);
+      const currentProfile = getStoredProfileInfo();
+      this.userId = currentProfile.id;
+    });
+  }
+
+  updateUsersTable(users: User[]) {
+    const userRows: UserRow[] = users.map(user => ({
+      userId: user.id,
+      firstNames: user.profile.first_names,
+      lastNames: user.profile.last_names,
+      email: user.email,
+      statusLabel: user.status == 1 ? "Activo" : "Inactivo"
+    }));
+
+    this.dataSource = new MatTableDataSource<UserRow>(userRows);
     this.dataSource.paginator = this.paginator;
   }
-}
 
-export interface PeriodicElement {
-  idUser: number;
-  id: number;
-  type: string;
-  test: string;
-  date: string;
-  time: string;
-  user: string;
-  city: string;
-  type_user: string;
-  level: string;
-  answer: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { idUser: 1, 
-    id: 2, 
-    type: 'Normal', 
-    test: 'Tecnologías', 
-    date: '08/09/20', 
-    time: '10:44:15', 
-    user: 'Yunerkis Leal',
-    city: 'Medellin',
-    type_user: "Consumidor",
-    level: 'Moderado',
-    answer: 'icono'
+  onEditRequested(userId: number) {
+    this._router.navigate([userId], { relativeTo: this._activatedRoute });
   }
-];
+}

@@ -22,7 +22,7 @@
 			<div class="card__risk" ><span *ngFor="let category of test.categories"> {{ category.name }} <br></span></div>
 			<div class="card__text">{{ test.name }}</div>
 			<img *ngIf="test.image == ''" src="../../../assets/bg/apprevenir-ludopatia.png" alt="test image" class="card__img-man">
-          	<img *ngIf="test.image != ''" src="{{url}}/image/{{test.image}}" alt="test image" class="card__img-man">
+          	<img *ngIf="test.image != ''" src="{{url}}/images/{{test.image}}" alt="test image" class="card__img-man">
 			<button *ngIf="test.addictions.length > 0 && test.id != 2" class="btn btn-primary" (click)="openDialogHome(test)">Hacer test</button>
 			<button  *ngIf="test.id == 2 || test.addictions.length == 0" class="btn btn-primary" routerLink="/test/{{test.id}}">Hacer test</button>
 		</div>

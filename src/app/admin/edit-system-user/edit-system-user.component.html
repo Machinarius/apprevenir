@@ -6,74 +6,58 @@
 		</button>
 	</div>
 	<div class="test-admin__card">
-		<div class="test-admin__box">
-			<div class="home__search">
-				<div class="inputContainer-search">
-					<img alt="PersonIcon" src="../../../assets/icons/search_baseline.svg" class="inputContainer-search__icon" />
-					<input
-					class="inputContainer-search__box"
-					type="text"
-					placeholder="Palabra clave"
-					/>
+		<app-loader #loader></app-loader>
+		<div *ngIf="!loader.loadingData">
+			<div class="test-admin__box">
+				<div class="home__search">
+					<div class="inputContainer-search">
+						<img alt="PersonIcon" src="../../../assets/icons/search_baseline.svg" class="inputContainer-search__icon" />
+						<input
+						class="inputContainer-search__box"
+						type="text"
+						placeholder="Palabra clave"
+						/>
+					</div>
+				</div>
+				<div align="end" class="btn-cancel">
+					<button class="btn btn-file app-m-right" mat-dialog-close><mat-icon class="icon-file">description</mat-icon>Excel</button>
+					<button class="btn btn-file" mat-dialog-close><mat-icon class="icon-file">picture_as_pdf</mat-icon>PDF</button>
 				</div>
 			</div>
-			<div align="end" class="btn-cancel">
-				<button class="btn btn-file app-m-right" mat-dialog-close><mat-icon class="icon-file">description</mat-icon>Excel</button>
-				<button class="btn btn-file" mat-dialog-close><mat-icon class="icon-file">picture_as_pdf</mat-icon>PDF</button>
-			</div>
-		</div>
 
-		<table mat-table [dataSource]="dataSource" matSort matSortActive="position" matSortDisableClear matSortDirection="desc" >
-			<ng-container matColumnDef="idUser">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Id Usuario</th>
-			<td mat-cell *matCellDef="let element"> {{element.idUser}} </td>
-			</ng-container>
-			<ng-container matColumnDef="id">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Id</th>
-			<td mat-cell *matCellDef="let element"> {{element.id}} </td>
-			</ng-container>
-			<ng-container matColumnDef="type">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Tipo </th>
-			<td mat-cell *matCellDef="let element"> {{element.type}} </td>
-			</ng-container>
-			<ng-container matColumnDef="test">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Test</th>
-			<td mat-cell *matCellDef="let element"> {{element.test}} </td>
-			</ng-container>
-			<ng-container matColumnDef="date">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Fecha</th>
-			<td mat-cell *matCellDef="let element"> {{element.date}} </td>
-			</ng-container>
-			<ng-container matColumnDef="time">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Hora</th>
-			<td mat-cell *matCellDef="let element"> {{element.time}} </td>
-			</ng-container>
-			<ng-container matColumnDef="user">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Usuario</th>
-			<td mat-cell *matCellDef="let element"> {{element.user}} </td>
-			</ng-container>
-			<ng-container matColumnDef="city">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Ciudad</th>
-			<td mat-cell *matCellDef="let element"> {{element.city}} </td>
-			</ng-container>
-			<ng-container matColumnDef="type_user">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Tipo de usuario</th>
-			<td mat-cell *matCellDef="let element"> {{element.type_user}} </td>
-			</ng-container>
-			<ng-container matColumnDef="level">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Nivel</th>
-			<td mat-cell *matCellDef="let element">
-				<mat-chip-list aria-label="Fish selection">
-					<mat-chip color="accent" selected>{{element.level}}</mat-chip>
-				</mat-chip-list>
-			</ng-container>
-			<ng-container matColumnDef="answer">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Respuestas</th>
-			<td mat-cell *matCellDef="let element"> {{element.answer}} </td>
-			</ng-container>
-			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-		</table>
-		<mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+			<table mat-table [dataSource]="dataSource" matSort matSortDirection="desc">
+				<ng-container matColumnDef="userId">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+					<td mat-cell *matCellDef="let element">{{element.userId}} </td>
+				</ng-container>
+				<ng-container matColumnDef="firstNames">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Nombres</th>
+					<td mat-cell *matCellDef="let element">{{element.firstNames}}</td>
+				</ng-container>
+				<ng-container matColumnDef="lastNames">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Apellidos</th>
+					<td mat-cell *matCellDef="let element">{{element.lastNames}} </td>
+				</ng-container>
+				<ng-container matColumnDef="email">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+					<td mat-cell *matCellDef="let element">{{element.email}} </td>
+				</ng-container>
+				<ng-container matColumnDef="statusLabel">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+					<td mat-cell *matCellDef="let element">{{element.statusLabel}}</td>
+				</ng-container>
+				<ng-container matColumnDef="actions">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Edición</th>
+					<td mat-cell *matCellDef="let element">
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="onEditRequested(element.userId)">edit</mat-icon>
+						<mat-icon fontSet="material-icons-outlined" class="app-cursor" *ngIf="userId != element.userId">delete</mat-icon>
+					</td>
+				</ng-container>
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+			</table>
+			
+			<mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+		</div>
   	</div>
 </div>

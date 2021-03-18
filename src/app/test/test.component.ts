@@ -18,7 +18,7 @@ export class TestComponent implements OnInit {
   addiction = null;
   addiction_id = false;
   addictionDesc = null;
-  url = this.testService.url;
+  url = this.testService.url+'/storage';
   test = {};
   formGroup: FormGroup;
   answers = [];

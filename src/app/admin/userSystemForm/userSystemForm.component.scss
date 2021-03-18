@@ -1,0 +1,121 @@
+.admin {
+    margin: 0 auto;
+    width: 1050px;
+    margin-top: 8rem;
+    &__title {
+        color: var(--color-normal-grey);
+        font-family: "KanitNormal";
+        font-size: 24px;
+    }
+    &__search {
+        width: 608px;
+        margin: 0 auto;
+
+        .inputContainer {
+            border: none;
+        }
+    }
+
+    &__card {
+        height: 766px;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px #26A79E26;
+        overflow: auto;
+        margin-bottom: 5rem;
+        border-radius: 10px;
+    }
+
+    &__box {
+        width: 550px;
+        margin: 0 auto;
+    }
+    &__text {
+        color: var(--color-normal-grey);
+        font-family: 'kanitRegular';
+        font-size: 18px;
+        margin: 1rem 0;
+    }
+    .mat-chip.mat-standard-chip {
+        background-color:#DDE6E5;
+        color:#3E6472;
+    }
+
+    .mat-form-field-flex {
+        border: 1px solid #009E9E;
+        border-radius: 8px;
+    }
+
+    &__turno {
+        color: var(--color-normal-grey);
+        font-family: 'FiratRegular';
+        font-size: 16px;
+        margin: 1rem 0;
+    }
+    &__sede {
+        color: #009E9E;
+        font-family: 'FiratRegular';
+        font-size: 13px;
+    }
+
+    &__cliente {
+        display: flex;
+        justify-content: space-between;
+        background: #26A79E12;
+        border-radius: 8px;
+        color: #3E6472;
+        height: 50px;
+        font-family: 'FiratRegular';
+        align-items: center;
+         padding: 0 10px;
+         cursor: pointer;
+         margin: 1rem 0;
+    }
+}
+.section-two {
+    width: 573px;
+    margin: 0 auto;
+    margin-top: 4rem;
+}
+
+.example-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+.example-margin {
+    color: var(--color-normal-grey);
+    font-family: "FiratRegular";
+    font-size: 16px;
+}
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+.example-full-width {
+width: 100%;
+}
+
+.registration {
+    &__title {
+        font-size: 24px;
+        color: var(--color-normal-grey);
+        font-family: 'KanitMedium';
+    }
+
+    &__box {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__gender {
+        font-size: 16px;
+        color: var(--color-normal-grey);
+        font-family: 'FiratRegular';
+        margin-bottom: 1rem;
+    }
+    
+}

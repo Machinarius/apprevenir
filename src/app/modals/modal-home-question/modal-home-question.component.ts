@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class ModalHomeQuestionComponent implements OnInit {
 
-  url = environment.url;
+  url = environment.url+'/storage';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any

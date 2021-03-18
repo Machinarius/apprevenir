@@ -12,8 +12,9 @@ export function getUserData(userId: string | number): Promise<User> {
   }));
 }
 
-export function getAllUsers(): Promise<User[]> {
-  return ensureResponseIsSuccessful<User[]>(fetch(`${environment.url}/api/v1/users`, {
+export function getAllUsers(system: boolean = false): Promise<User[]> {
+  let urlUsers = !system ? `${environment.url}/api/v1/users` : `${environment.url}/api/v1/users?system=user`;
+  return ensureResponseIsSuccessful<User[]>(fetch(`${urlUsers}`, {
     headers: getAuthHeaders()
   }));
 }

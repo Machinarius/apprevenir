@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   tests = [];
   arryTests = [];
-  url = this.testService.url;
+  url = this.testService.url+'/storage';
   SearchForm: FormGroup;
 
   constructor(

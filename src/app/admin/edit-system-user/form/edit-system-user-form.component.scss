@@ -1,0 +1,46 @@
+.test-admin {
+    margin: 0 auto;
+    width: 1050px;
+    margin-top: 8rem;
+    &__title {
+        color: var(--color-normal-grey);
+        font-family: "KanitNormal";
+        font-size: 24px;
+    }
+    &__card {
+        height: 766px;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px #26A79E26;
+        overflow: auto;
+        margin-bottom: 5rem;
+        border-radius: 10px;
+    }
+    &__box {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 20px 10px 20px;
+        align-items: center;
+    }
+}
+
+.table-action {
+    cursor: pointer;
+}
+
+.admin {
+    margin: 0 auto;
+    width: 1050px;
+    margin-top: 8rem;
+    &__card {
+        height: 766px;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px #26A79E26;
+        overflow: auto;
+        margin-bottom: 5rem;
+        border-radius: 10px;
+    }
+}
+.section-two {
+    width: 573px;
+    margin: 0 auto;
+}

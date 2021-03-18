@@ -16,7 +16,8 @@
               Mis datos
             </ng-template>
             <div class="test__profile">
-              <profile-form profile-update="true"></profile-form>
+              <profile-form profile-update="true" *ngIf="!userIsAdmin"></profile-form>
+              <user-system-form profile-update="true" *ngIf="userIsAdmin"></user-system-form>
             </div>
         </mat-tab>
         <mat-tab> 

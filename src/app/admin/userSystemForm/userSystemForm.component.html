@@ -1,0 +1,97 @@
+<app-loader #loader></app-loader>
+<div class="section-two" [hidden]="loader.loadingData">
+  <form [formGroup]="personalInfoForm">
+      <div>
+          <mat-form-field class="example-full-width">
+              <mat-label>Nombre</mat-label>
+              <input type="text" matInput required formControlName="name">
+              <mat-error>
+                Nombre es <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+      </div>
+      
+      <div class="registration__box">
+          <mat-form-field class="width-48">
+              <mat-label>Primer Apellido</mat-label>
+              <input type="text" matInput required formControlName="lastName">
+              <mat-error>
+                Primer Apellido es <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="width-48">
+              <mat-label>Segundo Apellido</mat-label>
+              <input type="text" matInput required formControlName="lastNameTwo">
+              <mat-error>
+                Segundo Apellido es <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+      </div>
+
+      <mat-form-field class="example-full-width">
+          <mat-label>Teléfono</mat-label>
+          <input type="text" matInput required formControlName="phoneNumber">
+          <img src="./../../../assets/icons/lock_outline.svg" alt="" matSuffix>
+          <mat-error>
+            Por favor ingresa tu número de celular
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+          <mat-label>Correo Electrónico</mat-label>
+          <input type="email" matInput required formControlName="emailAddress">
+          <img src="./../../../assets/icons/email_outline.svg" alt="" matSuffix>
+          <mat-error>
+            Por favor ingresa un correo electrónico válido
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+          <mat-label>Contraseña</mat-label>
+          <input type="password" matInput required formControlName="password">
+          <img src="./../../../assets/icons/lock_outline.svg" alt="" matSuffix>
+          <mat-error>
+              La contraseña debe tener entre 8 y 16 caracteres
+          </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+          <mat-label>Confirmación de contraseña</mat-label>
+          <input type="password" matInput required formControlName="passwordConfirmation">
+          <img src="./../../../assets/icons/lock_outline.svg" alt="" matSuffix>
+          <mat-error>
+              La confirmación debe ser igual a la contraseña
+          </mat-error>
+      </mat-form-field>
+      
+      <div>
+          <mat-form-field class="width-100">
+              <mat-label>Estado Civil</mat-label>
+              <mat-select formControlName="maritalStatus">
+                <mat-option *ngFor="let status of maritalStatusValues" [value]="status.key">
+                  {{status.label}}
+                </mat-option>
+              </mat-select>
+              <mat-error>
+                Por favor elige tu estado civil
+              </mat-error>
+            </mat-form-field>
+      </div>
+
+      <div class="registration__gender" *ngIf="!hiddenStatus">Estado</div>
+      <mat-radio-group aria-label="Select an option" required formControlName="status" *ngIf="!hiddenStatus">
+          <mat-radio-button value="1" class="app-m-right">Activo</mat-radio-button>
+          <mat-radio-button value="0">Inactivo</mat-radio-button>
+      </mat-radio-group>
+      <mat-error 
+      class="mat-error" 
+      style="font-size: 75%;"
+      *ngIf="statusSelectionIsInvalid"
+      >
+      Por favor elige un estado
+      </mat-error>
+      <div style="text-align: right;">
+          <button class="btn btn-primary" (click)="onSubmitClicked()">Guardar</button>
+      </div>
+  </form>
+</div>

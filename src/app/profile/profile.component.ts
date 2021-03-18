@@ -33,6 +33,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     'Leve': '#20E57E'
   };
 
+  public userIsAdmin = false;
+
   displayedColumns: string[] = ['Test', 'Fecha', 'Nivel', 'Respuestas'];
   dataSource = [];
   
@@ -64,6 +66,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private updateProfileData(profile: IProfileInfo) {
+    this.userIsAdmin = profile.isAdmin;
     this.firstNames = profile.firstNames;
     this.lastNames = profile.lastNames;
   }
