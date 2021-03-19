@@ -2,6 +2,17 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { ClientTypes } from "@typedefs/backend";
 import { PersonalInfoFormKeys, LocationFormKeys, LoginFormKeys } from "../forms/FormKeys";
 import * as dayjs from "dayjs";
+import { 
+  buildPasswordChangeValidator, 
+  buildPasswordEditMinLengthOverride,
+  passwordConfirmationValidator, 
+  getPasswordFieldValidators,
+  getPasswordConfirmationFieldValidator, 
+  CURRENT_PASSWORD_KEY,
+  PASSWORD_CONFIRMATION_KEY, 
+  PASSWORD_KEY
+} from "@services/forms/passwordValidators";
+import { getEmailFieldDefinition } from "@services/forms/emailAddress";
 
 type FormValidationTuple = [string] | [string | { value: string, disabled?: boolean } , ValidatorFn];
 type PersonalInfoFormSchema = Record<PersonalInfoFormKeys, FormValidationTuple>;
@@ -41,17 +52,12 @@ export function buildLocationFormGroup(formBuilder: FormBuilder): FormGroup {
 }
 
 export function buildLoginFormGroup(formBuilder: FormBuilder, isEditingProfile: boolean): FormGroup {
-  let passwordValidators: ValidatorFn[] = [];
-  if (!isEditingProfile) {
-    passwordValidators = [Validators.required];
-  }
-
   const loginFormSchema: LoginFormSchema = {
     phoneNumber: ['', Validators.required],
-    emailAddress: [{ value: '', disabled: isEditingProfile }, Validators.compose([Validators.required, Validators.email])],
-    password: ['', Validators.compose([...passwordValidators, Validators.minLength(8), Validators.maxLength(16)])],
-    passwordConfirmation: ['', Validators.compose(passwordValidators)],
-    currentPassword: ['']
+    emailAddress: getEmailFieldDefinition(isEditingProfile),
+    [PASSWORD_KEY]: ['', getPasswordFieldValidators(isEditingProfile)],
+    [PASSWORD_CONFIRMATION_KEY]: ['', getPasswordConfirmationFieldValidator()],
+    [CURRENT_PASSWORD_KEY]: ['']
   };
 
   return formBuilder.group(loginFormSchema, {
@@ -61,56 +67,6 @@ export function buildLoginFormGroup(formBuilder: FormBuilder, isEditingProfile: 
       passwordConfirmationValidator
     ]
   });
-}
-
-function buildPasswordEditMinLengthOverride(isEditingProfile: boolean): (group: FormGroup) => ValidationErrors | null {
-  if (!isEditingProfile) {
-    return () => null;
-  }
-
-  return (group: FormGroup) => {
-    const passwordControl = group.get("password");
-    if (!passwordControl?.value) {
-      passwordControl?.markAsPristine();
-      passwordControl?.setErrors(null);
-    }
-
-    return null;
-  };
-}
-
-function buildPasswordChangeValidator(isEditingProfile: boolean): (group: FormGroup) => ValidationErrors | null {
-  if (!isEditingProfile) {
-    return () => null;
-  }
-
-  return (group: FormGroup) => {
-    const passwordControl = group.get("password");
-    const currentPwControl = group.get("currentPassword");
-    const confirmationControl = group.get("passwordConfirmation");
-
-    if ((passwordControl?.value || confirmationControl?.value) && !currentPwControl?.value) {
-      currentPwControl.markAsTouched();
-      currentPwControl.setErrors({ missing: true });
-    } else {
-      currentPwControl.setErrors(null);
-    }
-
-    return null;
-  };
-}
-
-function passwordConfirmationValidator(group: FormGroup): ValidationErrors | null {
-  const passwordControl = group.get("password");
-  const confirmationControl = group.get("passwordConfirmation");
-
-  if (passwordControl?.value !== confirmationControl?.value) {
-    confirmationControl?.setErrors({ doesNotMatchPassword: true });
-    return null;
-  }
-
-  confirmationControl?.setErrors(null);
-  return null;
 }
 
 function referralHierarchyValidator(group: FormGroup): ValidationErrors | null {
