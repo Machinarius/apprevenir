@@ -12,9 +12,11 @@ export class LoaderComponent {
   loadingReferences = 0;
   public async showLoadingIndicator<TReturn>(promiseFactory: () => Promise<TReturn>): Promise<TReturn> {
     this.loadingReferences++;
-    const result = await promiseFactory();
-    this.loadingReferences--;
-    return result;
+    try {
+      return await promiseFactory();
+    } finally {
+      this.loadingReferences--;
+    }
   }
 
   get loadingData() {
