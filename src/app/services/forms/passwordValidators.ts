@@ -60,7 +60,7 @@ export function getPasswordFieldValidators(isEditingProfile: boolean): Validator
     passwordValidators = [Validators.required];
   }
 
-  return Validators.compose([...passwordValidators, Validators.minLength(8), Validators.maxLength(16)]);
+  return Validators.compose([...passwordValidators, Validators.minLength(8), Validators.maxLength(30)]);
 }
 
 export function getPasswordConfirmationFieldValidator(): ValidatorFn {
