@@ -281,6 +281,14 @@ export class AdminComponent implements AfterViewInit {
 
   onSubmitClicked() {
     this.runValidationsOnChipInputs();
+    this.clientForm.markAllAsTouched();
+
+    if (!this.clientForm.valid) {
+      console.log("Form is invalid");
+      return;
+    }
+
+    console.log("Form is valid");
   }
 }
 

@@ -39,7 +39,7 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
     [PASSWORD_KEY]: ['', getPasswordFieldValidators(isEditing)],
     [PASSWORD_CONFIRMATION_KEY]: ['', getPasswordConfirmationFieldValidator()],
     brandColor: ['', validateColor],
-    brandImageFiles: [null, validateBrandImageFile],
+    brandImageFiles: [{ value: null, disabled: true }, validateBrandImageFile],
     country: [ { value: '', disabled: true }, Validators.required],
     state: [ { value: '', disabled: true }, Validators.required],
     city: [ { value: '', disabled: true }, Validators.required],

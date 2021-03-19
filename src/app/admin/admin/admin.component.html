@@ -11,6 +11,9 @@
 					<mat-select formControlName="clientType" (selectionChange)="onClientTypeChanged()">
 						<mat-option *ngFor="let clientType of newClientTypes" [value]="clientType.key">{{clientType.label}}</mat-option>
 					</mat-select>
+					<mat-error>
+						Por favor elige el tipo de cliente
+					</mat-error>
 				</mat-form-field>
 
 				<mat-form-field class="width-100">
@@ -295,7 +298,7 @@
 			<div class="admin__tests-container" [formGroup]="clientForm">
 				<mat-checkbox color="primary" *ngFor="let test of tests" formControlName="tests[{{test.id}}]">{{test.name}}</mat-checkbox>
 			</div>
-			<p *ngIf="userMustSelectATest">Por favor habilita al menos un test</p>
+			<p *ngIf="userMustSelectATest" class="manual-error-label">Por favor habilita al menos un test</p>
 
 			<div>
 				<button class="btn btn-primary app-m-top" (click)="onSubmitClicked()">Guardar</button>
