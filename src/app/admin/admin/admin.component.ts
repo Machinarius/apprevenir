@@ -40,9 +40,6 @@ export class AdminComponent implements AfterViewInit {
   
   newClientTypes = NewClientTypes;
 
-  allUrbanZones: UserZone[] = [];
-  allRuralZones: UserZone[] = [];
-
   public urbanZonesDS = new MatTableDataSource<UserZone>(this.allUrbanZones);
   public ruralZonesDS = new MatTableDataSource<UserZone>(this.allRuralZones);
 
@@ -64,6 +61,22 @@ export class AdminComponent implements AfterViewInit {
     formBuilder: FormBuilder
   ) {
     this.clientForm = buildClientFormGroup(formBuilder);
+  }
+
+  get allUrbanZones(): UserZone[] {
+    return this.clientForm?.get("urbanZones")?.value || [];
+  }
+
+  get allRuralZones(): UserZone[] {
+    return this.clientForm?.get("ruralZones")?.value || [];
+  }
+
+  set allUrbanZones(zones: UserZone[]) {
+    this.clientForm.get("urbanZones").setValue(zones);
+  }
+
+  set allRuralZones(zones: UserZone[]) {
+    this.clientForm.get("ruralZone").setValue(zones);
   }
 
   get activeUrbanZones() {
@@ -101,6 +114,14 @@ export class AdminComponent implements AfterViewInit {
   get userMustSelectATest(): boolean {
     const control = this.clientForm.get("selectedTests");
     return control.touched && control.hasError("required");
+  }
+
+  get userMustCreateAnUrbanZone(): boolean {
+    return this.clientForm?.get("urbanZones")?.hasError("required") || false;
+  }
+
+  get userMustCreateARuralZone(): boolean {
+    return this.clientForm?.get("ruralZones")?.hasError("required") || false;
   }
 
   async ngAfterViewInit() {
@@ -207,7 +228,7 @@ export class AdminComponent implements AfterViewInit {
     createdZone.type = ZoneType.Rural;
     createdZone.children = result.childTerms;
 
-    this.allRuralZones.push(createdZone);
+    this.allRuralZones = [...this.allRuralZones, createdZone];
     this.ruralZonesDS.data = this.activeRuralZones;
   }
 
@@ -239,7 +260,7 @@ export class AdminComponent implements AfterViewInit {
     createdZone.type = ZoneType.Urban;
     createdZone.children = result.childTerms;
 
-    this.allUrbanZones.push(createdZone);
+    this.allUrbanZones = [...this.allUrbanZones, createdZone];
     this.urbanZonesDS.data = this.activeUrbanZones;
   }
 

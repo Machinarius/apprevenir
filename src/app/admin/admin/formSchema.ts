@@ -34,6 +34,8 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     country: [ { value: '', disabled: true }, Validators.required],
     state: [ { value: '', disabled: true }, Validators.required],
     city: [ { value: '', disabled: true }, Validators.required],
+    urbanZones: [[]],
+    ruralZones: [[]],
     locations: [[]],
     areas: [[]],
     shifts: [[]],
