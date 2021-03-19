@@ -60,7 +60,7 @@ export class AdminComponent implements AfterViewInit {
     private dialog: MatDialog,
     formBuilder: FormBuilder
   ) {
-    this.clientForm = buildClientFormGroup(formBuilder);
+    this.clientForm = buildClientFormGroup(formBuilder, false);
   }
 
   get allUrbanZones(): UserZone[] {

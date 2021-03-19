@@ -1,5 +1,14 @@
 import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { getEmailFieldDefinition } from "@services/forms/emailAddress";
 import { Test } from "@typedefs/backend";
+import { 
+  buildPasswordEditMinLengthOverride,
+  getPasswordConfirmationFieldValidator, 
+  getPasswordFieldValidators, 
+  passwordConfirmationValidator, 
+  PASSWORD_CONFIRMATION_KEY, 
+  PASSWORD_KEY 
+} from "@services/forms/passwordValidators";
 
 export type ClientFormKeys =
   | "clientType"
@@ -20,15 +29,15 @@ export type ClientFormKeys =
   | "grades"
   | "schoolGrades";
 
-export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
+export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolean): FormGroup {
   return formBuilder.group({
     clientType: ['', Validators.required],
     names: ['', Validators.required],
     phone: ['', Validators.required],
     nationalId: ['', Validators.required],
-    email: ['', Validators.compose([Validators.required, Validators.email])],
-    password: ['', Validators.required],
-    passwordConfirmation: ['', Validators.required],
+    email: getEmailFieldDefinition(isEditing),
+    [PASSWORD_KEY]: ['', getPasswordFieldValidators(isEditing)],
+    [PASSWORD_CONFIRMATION_KEY]: ['', getPasswordConfirmationFieldValidator()],
     brandColor: ['', validateColor],
     brandImageFiles: [null, validateBrandImageFile],
     country: [ { value: '', disabled: true }, Validators.required],
@@ -46,6 +55,11 @@ export function buildClientFormGroup(formBuilder: FormBuilder): FormGroup {
     semesters: [[]],
     schoolGrades: [[]],
     selectedTests: [{}, validateSelectedTests]
+  }, {
+    validators: [
+      passwordConfirmationValidator,
+      buildPasswordEditMinLengthOverride(isEditing)
+    ]
   });
 }
 
