@@ -47,6 +47,10 @@ export class ClientsListComponent implements AfterViewInit {
     });
   }
 
+  onClientCreationRequested() {
+    this.router.navigate(["new"], { relativeTo: this.activatedRoute });
+  }
+
   onClientEditRequested(client: ClientRowElement) {
     this.router.navigate([client.id], { relativeTo: this.activatedRoute });
   }
