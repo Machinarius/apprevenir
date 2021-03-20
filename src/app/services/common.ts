@@ -7,15 +7,23 @@ export function getAuthHeaders() {
   };
 }
 
-export async function ensureResponseIsSuccessful<TPayload>(requestPromise: ReturnType<typeof fetch>): Promise<TPayload> {
-  const result = await requestPromise;
-  if (!result.ok) {
-    throw new Error("The server could not reply to the request");
+type ErrorsDictionary = { [key: string]: string[] };
+
+export class BackendError extends Error {
+  get errorMessages(): string[] {
+    return Object.keys(this.rawErrors).map(key => this.rawErrors[key].join(", "));
   }
 
+  constructor(public rawErrors: ErrorsDictionary) {
+    super("The server replied negatively to the request");
+  }
+}
+
+export async function ensureResponseIsSuccessful<TPayload>(requestPromise: ReturnType<typeof fetch>): Promise<TPayload> {
+  const result = await requestPromise;
   const response = await result.json() as BackendResponse<TPayload>;
   if (!response.success) {
-    throw new Error("The server could not reply to the request");
+    throw new BackendError(response.errors);
   }
 
   return response.data;
