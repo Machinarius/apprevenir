@@ -2,7 +2,7 @@ import { ClientTypes, User } from "@typedefs/backend";
 import { environment } from "@environments/environment";
 import { ensureResponseIsSuccessful, getAuthHeaders } from "@services/common";
 
-export function getClients(clientType: ClientTypes): Promise<User[]> {
+export function getClientsOfType(clientType: ClientTypes): Promise<User[]> {
   return ensureResponseIsSuccessful<User[]>(fetch(`${environment.url}/api/v1/clients?client=${clientType}`));
 }
 

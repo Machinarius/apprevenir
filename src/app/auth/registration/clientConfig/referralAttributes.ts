@@ -1,4 +1,4 @@
-import { getClients } from "@services/user/usersDataSource";
+import { getClientsOfType } from "@services/user/usersDataSource";
 import { ClientTypes, CompanyUser, EducationalInstitutionUser, EducationBureauUser, UniversityUser } from "@typedefs/backend";
 import { ReferralHierarchyKeys } from "../forms/FormKeys";
 
@@ -135,7 +135,7 @@ function buildUniversityReferralConfigDS(clients: UniversityUser[]): ReferralCon
 }
 
 export async function buildReferralConfigDataSource(clientType: ClientTypes): Promise<ReferralConfigDataSource> {
-  const clients = await getClients(clientType);
+  const clients = await getClientsOfType(clientType);
   switch(clientType) {
     case ClientTypes.Company: 
       return buildCompanyReferralConfigDS(clients as unknown as CompanyUser[]);
