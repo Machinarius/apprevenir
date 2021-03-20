@@ -314,11 +314,11 @@ export class EditClientComponent implements AfterViewInit {
     
     try {
       await this.loader.showLoadingIndicator(async () => {
-        await submitClientCreationForm(this.clientForm.value, this.editModeIsEnabled, this.editTargetClientId);
+        await submitClientCreationForm(this.clientForm.getRawValue(), this.editModeIsEnabled, this.editTargetClientId);
       });
 
       if (this.editModeIsEnabled) {
-        await Swal.fire("Cliente actualizadp", "El cliente ha sido actualizado con éxito", "success");
+        await Swal.fire("Cliente actualizado", "El cliente ha sido actualizado con éxito", "success");
       } else {
         await Swal.fire("Cliente creado", "El cliente ha sido creado con éxito", "success");
       }
