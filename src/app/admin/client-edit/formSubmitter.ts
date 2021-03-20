@@ -36,12 +36,8 @@ async function createUser(rawValues: ClientFormRawValues): Promise<number> {
   const userRequestData: ClientRegistrationRequest = {
     client: rawValues.clientType as ClientTypes,
     first_names: rawValues.names as string,
-    last_names: "\u00A0",
-    last_names_two: "\u00A0",
     phone: rawValues.phone as string,
     email: rawValues.email as string,
-    password: rawValues.password as string,
-    password_confirmation: rawValues.passwordConfirmation as string,
     country_id: rawValues.country as number,
     state_id: rawValues.state as number,
     city_id: rawValues.city as number,
@@ -52,7 +48,7 @@ async function createUser(rawValues: ClientFormRawValues): Promise<number> {
     }
   };
 
-  const userObject = await ensureResponseIsSuccessful<{ id: number }>(fetch(`${environment.url}/api/v1/register`, {
+  const userObject = await ensureResponseIsSuccessful<{ id: number }>(fetch(`${environment.url}/api/v1/clients/new`, {
     headers: {
       "Content-Type": "application/json",
       ...getAuthHeaders()

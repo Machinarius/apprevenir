@@ -1,14 +1,6 @@
 import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { getEmailFieldDefinition } from "@services/forms/emailAddress";
 import { ClientTypes, CompanyUser, EducationalInstitutionUser, EducationBureauUser, TerritorialEntityUser, Test, UniversityUser, User } from "@typedefs/backend";
-import { 
-  buildPasswordEditMinLengthOverride,
-  getPasswordConfirmationFieldValidator, 
-  getPasswordFieldValidators, 
-  passwordConfirmationValidator, 
-  PASSWORD_CONFIRMATION_KEY, 
-  PASSWORD_KEY 
-} from "@services/forms/passwordValidators";
 import { UserInputTerm } from "./models/UserInputTerm";
 import { UserZone } from "./models/UserZone";
 import { TerritorialEntityCommune, TerritorialEntityNeighborhood, ZoneType } from "@typedefs/backend/userData/TerritorialEntityUser";
@@ -19,8 +11,6 @@ export type ClientFormKeys =
   | "phone"
   | "nationalId"
   | "email"
-  | "password"
-  | "passwordConfirmation"
   | "brandColor"
   | "brandImageFiles"
   | "country"
@@ -48,8 +38,6 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
     phone: ['', Validators.required],
     nationalId: ['', Validators.required],
     email: getEmailFieldDefinition(isEditing),
-    [PASSWORD_KEY]: ['', getPasswordFieldValidators(isEditing)],
-    [PASSWORD_CONFIRMATION_KEY]: ['', getPasswordConfirmationFieldValidator()],
     brandColor: ['', validateColor],
     brandImageFiles: [{ value: null, disabled: true }, validateBrandImageFile],
     country: [ { value: '', disabled: true }, Validators.required],
@@ -67,18 +55,10 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
     semesters: [[]],
     schoolGrades: [[]],
     selectedTests: [{}, validateSelectedTests]
-  }, {
-    validators: [
-      passwordConfirmationValidator,
-      buildPasswordEditMinLengthOverride(isEditing)
-    ]
   });
 }
 
 export function loadUserIntoForm(user: User, formGroup: FormGroup) {
-  formGroup.get(PASSWORD_KEY).disable();
-  formGroup.get(PASSWORD_CONFIRMATION_KEY).disable();
-
   formGroup.get('clientType').setValue(user.client);
   formGroup.get('clientType').disable();
 
