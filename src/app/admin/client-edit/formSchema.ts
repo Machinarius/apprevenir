@@ -59,17 +59,17 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
 }
 
 export function loadUserIntoForm(user: User, formGroup: FormGroup) {
-  formGroup.get('clientType').setValue(user.client);
+  formGroup.get('clientType').patchValue(user.client);
   formGroup.get('clientType').disable();
 
-  formGroup.get('email').setValue(user.email);
+  formGroup.get('email').patchValue(user.email);
   formGroup.get('email').disable();
 
-  formGroup.get('names').setValue(user.profile.first_names),
-  formGroup.get('phone').setValue(user.profile.phone);
-  formGroup.get('country').setValue(user.profile.country_id);
-  formGroup.get('state').setValue(user.profile.state_id);
-  formGroup.get('city').setValue(user.profile.city_id);
+  formGroup.get('names').patchValue(user.profile.first_names),
+  formGroup.get('phone').patchValue(user.profile.phone);
+  formGroup.get('country').patchValue(user.profile.country_id);
+  formGroup.get('state').patchValue(user.profile.state_id);
+  formGroup.get('city').patchValue(user.profile.city_id);
 
   if (typeof user.profile.country_id === "number") {
     formGroup.get('state').enable();
@@ -80,9 +80,9 @@ export function loadUserIntoForm(user: User, formGroup: FormGroup) {
   }
 
   // @ts-expect-error
-  formGroup.get('nationalId').setValue(user.profile.client_config?.national_id);
+  formGroup.get('nationalId').patchValue(user.profile.client_config?.national_id);
   // @ts-expect-error
-  formGroup.get('brandColor').setValue(user.profile.client_config?.brand_color);
+  formGroup.get('brandColor').patchValue(user.profile.client_config?.brand_color);
 
   const clientType: ClientTypes = user.client as ClientTypes;
   switch (clientType) {
@@ -107,24 +107,24 @@ export function loadUserIntoForm(user: User, formGroup: FormGroup) {
 }
 
 function loadCompanyUserData(user: CompanyUser, formGroup: FormGroup) {
-  formGroup.get('locations').setValue(user.clientTypeConfig.locations.map(location => parseObjectIntoInputTerm(location, "location")));
-  formGroup.get('areas').setValue(user.clientTypeConfig.areas.map(area => parseObjectIntoInputTerm(area, "area")));
-  formGroup.get('shifts').setValue(user.clientTypeConfig.schedules.map(schedule => parseObjectIntoInputTerm(schedule, "schedul")));
+  formGroup.get('locations').patchValue(user.clientTypeConfig.locations.map(location => parseObjectIntoInputTerm(location, "location")));
+  formGroup.get('areas').patchValue(user.clientTypeConfig.areas.map(area => parseObjectIntoInputTerm(area, "area")));
+  formGroup.get('shifts').patchValue(user.clientTypeConfig.schedules.map(schedule => parseObjectIntoInputTerm(schedule, "schedul")));
 }
 
 function loadEducationBureauData(user: EducationBureauUser, formGroup: FormGroup) {
-  formGroup.get('schools').setValue(user.clientTypeConfig.educationalInstitutions.map(institution => parseObjectIntoInputTerm(institution, "educational_institution")));
-  formGroup.get('grades').setValue(user.clientTypeConfig.grades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
+  formGroup.get('schools').patchValue(user.clientTypeConfig.educationalInstitutions.map(institution => parseObjectIntoInputTerm(institution, "educational_institution")));
+  formGroup.get('grades').patchValue(user.clientTypeConfig.grades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
 }
 
 function loadEducationalInstitutionData(user: EducationalInstitutionUser, formGroup: FormGroup) {
-  formGroup.get('schoolGrades').setValue(user.clientTypeConfig.educationalGrades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
+  formGroup.get('schoolGrades').patchValue(user.clientTypeConfig.educationalGrades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
 }
 
 function loadUniversityData(user: UniversityUser, formGroup: FormGroup) {
-  formGroup.get('programs').setValue(user.clientTypeConfig.programs.map(program => parseObjectIntoInputTerm(program, "program")));
-  formGroup.get('modalities').setValue(user.clientTypeConfig.modalities.map(modality => parseObjectIntoInputTerm(modality, "modality")));
-  formGroup.get('semesters').setValue(user.clientTypeConfig.semesters.map(semester => parseObjectIntoInputTerm(semester, "semester")));
+  formGroup.get('programs').patchValue(user.clientTypeConfig.programs.map(program => parseObjectIntoInputTerm(program, "program")));
+  formGroup.get('modalities').patchValue(user.clientTypeConfig.modalities.map(modality => parseObjectIntoInputTerm(modality, "modality")));
+  formGroup.get('semesters').patchValue(user.clientTypeConfig.semesters.map(semester => parseObjectIntoInputTerm(semester, "semester")));
 }
 
 function parseObjectIntoInputTerm<TObject extends { id: number }>(object: TObject, labelKey: keyof TObject): UserInputTerm {
@@ -137,10 +137,10 @@ function parseObjectIntoInputTerm<TObject extends { id: number }>(object: TObjec
 }
 
 function loadTerritorialEntityData(user: TerritorialEntityUser, formGroup: FormGroup) {
-  formGroup.get('urbanZones').setValue(
+  formGroup.get('urbanZones').patchValue(
     user.clientTypeConfig.communes[ZoneType.Urban].map(parseCommuneIntoZoneModel)
   );
-  formGroup.get('ruralZones').setValue(
+  formGroup.get('ruralZones').patchValue(
     user.clientTypeConfig.communes[ZoneType.Rural].map(parseCommuneIntoZoneModel)
   );
 }

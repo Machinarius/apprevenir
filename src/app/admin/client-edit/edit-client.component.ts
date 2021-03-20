@@ -314,10 +314,15 @@ export class EditClientComponent implements AfterViewInit {
     
     try {
       await this.loader.showLoadingIndicator(async () => {
-        await submitClientCreationForm(this.clientForm.value);
+        await submitClientCreationForm(this.clientForm.value, this.editModeIsEnabled, this.editTargetClientId);
       });
 
-      await Swal.fire("Cliente creado", "El cliente ha sido creado con éxito", "success");
+      if (this.editModeIsEnabled) {
+        await Swal.fire("Cliente actualizadp", "El cliente ha sido actualizado con éxito", "success");
+      } else {
+        await Swal.fire("Cliente creado", "El cliente ha sido creado con éxito", "success");
+      }
+
       this.router.navigate(['app/admin/clients']);
 
       return;
@@ -327,8 +332,11 @@ export class EditClientComponent implements AfterViewInit {
       let errorMessage = "No fue posible contactar al servidor. Por favor revisa tu conexión a internet e inténtalo de nuevo.";
       if (error instanceof BackendError) {
         errorMessage = "Por favor revisa los datos ingresados e inténtalo de nuevo: <br />" 
-          + error.errorMessages.join(", ") 
-          + "<br /> Es posible que debas volver a la lista de clientes y eliminar este cliente antes de poder intentarlo de nuevo.";
+          + error.errorMessages.join(", ");
+
+        if (!this.editModeIsEnabled) {
+          errorMessage += "<br /> Es posible que debas volver a la lista de clientes para editar este cliente antes de intentarlo de nuevo.";
+        }
       }
 
       Swal.fire("Error", errorMessage, "error");
