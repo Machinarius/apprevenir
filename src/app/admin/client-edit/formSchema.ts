@@ -1,6 +1,6 @@
 import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { getEmailFieldDefinition } from "@services/forms/emailAddress";
-import { Test } from "@typedefs/backend";
+import { ClientTypes, CompanyUser, EducationalInstitutionUser, EducationBureauUser, TerritorialEntityUser, Test, UniversityUser, User } from "@typedefs/backend";
 import { 
   buildPasswordEditMinLengthOverride,
   getPasswordConfirmationFieldValidator, 
@@ -9,6 +9,9 @@ import {
   PASSWORD_CONFIRMATION_KEY, 
   PASSWORD_KEY 
 } from "@services/forms/passwordValidators";
+import { UserInputTerm } from "./models/UserInputTerm";
+import { UserZone } from "./models/UserZone";
+import { TerritorialEntityCommune, TerritorialEntityNeighborhood, ZoneType } from "@typedefs/backend/userData/TerritorialEntityUser";
 
 export type ClientFormKeys =
   | "clientType"
@@ -70,6 +73,105 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
       buildPasswordEditMinLengthOverride(isEditing)
     ]
   });
+}
+
+export function loadUserIntoForm(user: User, formGroup: FormGroup) {
+  formGroup.get(PASSWORD_KEY).disable();
+  formGroup.get(PASSWORD_CONFIRMATION_KEY).disable();
+
+  formGroup.get('clientType').setValue(user.client);
+  formGroup.get('clientType').disable();
+
+  formGroup.get('email').setValue(user.email);
+  formGroup.get('email').disable();
+
+  formGroup.get('names').setValue(user.profile.first_names),
+  formGroup.get('phone').setValue(user.profile.phone);
+  formGroup.get('country').setValue(user.profile.country_id);
+  formGroup.get('state').setValue(user.profile.state_id);
+  formGroup.get('city').setValue(user.profile.city_id);
+
+  // @ts-expect-error
+  formGroup.get('nationalId').setValue(user.profile.client_config?.national_id);
+  // @ts-expect-error
+  formGroup.get('brandColor').setValue(user.profile.client_config?.brand_color);
+
+  const clientType: ClientTypes = user.client as ClientTypes;
+  switch (clientType) {
+    case ClientTypes.Company:
+      loadCompanyUserData(user as any, formGroup);
+      break;
+    case ClientTypes.EducationBureau:
+      loadEducationBureauData(user as any, formGroup);
+      break;
+    case ClientTypes.EducationalInstitution:
+      loadEducationalInstitutionData(user as any, formGroup);
+      break;
+    case ClientTypes.University:
+      loadUniversityData(user as any, formGroup);
+      break;
+    case ClientTypes.TerritorialEntity:
+      loadTerritorialEntityData(user as any, formGroup);
+      break;
+  }
+}
+
+function loadCompanyUserData(user: CompanyUser, formGroup: FormGroup) {
+  formGroup.get('locations').setValue(user.clientTypeConfig.locations.map(location => parseObjectIntoInputTerm(location, "location")));
+  formGroup.get('areas').setValue(user.clientTypeConfig.areas.map(area => parseObjectIntoInputTerm(area, "area")));
+  formGroup.get('shifts').setValue(user.clientTypeConfig.schedules.map(schedule => parseObjectIntoInputTerm(schedule, "schedul")));
+}
+
+function loadEducationBureauData(user: EducationBureauUser, formGroup: FormGroup) {
+  formGroup.get('schools').setValue(user.clientTypeConfig.educationalInstitutions.map(institution => parseObjectIntoInputTerm(institution, "educational_institution")));
+  formGroup.get('grades').setValue(user.clientTypeConfig.grades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
+}
+
+function loadEducationalInstitutionData(user: EducationalInstitutionUser, formGroup: FormGroup) {
+  formGroup.get('schoolGrades').setValue(user.clientTypeConfig.educationalGrades.map(grade => parseObjectIntoInputTerm(grade, "grade")));
+}
+
+function loadUniversityData(user: UniversityUser, formGroup: FormGroup) {
+  formGroup.get('programs').setValue(user.clientTypeConfig.programs.map(program => parseObjectIntoInputTerm(program, "program")));
+  formGroup.get('modalities').setValue(user.clientTypeConfig.modalities.map(modality => parseObjectIntoInputTerm(modality, "modality")));
+  formGroup.get('semesters').setValue(user.clientTypeConfig.semesters.map(semester => parseObjectIntoInputTerm(semester, "semester")));
+}
+
+function parseObjectIntoInputTerm<TObject extends { id: number }>(object: TObject, labelKey: keyof TObject): UserInputTerm {
+  return {
+    cameFromServer: true,
+    deletedByUser: false,
+    id: object.id,
+    label: object[labelKey] as unknown as string
+  };
+}
+
+function loadTerritorialEntityData(user: TerritorialEntityUser, formGroup: FormGroup) {
+  formGroup.get('urbanZones').setValue(
+    user.clientTypeConfig.communes[ZoneType.Urban].map(parseCommuneIntoZoneModel)
+  );
+  formGroup.get('ruralZones').setValue(
+    user.clientTypeConfig.communes[ZoneType.Rural].map(parseCommuneIntoZoneModel)
+  );
+}
+
+function parseCommuneIntoZoneModel(commune: TerritorialEntityCommune): UserZone {
+  const zone = new UserZone();
+  zone.id = commune.id;
+  zone.name = commune.commune;
+  zone.type = commune.zone_type;
+  zone.children = commune.neighborhoods.map(parseNeighborhoodIntoInputTerm);
+  
+  return zone;
+}
+
+function parseNeighborhoodIntoInputTerm(neighborhood: TerritorialEntityNeighborhood): UserInputTerm {
+  return {
+    cameFromServer: true,
+    deletedByUser: false,
+    id: neighborhood.id,
+    label: neighborhood.neighborhood
+  };
 }
 
 export function configureTestsControl(formGroup: FormGroup, tests: Test[]) {

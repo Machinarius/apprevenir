@@ -8,16 +8,17 @@ import { City, Country, State, Test, ZoneType } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
-import { buildClientFormGroup, configureTestsControl, storeBrandImageFiles } from './formSchema';
+import { buildClientFormGroup, configureTestsControl, loadUserIntoForm, storeBrandImageFiles } from './formSchema';
 import { ZoneInputConfig } from './models/ZoneInputConfig';
 import { UserZone } from './models/UserZone';
 import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
 import { ChipInputComponent } from './chip-autocomplete/chip-input.component';
 import { getAllTests } from '@services/test/testsDataSource';
 import { submitClientCreationForm } from './formSubmitter';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BackendError } from '@services/common';
 import Swal from 'sweetalert2';
+import { getUserData } from '@services/user/usersDataSource';
 
 @Component({
   selector: 'edit-client',
@@ -33,6 +34,11 @@ export class EditClientComponent implements AfterViewInit {
     'children', 
     'actions'
   ];
+
+  editTargetClientId: number | null = null;
+  get editModeIsEnabled() {
+    return this.editTargetClientId != null && !isNaN(this.editTargetClientId);
+  }
   
   clientForm: FormGroup;
 
@@ -60,10 +66,16 @@ export class EditClientComponent implements AfterViewInit {
 
   constructor(
     private router: Router,
+    private currentRoute: ActivatedRoute,
     private dialog: MatDialog,
     formBuilder: FormBuilder
   ) {
-    this.clientForm = buildClientFormGroup(formBuilder, false);
+    const params = currentRoute.snapshot.paramMap;
+    if (params.has("id")) {
+      this.editTargetClientId = parseInt(params.get("id"));
+    }
+
+    this.clientForm = buildClientFormGroup(formBuilder, this.editModeIsEnabled);
   }
 
   get allUrbanZones(): UserZone[] {
@@ -147,7 +159,8 @@ export class EditClientComponent implements AfterViewInit {
 
       this.countries = await getCountries();
       this.clientForm.get('country').enable();
-      //await this.loadProfileFormDataIfNeeded();
+
+      await this.loadClientInfoIfNeeded();
     });
   }
 
@@ -225,7 +238,7 @@ export class EditClientComponent implements AfterViewInit {
 
   deleteRuralZone(currentZone: UserZone) {
     currentZone.deletedByUser = true;
-    this.ruralZonesDS.data = this.activeUrbanZones;
+    this.ruralZonesDS.data = this.activeRuralZones;
   }
 
   async openUrbanZoneEditDialog(currentZone?: UserZone) {
@@ -269,6 +282,23 @@ export class EditClientComponent implements AfterViewInit {
 
   runValidationsOnChipInputs() {
     this.allChipInputs.forEach(input => input.runValidations());
+  }
+
+  async loadClientInfoIfNeeded() {
+    if (!this.editModeIsEnabled) {
+      return;
+    }
+
+    const user = await getUserData(this.editTargetClientId);
+    loadUserIntoForm(user, this.clientForm);
+
+    this.urbanZonesDS.data = this.activeUrbanZones;
+    this.ruralZonesDS.data = this.activeRuralZones;
+
+    await this.loader.showLoadingIndicator(async () => {
+      await this.onCountryChanged();
+      await this.onStateChanged();
+    });
   }
 
   async onSubmitClicked() {
