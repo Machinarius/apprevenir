@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { deleteUser, getAllClients } from '@services/user/usersDataSource';
@@ -27,6 +28,7 @@ export class ClientsListComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(LoaderComponent) loader: LoaderComponent;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private router: Router,
@@ -37,6 +39,8 @@ export class ClientsListComponent implements AfterViewInit {
 
   async ngAfterViewInit() {
     this.clientsDataSource.paginator = this.paginator;
+    this.clientsDataSource.sort = this.sort;
+    
     await this.reloadClients();
   }
 
