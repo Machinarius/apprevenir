@@ -1,54 +1,81 @@
-
 <div class="test-admin">
-	<div class="test-admin__box">
-		<h1 class="test-admin__title app-m-top">Edición de Cliente</h1>
-		<button mat-mini-fab color="primary" aria-label="Example icon button with a delete icon">
-			<mat-icon>add</mat-icon>
-		</button>
-	</div>
-	<div class="test-admin__card">
+  <div class="test-admin__box">
+    <h1 class="test-admin__title app-m-top">Edición de Cliente</h1>
+    <button
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div class="test-admin__card">
+    <div class="test-admin__box">
+      <div class="home__search">
+        <div class="inputContainer-search">
+          <img
+            alt="PersonIcon"
+            src="../../../assets/icons/search_baseline.svg"
+            class="inputContainer-search__icon"
+          />
+          <input
+            class="inputContainer-search__box"
+            type="text"
+            placeholder="Palabra clave"
+          />
+        </div>
+      </div>
+      <div align="end" class="btn-cancel">
+        <button class="btn btn-file app-m-right" mat-dialog-close>
+          <mat-icon class="icon-file">description</mat-icon>Excel
+        </button>
+        <button class="btn btn-file" mat-dialog-close>
+          <mat-icon class="icon-file">picture_as_pdf</mat-icon>PDF
+        </button>
+      </div>
+    </div>
 
-		<div class="test-admin__box">
-			<div class="home__search">
-				<div class="inputContainer-search">
-					<img alt="PersonIcon" src="../../../assets/icons/search_baseline.svg" class="inputContainer-search__icon" />
-					<input
-					class="inputContainer-search__box"
-					type="text"
-					placeholder="Palabra clave"
-					/>
-				</div>
-			</div>
-			<div align="end" class="btn-cancel">
-				<button class="btn btn-file app-m-right" mat-dialog-close><mat-icon class="icon-file">description</mat-icon>Excel</button>
-				<button class="btn btn-file" mat-dialog-close><mat-icon class="icon-file">picture_as_pdf</mat-icon>PDF</button>
-			</div>
-		</div>
-
-		<table mat-table [dataSource]="dataSource" matSort matSortActive="position" matSortDisableClear matSortDirection="desc" >
-			<ng-container matColumnDef="idUser">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Id</th>
-			<td mat-cell *matCellDef="let element"> {{element.idUser}} </td>
-			</ng-container>
-			<ng-container matColumnDef="name">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Nombre</th>
-			<td mat-cell *matCellDef="let element"> {{element.name}} </td>
-			</ng-container>
-			<ng-container matColumnDef="type">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Tipo </th>
-			<td mat-cell *matCellDef="let element"> {{element.type}} </td>
-			</ng-container>
-			<ng-container matColumnDef="test">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Estado</th>
-			<td mat-cell *matCellDef="let element"> {{element.test}} </td>
-			</ng-container>
-			<ng-container matColumnDef="date">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Edición</th>
-			<td mat-cell *matCellDef="let element"> {{element.date}} </td>
-			</ng-container>
-			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-		</table>
-		<mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
-  	</div>
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      matSortActive="position"
+      matSortDisableClear
+      matSortDirection="desc"
+    >
+      <ng-container matColumnDef="idUser">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Id
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.idUser }}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Nombre
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Tipo
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+      </ng-container>
+      <ng-container matColumnDef="test">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Estado
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.test }}</td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+          Edición
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+  </div>
 </div>
