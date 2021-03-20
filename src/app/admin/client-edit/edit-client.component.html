@@ -19,7 +19,7 @@
 				<mat-form-field class="width-100">
 					<mat-label>País</mat-label>
 					<mat-select formControlName="country" (selectionChange)="onCountryChanged()">
-						<mat-option value="{{country.id}}" *ngFor="let country of countries">{{ country.name }}</mat-option>
+						<mat-option [value]="country.id" *ngFor="let country of countries">{{ country.name }}</mat-option>
 					</mat-select>
 					<mat-error>
 						Por favor elige tu País
@@ -29,7 +29,7 @@
 				<mat-form-field class="width-100">
 					<mat-label>Departamento</mat-label>
 					<mat-select formControlName="state" (selectionChange)="onStateChanged()">
-						<mat-option value="{{state.id}}" *ngFor="let state of states">{{ state.name }}</mat-option>
+						<mat-option [value]="state.id" *ngFor="let state of states">{{ state.name }}</mat-option>
 					</mat-select>
 					<mat-error>
 						Por favor elige tu Departamento
@@ -39,7 +39,7 @@
 				<mat-form-field class="width-100">
 					<mat-label>Ciudad</mat-label>
 					<mat-select formControlName="city">
-						<mat-option value="{{city.id}}" *ngFor="let city of cities">{{ city.name }}</mat-option>
+						<mat-option [value]="city.id" *ngFor="let city of cities">{{ city.name }}</mat-option>
 					</mat-select>
 					<mat-error>
 						Por favor elige tu Ciudad
