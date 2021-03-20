@@ -126,7 +126,8 @@ async function createZone(zone: UserZone, userId: number): Promise<void> {
   }));
 
   const zoneId = zoneResponse.id;
-  await runRESTRequests(computeTermDeltaRequests(zone.children, zoneId, "neighborhoods", "neighborhood", "commune_id"));
+  const deltaRequests = computeTermDeltaRequests(zone.children, zoneId, "neighborhoods", "neighborhood", "commune_id");
+  await runRESTRequests(deltaRequests);
 }
 
 async function updateZone(zone: UserZone, userId: number): Promise<void> {
@@ -141,7 +142,9 @@ async function updateZone(zone: UserZone, userId: number): Promise<void> {
       commune: zone.name
     })
   }));
-  await runRESTRequests(computeTermDeltaRequests(zone.children, zone.id, "neighborhoods", "neighborhood", "commune_id"));
+
+  const deltaRequests = computeTermDeltaRequests(zone.children, zone.id, "neighborhoods", "neighborhood", "commune_id"); 
+  await runRESTRequests(deltaRequests);
 }
 
 async function uploadUniversityData(rawValues: ClientFormRawValues, userId: number) {
