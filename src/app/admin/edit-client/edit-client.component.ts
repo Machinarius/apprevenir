@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { getAllClients } from '@services/user/usersDataSource';
+import { ClientTypes, User } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
 
 @Component({
@@ -9,38 +11,51 @@ import { LoaderComponent } from 'src/app/core/loader/loader.component';
   styleUrls: ['./edit-client.component.scss']
 })
 export class EditClientComponent implements AfterViewInit {
-  public resultsLength = 0;
-  public displayedColumns: string[] = [
-    'idUser',
+  public clientColumns: string[] = [
+    'id',
     'name',
     'type',
-    'test',
-    'date'
+    'status',
+    'actions'
   ];
-  public dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+
+  public clients: User[] = [];
+  public clientsDataSource = new MatTableDataSource<UserRowElement>([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(LoaderComponent) loader: LoaderComponent;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  async ngAfterViewInit() {
+    this.clientsDataSource.paginator = this.paginator;
+    await this.loader.showLoadingIndicator(async () => {
+      this.clients = await getAllClients();
+      this.clientsDataSource.data = this.clients.map(generateRowElement);
+    });
   }
 }
 
-export interface PeriodicElement {
-  idUser: string;
-  name: string;
-  type: string;
-  test: string;
-  date: string;
+interface UserRowElement {
+  id: number,
+  name: string,
+  type: string,
+  status: string
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    idUser: '001',
-    name: 'Industrias Noel',
-    type: 'Empresa',
-    test: 'Activo',
-    date: 'icon'
-  }
-];
+// TODO: Make this a shared/centralized constant
+const clientTypeStringsMap: { [key in ClientTypes]: string } = {
+  [ClientTypes.Company]: "Empresa",
+  [ClientTypes.EducationBureau]: "Secretaría de Educación",
+  [ClientTypes.EducationalInstitution]: "Institución Educativa",
+  [ClientTypes.NaturalPerson]: "Persona Natural",
+  [ClientTypes.TerritorialEntity]: "Entidad Territorial",
+  [ClientTypes.University]: "Universidad"
+};
+
+function generateRowElement(user: User): UserRowElement {
+  return {
+    id: user.id,
+    name: `${user.profile.first_names} ${user.profile.last_names} ${user.profile.last_names_two}`,
+    type: clientTypeStringsMap[user.client],
+    status: user.status == 1 ? "Activo" : "Inactivo"
+  };
+}
