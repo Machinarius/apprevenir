@@ -4,6 +4,9 @@ import { ClientTypes, CompanyUser, EducationalInstitutionUser, EducationBureauUs
 import { UserInputTerm } from "./models/UserInputTerm";
 import { UserZone } from "./models/UserZone";
 import { TerritorialEntityCommune, TerritorialEntityNeighborhood, ZoneType } from "@typedefs/backend/userData/TerritorialEntityUser";
+import { Color } from "@angular-material-components/color-picker";
+
+const COLOR_STRING_REGEX = /#?([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})/;
 
 export type ClientFormKeys =
   | "clientType"
@@ -78,7 +81,18 @@ export function loadUserIntoForm(user: User, formGroup: FormGroup) {
   // @ts-expect-error
   formGroup.get('nationalId').setValue(user.profile.client_config?.national_id);
   // @ts-expect-error
-  formGroup.get('brandColor').setValue(user.profile.client_config?.brand_color);
+  const brandColorString = user.profile.client_config?.brand_color as string;
+  const colorMatches = brandColorString.match(COLOR_STRING_REGEX);
+  if (colorMatches.length === 4) {
+    const rValue = parseInt(colorMatches[1], 16);
+    const gValue = parseInt(colorMatches[2], 16);
+    const bValue = parseInt(colorMatches[3], 16);
+
+    if (![rValue, gValue, bValue].some(isNaN)) {
+      const colorValue = new Color(rValue, gValue, bValue);
+      formGroup.get('brandColor').setValue(colorValue);
+    }
+  }
 
   const clientType: ClientTypes = user.client as ClientTypes;
   switch (clientType) {
@@ -197,7 +211,7 @@ const validateSelectedTests: ValidatorFn = (control) => {
 }
 
 const validateColor: ValidatorFn = (control) => {
-  if (!/[A-Fa-f0-9]{6}/.test(control.value?.hex)) {
+  if (!COLOR_STRING_REGEX.test(control.value?.hex)) {
     return { required: true };
   }
 

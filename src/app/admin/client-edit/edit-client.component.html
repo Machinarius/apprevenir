@@ -95,14 +95,14 @@
 				<div class="field-icons">
 					<mat-form-field>
 						<mat-label>Color principal</mat-label>
-						<input matInput [ngxMatColorPicker]="picker" formControlName="brandColor">
+						<input matInput [ngxMatColorPicker]="brandColorPicker" #brandColorInput formControlName="brandColor">
 						<mat-error>
 							Por favor ingresa un color válido usando el ícono ubicado al costado
 						</mat-error>
 					</mat-form-field>
 					<div class="field-icons__picker">
-						<ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
-						<ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+						<ngx-mat-color-toggle matSuffix [for]="brandColorPicker"></ngx-mat-color-toggle>
+						<ngx-mat-color-picker #brandColorPicker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
 					</div>
 				</div>
 			</form>

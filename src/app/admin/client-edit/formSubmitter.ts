@@ -36,7 +36,7 @@ async function createOrUpdateUser(rawValues: ClientFormRawValues, editModeEnable
   if (editModeEnabled && currentUserId === null) {
     throw new Error("You must supply the current user id if you are editing a user");
   } 
-
+  
   const userRequestData: ClientRegistrationRequest = {
     client: rawValues.clientType as ClientTypes,
     first_names: rawValues.names as string,
@@ -48,7 +48,7 @@ async function createOrUpdateUser(rawValues: ClientFormRawValues, editModeEnable
     client_config: {
       national_id: rawValues.nationalId as string,
       // @ts-expect-error
-      brand_color: rawValues.brandColor.hex as string
+      brand_color: `#${rawValues.brandColor.hex}`
     }
   };
 
