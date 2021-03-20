@@ -42,7 +42,7 @@ export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolea
     nationalId: ['', Validators.required],
     email: getEmailFieldDefinition(isEditing),
     brandColor: ['', validateColor],
-    brandImageFiles: [{ value: null, disabled: true }, validateBrandImageFile],
+    brandImageFiles: [{ value: null, disabled: true }, generateBrandImageFileValidator(isEditing)],
     country: [ { value: '', disabled: true }, Validators.required],
     state: [ { value: '', disabled: true }, Validators.required],
     city: [ { value: '', disabled: true }, Validators.required],
@@ -188,6 +188,26 @@ export function storeBrandImageFiles(formGroup: FormGroup, fileList: FileList) {
   formGroup.get("brandImageFiles").setValue(fileList);
 }
 
+function generateBrandImageFileValidator(editModeIsEnabled: boolean): ValidatorFn {
+  return (control) => {
+    if (editModeIsEnabled) {
+      return null;
+    }
+
+    const fileList = control.value as FileList | null;
+    if (!fileList || fileList.length != 1 || !fileList.item) {
+      return { required: true };
+    }
+  
+    const file = fileList.item(0);
+    if (file.type == "image/png" || file.type == "image/jpeg") {
+      return null;
+    }
+  
+    return { required: true };
+  };
+}
+
 function generateTestEnabledChangeHandler(test: Test, formGroup: FormGroup) {
   return (value: boolean) => {
     const testsControl = formGroup.get("selectedTests");
@@ -217,17 +237,3 @@ const validateColor: ValidatorFn = (control) => {
 
   return null;
 }
-
-const validateBrandImageFile: ValidatorFn = (control) => {
-  const fileList = control.value as FileList | null;
-  if (!fileList || fileList.length != 1 || !fileList.item) {
-    return { required: true };
-  }
-
-  const file = fileList.item(0);
-  if (file.type == "image/png" || file.type == "image/jpeg") {
-    return null;
-  }
-
-  return { required: true };
-};
