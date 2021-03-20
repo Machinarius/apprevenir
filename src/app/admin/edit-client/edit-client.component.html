@@ -23,6 +23,8 @@
             class="inputContainer-search__box"
             type="text"
             placeholder="Palabra clave"
+						[(ngModel)]="clientsFilter"
+						(ngModelChange)="onClientsFilterChanged()"
           />
         </div>
       </div>

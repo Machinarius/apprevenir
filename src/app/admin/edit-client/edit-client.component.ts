@@ -22,9 +22,14 @@ export class EditClientComponent implements AfterViewInit {
 
   public clients: User[] = [];
   public clientsDataSource = new MatTableDataSource<ClientRowElement>([]);
+  public clientsFilter: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(LoaderComponent) loader: LoaderComponent;
+
+  constructor() {
+    this.clientsDataSource.filterPredicate = this.filterClients;
+  }
 
   async ngAfterViewInit() {
     this.clientsDataSource.paginator = this.paginator;
@@ -68,6 +73,14 @@ export class EditClientComponent implements AfterViewInit {
 
     await Swal.fire("Éxito", "El cliente ha sido eliminado exitosamente", "info");
     await this.reloadClients();
+  }
+
+  onClientsFilterChanged() {
+    this.clientsDataSource.filter = this.clientsFilter;
+  }
+
+  filterClients(client: ClientRowElement, filter: string) {
+    return client.name.toLowerCase().includes(filter.toLowerCase());
   }
 }
 
