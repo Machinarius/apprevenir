@@ -44,7 +44,8 @@ export class ChipInputComponent implements OnInit {
       this.allTerms.push({
 				id: null,
 				label: value.trim(),
-				deletedByUser: false
+				deletedByUser: false,
+				cameFromServer: false
 			});
 			
 			this.validateAndStoreTermsIntoForm();

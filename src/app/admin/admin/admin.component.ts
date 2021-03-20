@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { getCities, getCountries, getStates } from '@services/geoData/geoDataSource';
 import { City, Country, State, Test, ZoneType } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
-import { UserService } from 'src/app/services/user/user.service';
 import { ZoneEditModalComponent } from './zone-edit-modal/zone-edit-modal.component';
 import { NewClientTypes } from './constants/newClientTypes';
 import { buildClientFormGroup, configureTestsControl, storeBrandImageFiles } from './formSchema';
@@ -15,6 +14,10 @@ import { UserZone } from './models/UserZone';
 import { ClientTypes } from "@typedefs/backend/userData/ClientTypes";
 import { ChipInputComponent } from './chip-autocomplete/chip-input.component';
 import { getAllTests } from '@services/test/testsDataSource';
+import { submitClientCreationForm } from './formSubmitter';
+import { Router } from '@angular/router';
+import { BackendError } from '@services/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin',
@@ -56,7 +59,7 @@ export class AdminComponent implements AfterViewInit {
   @ViewChild("schoolGradesInput") schoolGradesInput: ChipInputComponent;
 
   constructor(
-    private userService: UserService,
+    private router: Router,
     private dialog: MatDialog,
     formBuilder: FormBuilder
   ) {
@@ -76,7 +79,7 @@ export class AdminComponent implements AfterViewInit {
   }
 
   set allRuralZones(zones: UserZone[]) {
-    this.clientForm.get("ruralZone").setValue(zones);
+    this.clientForm.get("ruralZones").setValue(zones);
   }
 
   get activeUrbanZones() {
@@ -192,19 +195,6 @@ export class AdminComponent implements AfterViewInit {
     storeBrandImageFiles(this.clientForm, element.files);
   }
 
-  onSubmit() {
-
-    if(this.clientForm.invalid) {
-      return;
-    }
-
-    let formData = Object.assign(this.clientForm.value);
-
-    formData.last_names = 'cliente';
-
-    this.userService.client(formData);
-  }
-
   async openRuralZoneEditDialog(currentZone?: UserZone) {
     const config: ZoneInputConfig = {
       ...ruralZoneConfigTemplate,
@@ -218,6 +208,7 @@ export class AdminComponent implements AfterViewInit {
     }
 
     if (currentZone) {
+      currentZone.editedByUser = true;
       currentZone.name = result.zoneName;
       currentZone.children = result.childTerms;
       return;
@@ -250,6 +241,7 @@ export class AdminComponent implements AfterViewInit {
     }
 
     if (currentZone) {
+      currentZone.editedByUser = true;
       currentZone.name = result.zoneName;
       currentZone.children = result.childTerms;
       return;
@@ -279,16 +271,35 @@ export class AdminComponent implements AfterViewInit {
     this.allChipInputs.forEach(input => input.runValidations());
   }
 
-  onSubmitClicked() {
+  async onSubmitClicked() {
     this.runValidationsOnChipInputs();
     this.clientForm.markAllAsTouched();
 
     if (!this.clientForm.valid) {
-      console.log("Form is invalid");
       return;
     }
+    
+    try {
+      await this.loader.showLoadingIndicator(async () => {
+        await submitClientCreationForm(this.clientForm.value);
+      });
 
-    console.log("Form is valid");
+      await Swal.fire("Cliente creado", "El cliente ha sido creado con éxito", "success");
+      this.router.navigate(['app/admin/edit-client']);
+
+      return;
+    } catch (error) {
+      console.error(error);
+
+      let errorMessage = "No fue posible contactar al servidor. Por favor revisa tu conexión a internet e inténtalo de nuevo.";
+      if (error instanceof BackendError) {
+        errorMessage = "Por favor revisa los datos ingresados e inténtalo de nuevo: <br />" 
+          + error.errorMessages.join(", ") 
+          + "<br /> Es posible que debas volver a la lista de clientes y eliminar este cliente antes de poder intentarlo de nuevo.";
+      }
+
+      Swal.fire("Error", errorMessage, "error");
+    }
   }
 }
 

@@ -19,15 +19,24 @@ export type ClientFormKeys =
   | "password"
   | "passwordConfirmation"
   | "brandColor"
+  | "brandImageFiles"
   | "country"
   | "state"
   | "city"
+  | "urbanZones"
+  | "ruralZones"
   | "locations"
   | "areas"
   | "shifts"
   | "schools"
   | "grades"
-  | "schoolGrades";
+  | "programs"
+  | "modalities"
+  | "semesters"
+  | "schoolGrades"
+  | "selectedTests";
+
+export type ClientFormRawValues = Record<ClientFormKeys, unknown>;
 
 export function buildClientFormGroup(formBuilder: FormBuilder, isEditing: boolean): FormGroup {
   return formBuilder.group({
