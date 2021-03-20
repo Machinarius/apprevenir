@@ -344,7 +344,7 @@ const urbanZoneConfigTemplate: Omit<ZoneInputConfig, "currentChildTerms" | "curr
 
 const ruralZoneConfigTemplate: Omit<ZoneInputConfig, "currentChildTerms" | "currentZoneName"> = {
   zoneTypeName: "Corregimiento",
-  zoneNameInputLabel: "Nombre de la Vereda",
+  zoneNameInputLabel: "Nombre de el Corregimiento",
   zoneNameRequiredMessage: "Por favor ingresa un nombre válido",
   childrenInputTitle: "Veredes",
   childrenInputDescription: "Ingrese las veredas separadas por coma o presionando (Enter)",
