@@ -91,6 +91,14 @@ export function loadUserIntoForm(user: User, formGroup: FormGroup) {
   formGroup.get('state').setValue(user.profile.state_id);
   formGroup.get('city').setValue(user.profile.city_id);
 
+  if (typeof user.profile.country_id === "number") {
+    formGroup.get('state').enable();
+  } 
+
+  if (typeof user.profile.state_id === "number") {
+    formGroup.get('city').enable();
+  }
+
   // @ts-expect-error
   formGroup.get('nationalId').setValue(user.profile.client_config?.national_id);
   // @ts-expect-error
@@ -114,6 +122,8 @@ export function loadUserIntoForm(user: User, formGroup: FormGroup) {
       loadTerritorialEntityData(user as any, formGroup);
       break;
   }
+
+  console.log("form state after load: ", formGroup.value);
 }
 
 function loadCompanyUserData(user: CompanyUser, formGroup: FormGroup) {

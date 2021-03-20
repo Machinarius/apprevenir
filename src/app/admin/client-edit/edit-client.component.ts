@@ -290,15 +290,18 @@ export class EditClientComponent implements AfterViewInit {
     }
 
     const user = await getUserData(this.editTargetClientId);
+    if (typeof user.profile.country_id === "number") {
+      this.states = await getStates(user.profile.country_id);
+    } 
+
+    if (typeof user.profile.state_id === "number") {
+      this.cities = await getCities(user.profile.state_id);
+    }
+
     loadUserIntoForm(user, this.clientForm);
 
     this.urbanZonesDS.data = this.activeUrbanZones;
     this.ruralZonesDS.data = this.activeRuralZones;
-
-    await this.loader.showLoadingIndicator(async () => {
-      await this.onCountryChanged();
-      await this.onStateChanged();
-    });
   }
 
   async onSubmitClicked() {
