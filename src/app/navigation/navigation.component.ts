@@ -67,7 +67,7 @@ const ADMIN_MENU_ELEMENTS: MenuElement[] = [
     children: [
       {
         name: 'Crear cliente',
-        route: 'admin/create-client',
+        route: 'admin/clients/new',
       },
       {
         name: 'Edición de clientes',
