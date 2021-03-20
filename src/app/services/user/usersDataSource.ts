@@ -22,3 +22,10 @@ export function getAllUsers(system: boolean = false): Promise<User[]> {
     headers: getAuthHeaders()
   }));
 }
+
+export function deleteUser(userId: number): Promise<void> {
+  return ensureResponseIsSuccessful(fetch(`${environment.url}/api/v1/users/${userId}`, {
+    headers: getAuthHeaders(),
+    method: "DELETE"
+  }));
+}
