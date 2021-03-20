@@ -1,10 +1,11 @@
-<div class="test-admin">
-  <div class="test-admin__box">
+<app-loader #loader></app-loader>
+
+<div class="test-admin" [hidden]="loader.loadingData">
+  <div class="test-admin__box" >
     <h1 class="test-admin__title app-m-top">Edición de Cliente</h1>
     <button
       mat-mini-fab
       color="primary"
-      aria-label="Example icon button with a delete icon"
     >
       <mat-icon>add</mat-icon>
     </button>
