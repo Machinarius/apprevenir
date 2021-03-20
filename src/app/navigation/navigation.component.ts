@@ -71,7 +71,7 @@ const ADMIN_MENU_ELEMENTS: MenuElement[] = [
       },
       {
         name: 'Edición de clientes',
-        route: 'admin/edit-client',
+        route: 'admin/clients',
       },
     ],
   },

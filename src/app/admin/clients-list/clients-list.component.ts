@@ -8,11 +8,11 @@ import { LoaderComponent } from 'src/app/core/loader/loader.component';
 import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-edit-client',
-  templateUrl: './edit-client.component.html',
-  styleUrls: ['./edit-client.component.scss']
+  selector: 'clients-list',
+  templateUrl: './clients-list.component.html',
+  styleUrls: ['./clients-list.component.scss']
 })
-export class EditClientComponent implements AfterViewInit {
+export class ClientsListComponent implements AfterViewInit {
   public clientColumns: string[] = [
     'id',
     'name',

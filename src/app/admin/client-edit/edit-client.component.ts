@@ -20,11 +20,11 @@ import { BackendError } from '@services/common';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  selector: 'edit-client',
+  templateUrl: './edit-client.component.html',
+  styleUrls: ['./edit-client.component.scss']
 })
-export class AdminComponent implements AfterViewInit {
+export class EditClientComponent implements AfterViewInit {
   public color: ThemePalette = 'primary';
   public touchUi = false;
 
@@ -285,7 +285,7 @@ export class AdminComponent implements AfterViewInit {
       });
 
       await Swal.fire("Cliente creado", "El cliente ha sido creado con éxito", "success");
-      this.router.navigate(['app/admin/edit-client']);
+      this.router.navigate(['app/admin/clients']);
 
       return;
     } catch (error) {

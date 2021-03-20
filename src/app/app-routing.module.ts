@@ -7,7 +7,7 @@ import { RecoveryComponent } from './auth/recovery/recovery.component';
 import { HomeComponent } from './home/home.component';
 import { TestComponent } from './test/test.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
-import { AdminComponent } from './admin/admin/admin.component';
+import { EditClientComponent } from './admin/client-edit/edit-client.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditFinalUserComponent } from './admin/edit-final-user/edit-final-user.component';
@@ -15,7 +15,7 @@ import { FinalUserComponent } from './admin/final-user/final-user.component';
 import { ReportComponent } from './admin/report/report.component';
 import { SystemUserComponent } from './admin/system-user/system-user.component';
 import { EditSystemUserComponent } from './admin/edit-system-user/edit-system-user.component';
-import { EditClientComponent } from './admin/edit-client/edit-client.component';
+import { ClientsListComponent } from './admin/clients-list/clients-list.component';
 
 import { AuthGuardService } from '../app/services/auth/auth-guard.service';
 import { AnonGuardService } from '../app/services/auth/anon-guard.service';
@@ -39,13 +39,14 @@ const appRoutes: Routes = [
         children: [
           { path: '', component: FinalUserComponent },
           { path: 'report', component: ReportComponent },
-          { path: 'create-client', component: AdminComponent },
           { path: 'system-user', component: SystemUserComponent },
           { path: 'edit-system-user', component: EditSystemUserComponent },
           { path: 'edit-system-user/:userId', component: EditSystemUserFormComponent },
-          { path: 'edit-client', component: EditClientComponent },
           { path: 'edit-final-user', component: EditFinalUserComponent },
-          { path: "edit-final-user/:userId", component: EditFinalUserForm }
+          { path: "edit-final-user/:userId", component: EditFinalUserForm },
+          { path: 'clients', component: ClientsListComponent },
+          { path: 'clients/new', component: EditClientComponent },
+          { path: 'clients/:id', component: EditClientComponent }
         ]
       }
     ],

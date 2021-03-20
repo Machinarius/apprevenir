@@ -16,7 +16,7 @@ import { ModalComponent } from './auth/modal/modal.component';
 import { TestComponent } from './test/test.component';
 import { RecoveryComponent } from './auth/recovery/recovery.component';
 import { ModalHomeQuestionComponent } from './modals/modal-home-question/modal-home-question.component';
-import { AdminComponent } from './admin/admin/admin.component';
+import { EditClientComponent } from './admin/client-edit/edit-client.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FinalUserComponent } from './admin/final-user/final-user.component';
@@ -24,11 +24,11 @@ import { EditFinalUserComponent } from './admin/edit-final-user/edit-final-user.
 import { ReportComponent } from './admin/report/report.component';
 import { SystemUserComponent } from './admin/system-user/system-user.component';
 import { EditSystemUserComponent } from './admin/edit-system-user/edit-system-user.component';
-import { EditClientComponent } from './admin/edit-client/edit-client.component';
+import { ClientsListComponent } from './admin/clients-list/clients-list.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { InformationModalComponent } from './test/information-modal/information-modal.component';
-import { ZoneEditModalComponent } from './admin/admin/zone-edit-modal/zone-edit-modal.component';
+import { ZoneEditModalComponent } from './admin/client-edit/zone-edit-modal/zone-edit-modal.component';
 import { ProfileModalComponent } from './profile/profile-modal/profile-modal.component';
 import { HomeModalComponent } from './home/home-modal/home-modal.component';
 import { ConfidentialModalComponent } from './test/confidential-modal/confidential-modal.component';
@@ -39,7 +39,7 @@ import { EditFinalUserForm } from './admin/edit-final-user/form/edit-final-user-
 import { NotFoundComponent } from './navigation/not-found/not-found.component';
 import { ClientConfigComponent } from './auth/registration/clientConfig/client-config.component';
 import { PolicyModalComponent } from './auth/policy-modal/policy-modal.component';
-import { ChipInputComponent } from './admin/admin/chip-autocomplete/chip-input.component';
+import { ChipInputComponent } from './admin/client-edit/chip-autocomplete/chip-input.component';
 import { ReportModalComponent } from './admin/report/report-modal/report-modal.component';
 import { EditSystemUserFormComponent } from './admin/edit-system-user/form/edit-system-user-form.component';
 
@@ -56,7 +56,7 @@ import { EditSystemUserFormComponent } from './admin/edit-system-user/form/edit-
     TestComponent,
     RecoveryComponent,
     ModalHomeQuestionComponent,
-    AdminComponent,
+    EditClientComponent,
     NavigationComponent,
     ProfileComponent,
     FinalUserComponent,
@@ -64,7 +64,7 @@ import { EditSystemUserFormComponent } from './admin/edit-system-user/form/edit-
     ReportComponent,
     SystemUserComponent,
     EditSystemUserComponent,
-    EditClientComponent,
+    ClientsListComponent,
     InformationModalComponent,
     ZoneEditModalComponent,
     ProfileModalComponent,
