@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { deleteUser, getAllClients } from '@services/user/usersDataSource';
 import { ClientTypes, User } from '@typedefs/backend';
 import { LoaderComponent } from 'src/app/core/loader/loader.component';
@@ -27,7 +28,10 @@ export class EditClientComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(LoaderComponent) loader: LoaderComponent;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.clientsDataSource.filterPredicate = this.filterClients;
   }
 
@@ -41,6 +45,10 @@ export class EditClientComponent implements AfterViewInit {
       this.clients = await getAllClients();
       this.clientsDataSource.data = this.clients.map(generateRowElement);
     });
+  }
+
+  onClientEditRequested(client: ClientRowElement) {
+    this.router.navigate([client.id], { relativeTo: this.activatedRoute });
   }
 
   async onClientRemovalRequested(client: ClientRowElement) {

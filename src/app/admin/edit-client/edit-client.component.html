@@ -75,7 +75,7 @@
           Edición
         </th>
         <td mat-cell *matCellDef="let element">
-					<mat-icon fontSet="material-icons-outlined" class="app-cursor">edit</mat-icon>
+					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="onClientEditRequested(element)">edit</mat-icon>
 					<mat-icon fontSet="material-icons-outlined" class="app-cursor" (click)="onClientRemovalRequested(element)">delete</mat-icon>
 				</td>
       </ng-container>
